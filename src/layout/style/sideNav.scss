@@ -1,0 +1,15 @@
+.side-nav {
+  &-header {
+    height: 64px;
+    padding: 20px;
+    display: flex;
+    &-content{
+      flex: 1;
+      border-radius: 5px;
+      text-align: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 600;
+    }
+  }
+}

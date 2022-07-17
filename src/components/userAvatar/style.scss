@@ -1,0 +1,9 @@
+.user-avatar {
+  &-name {
+    text-align: center;
+    max-width: 80px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
