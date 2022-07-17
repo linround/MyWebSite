@@ -18,40 +18,40 @@ export const menus = [
     
     title: '首页',
     Icon: <MailOutlined/>,
-    key: '/'
+    key: '/admin'
   },
   {
     title: 'CSS脑洞',
     Icon: <AppstoreOutlined />,
-    key: '/CSSDemo',
+    key: '/admin/CSSDemo',
     subs: [
-      {key: '/CSSDemo/Menus', title: 'Menus', Icon: <PieChartOutlined />,},
-      {key: '/CSSDemo/Demo2', title: 'Demo2', Icon: <PieChartOutlined />,},
-      {key: '/CSSDemo/Buttons', title: 'Buttons', Icon: <PieChartOutlined />,},
-      {key: '/CSSDemo/Waves', title: 'Waves', Icon: <PieChartOutlined />,},
-      {key: '/CSSDemo/NavBarDemo', title: 'NavBarDemo', Icon: <PieChartOutlined />,},
-      {key: '/CSSDemo/LoginFish', title: 'LoginFish', Icon: <PieChartOutlined />,},
+      {key: '/admin/CSSDemo/Menus', title: 'Menus', Icon: <PieChartOutlined />,},
+      {key: '/admin/CSSDemo/Demo2', title: 'Demo2', Icon: <PieChartOutlined />,},
+      {key: '/admin/CSSDemo/Buttons', title: 'Buttons', Icon: <PieChartOutlined />,},
+      {key: '/admin/CSSDemo/Waves', title: 'Waves', Icon: <PieChartOutlined />,},
+      {key: '/admin/CSSDemo/NavBarDemo', title: 'NavBarDemo', Icon: <PieChartOutlined />,},
+      {key: '/admin/CSSDemo/LoginFish', title: 'LoginFish', Icon: <PieChartOutlined />,},
     ]
   },
   {
     title: '可视化脑洞',
     Icon: <MenuFoldOutlined />,
-    key: '/VisualizationDemo',
+    key: '/admin/VisualizationDemo',
     subs: [
-      {key: '/VisualizationDemo/ThreeJs', title: 'ThreeJs', Icon: <DesktopOutlined />,},
-      {key: '/VisualizationDemo/Canvas', title: 'Canvas', Icon: <DesktopOutlined />,},
+      {key: '/admin/VisualizationDemo/ThreeJs', title: 'ThreeJs', Icon: <DesktopOutlined />,},
+      {key: '/admin/VisualizationDemo/Canvas', title: 'Canvas', Icon: <DesktopOutlined />,},
     ]
   },
   {
     
     title: '进度条',
     Icon: <MailOutlined/>,
-    key: '/Progress'
+    key: '/admin/Progress'
   },
   {
     title: '动画',
     Icon: <ContainerOutlined />,
-    key: '/AnimationDemo'
+    key: '/admin/AnimationDemo'
   },
 ]
 

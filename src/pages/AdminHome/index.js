@@ -2,8 +2,10 @@ import React from "react";
 
 export default function Home(){
   return (
-    <div>
-      Home
+    <div style={{
+      color:'red'
+    }}>
+      AdminHome
     </div>
   )
 }
