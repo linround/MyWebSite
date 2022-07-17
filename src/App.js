@@ -1,7 +1,8 @@
 import React, {useState} from "react";
 import {AuthProvider,RequireAuth} from "./components/AuthProvider";
 import {Routes,Route} from "react-router-dom";
-import Home from './pages/home'
+import Home from "./pages/Home";
+import AdminHome from './pages/AdminHome'
 import MyLayout from "./layout";
 import CSSDemo from './pages/cssDemo'
 import LoginPage from "./pages/login";
@@ -11,7 +12,7 @@ import AnimationDemo from "./pages/animationDemo";
 import Menus from './pages/menus'
 import Demo2 from './pages/demo2'
 import Buttons from "./pages/cssDemo/buttons";
-import LoginForm from "./pages/login/demo";
+import LoginForm from "./pages/login/index";
 import {Waves} from "./pages/cssDemo/waves";
 import {NavBarDemo} from './pages/cssDemo/navBar'
 import {LoginFish} from "./pages/login/fish";
@@ -27,31 +28,32 @@ export default function App(){
     <AuthProvider>
       <Routes>
         <Route
-          path='/'
+          path='/admin'
           element={
             <RequireAuth>
               <MyLayout />
             </RequireAuth>
           }>
-          <Route index element={<Home />}></Route>
-          <Route path='/AnimationDemo' element={<AnimationDemo />}></Route>
+          <Route index element={<AdminHome />}></Route>
+          <Route path='/admin/AnimationDemo' element={<AnimationDemo />}></Route>
           
           
-          <Route path='/VisualizationDemo' element={<VisualizationDemo />} />
-          <Route path='/VisualizationDemo/ThreeJs' element={<ThreeJs />} />
-          <Route path='/VisualizationDemo/Canvas' element={<Canvas />} />
-          <Route path='/Progress' element={<Progress />} />
+          <Route path='/admin/VisualizationDemo' element={<VisualizationDemo />} />
+          <Route path='/admin/VisualizationDemo/ThreeJs' element={<ThreeJs />} />
+          <Route path='/admin/VisualizationDemo/Canvas' element={<Canvas />} />
+          <Route path='/admin/Progress' element={<Progress />} />
           
           
-          <Route path='/CSSDemo' element={<CSSDemo />} />
-          <Route path='/CSSDemo/Menus' element={<Menus />} />
-          <Route path='/CSSDemo/Demo2' element={<Demo2 />} />
-          <Route path='/CSSDemo/Buttons' element={<Buttons />} />
-          <Route path='/CSSDemo/Waves' element={<Waves />} />
-          <Route path='/CSSDemo/NavBarDemo' element={<NavBarDemo />} />
-          <Route path='/CSSDemo/LoginFish' element={<LoginFish />} />
+          <Route path='/admin/CSSDemo' element={<CSSDemo />} />
+          <Route path='/admin/CSSDemo/Menus' element={<Menus />} />
+          <Route path='/admin/CSSDemo/Demo2' element={<Demo2 />} />
+          <Route path='/admin/CSSDemo/Buttons' element={<Buttons />} />
+          <Route path='/admin/CSSDemo/Waves' element={<Waves />} />
+          <Route path='/admin/CSSDemo/NavBarDemo' element={<NavBarDemo />} />
+          <Route path='/admin/CSSDemo/LoginFish' element={<LoginFish />} />
         </Route>
         <Route path='/LoginPage' element={<LoginForm />} />
+        <Route path='/' element={<Home />} />
       </Routes>
     </AuthProvider>
     
