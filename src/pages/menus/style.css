@@ -6,24 +6,6 @@ html {
 
 }
 
-html *,
-html *::before,
-html *::after {
-
-  box-sizing: inherit;
-
-}
-
-body{
-
-  margin: 0;
-  height: 100vh;
-  overflow: hidden;
-  background-color: #ffb457;
-  -webkit-tap-highlight-color: transparent;
-  transition: background-color var(--duration);
-
-}
 
 .menu{
 
