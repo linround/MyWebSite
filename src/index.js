@@ -5,15 +5,15 @@ import {store} from './store/index'
 import './index.css';
 import 'antd/dist/antd.css'
 import App  from './App';
-import { BrowserRouter,HashRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 
 
 ReactDOM.render(
-  <HashRouter>
+  <BrowserRouter>
     <Provider store={store}>
       <App></App>
     </Provider>
-  </HashRouter>,
+  </BrowserRouter>,
   document.getElementById('root')
 );
 
