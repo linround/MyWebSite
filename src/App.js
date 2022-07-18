@@ -16,6 +16,7 @@ import LoginForm from "./pages/login/index";
 import {Waves} from "./pages/cssDemo/waves";
 import {NavBarDemo} from './pages/cssDemo/navBar'
 import {LoginFish} from "./pages/login/fish";
+import {P404} from "./pages/P404";
 
 // 可视化相关
 import VisualizationDemo from './pages/visualizationDemo'
@@ -54,6 +55,7 @@ export default function App(){
         </Route>
         <Route path='/LoginPage' element={<LoginForm />} />
         <Route path='/' element={<Home />} />
+        <Route path='*' element={<P404 />}></Route>
       </Routes>
     </AuthProvider>
     
