@@ -17,6 +17,9 @@ import {Waves} from "./pages/cssDemo/waves";
 import {NavBarDemo} from './pages/cssDemo/navBar'
 import {LoginFish} from "./pages/login/fish";
 import {P404} from "./pages/P404";
+import Horse from "./pages/Horse";
+import MobileIndex from './pages/mobile/index'
+import GridArt from './pages/GridArt'
 
 // 可视化相关
 import VisualizationDemo from './pages/visualizationDemo'
@@ -53,8 +56,11 @@ export default function App(){
           <Route path='/admin/CSSDemo/NavBarDemo' element={<NavBarDemo />} />
           <Route path='/admin/CSSDemo/LoginFish' element={<LoginFish />} />
         </Route>
+        <Route path='/MobileIndex' element={<MobileIndex />} />
         <Route path='/LoginPage' element={<LoginForm />} />
-        <Route path='/' element={<Home />} />
+        <Route path='/Horse' element={<Horse />} />
+        <Route path='/' element={<GridArt />} />
+        <Route path='/Home' element={<Home />} />
         <Route path='*' element={<P404 />}></Route>
       </Routes>
     </AuthProvider>

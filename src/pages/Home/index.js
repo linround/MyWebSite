@@ -6,6 +6,7 @@ import ImgProperty from "../cssDemo/imgProperty";
 import BounceWebgl from "./bounceWebgl";
 import TimeMaskLayer from "./timeMaskLayer";
 import DropDownOptions from "../../components/DropDown";
+import RippleButton from '../../components/RippleButton'
 
 export default class Home extends React.Component{
   componentDidMount() {
@@ -20,6 +21,7 @@ export default class Home extends React.Component{
           </CustomButton12>
         </Link>
         <ImgProperty></ImgProperty>
+        <RippleButton />
         <TimeMaskLayer></TimeMaskLayer>
         <DropDownOptions></DropDownOptions>
         <BounceWebgl></BounceWebgl>

@@ -7,6 +7,10 @@ body {
   background-color: #222429;
   padding: 1.5rem;
   line-height: 1.4;
+
+  margin: 0;
+  padding: 0;
+  font-family: system-ui;
 }
 #root{
   height: 100vh;
