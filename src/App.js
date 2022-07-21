@@ -38,7 +38,8 @@ import ThreeJs from './pages/threeJs'
 import Canvas from './pages/canvas'
 import Progress from './pages/progress'
 
-export default function App(){
+
+export default function App() {
   return (
     <AuthProvider>
       <Routes>
