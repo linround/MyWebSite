@@ -4,6 +4,7 @@ class Dragon6 {
     console.log('get')
   }
 
+
   setAge(value) {
     // ...
     console.log('set')

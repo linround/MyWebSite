@@ -1,12 +1,11 @@
-import React from "react";
+import React from 'react'
 
-
-export class LoginFish extends React.Component{
+export class LoginFish extends React.Component {
   componentDidMount() {
-  
+
   }
   render() {
-    return(
+    return (
       <>
         LoginFish
       </>

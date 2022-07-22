@@ -1,11 +1,12 @@
-import React from "react";
+import React from 'react'
 import './link.css'
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faAppleAlt, faFaceGrinBeam,faGift, faContactBook} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+  faAppleAlt, faFaceGrinBeam, faGift, faContactBook
+} from '@fortawesome/free-solid-svg-icons'
 
 
-
-export function ButtonLink(){
+export function ButtonLink() {
   return (
     <div>
       <div className="container">

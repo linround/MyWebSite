@@ -1,12 +1,13 @@
-import React, {useState} from "react";
-import {Layout} from "antd";
-import {Outlet} from "react-router-dom";
-import { SideNav } from "./sideNav";
-import { HeaderBar} from "./headerBar";
-import {userSelector} from "../store/user";
-import {useSelector} from "react-redux";
+import React, { useState } from 'react'
+import { Layout } from 'antd'
+import { Outlet } from 'react-router-dom'
+import { SideNav } from './sideNav'
+import { HeaderBar } from './headerBar'
+import { userSelector } from '../store/user'
+import { useSelector } from 'react-redux'
 
-const {Header, Content, Sider, Footer } = Layout
+
+const { Header, Content, Sider, Footer, } = Layout
 export default function MyLayout() {
   const [collapsed, setCollapsed] = useState(false)
   const user = useSelector(userSelector)
@@ -18,7 +19,7 @@ export default function MyLayout() {
       <Sider
         theme={user.theme}
         style={{
-          height: '100vh'
+          height: '100vh',
         }}
         collapsed={collapsed}>
         <SideNav />

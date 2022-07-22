@@ -1,18 +1,19 @@
-import React from "react";
+import React from 'react'
 import './style.scss'
+
 
 export default class BounceWebgl extends React.Component {
   componentDidMount() {
     /*********
      * made by Matthias Hurrle (@atzedent)
      */
-    
+
     /** @type {HTMLCanvasElement} */
     const canvas = document.querySelector('#home-canvas')
-    
+
     const gl = canvas.getContext('webgl')
     const dpr = window.devicePixelRatio
-    
+
     const vertexSource = `
  #ifdef GL_FRAGMENT_PRECISION_HIGH
   precision highp float;
@@ -238,28 +239,30 @@ void main() {
       /** @param {[number,number]} point */
       add: function (point) {
         this.points.push(point)
-      }
+      },
     }
-    let time;
-    let buffer;
-    let program;
-    let resolution;
-    let pointers;
+    let time
+    let buffer
+    let program
+    let resolution
+    let pointers
     let vertices = []
-    let touches = [0, 0]
-    
+    const touches = [0, 0]
+
     function resize() {
       const {
         innerWidth: width,
-        innerHeight: height
+        innerHeight: height,
       } = window
-      
+
       canvas.width = 300
       canvas.height = 300
-      
-      gl.viewport(0, 0, width , height)
+
+      gl.viewport(
+        0, 0, width, height
+      )
     }
-    
+
     function compile(shader, source) {
       /**
        * 要创建一个 WebGLShader 需要使用 WebGLRenderingContext.createShader，
@@ -268,29 +271,29 @@ void main() {
        */
       gl.shaderSource(shader, source)
       gl.compileShader(shader)
-      
+
       if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
         console.error(gl.getShaderInfoLog(shader))
       }
     }
-    
+
     function setup() {
       const vs = gl.createShader(gl.VERTEX_SHADER)
       const fs = gl.createShader(gl.FRAGMENT_SHADER)
-      
+
       program = gl.createProgram()
       //
       compile(vs, vertexSource)
       compile(fs, fragmentSource)
-      
+
       gl.attachShader(program, vs)
       gl.attachShader(program, fs)
       gl.linkProgram(program)
-      
+
       if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
         console.error(gl.getProgramInfoLog(program))
       }
-      
+
       vertices = [
         -1.0, -1.0,
         1.0, -1.0,
@@ -299,116 +302,126 @@ void main() {
         1.0, -1.0,
         1.0, 1.0
       ]
-      
-      buffer = gl.createBuffer();
-      
+
+      buffer = gl.createBuffer()
+
       gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW)
-      
-      const position = gl.getAttribLocation(program, "position")
-      
+      gl.bufferData(
+        gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW
+      )
+
+      const position = gl.getAttribLocation(program, 'position')
+
       gl.enableVertexAttribArray(position)
-      gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0)
-      
-      time = gl.getUniformLocation(program, "time")
+      gl.vertexAttribPointer(
+        position, 2, gl.FLOAT, false, 0, 0
+      )
+
+      time = gl.getUniformLocation(program, 'time')
       resolution = gl.getUniformLocation(program, 'resolution')
       pointers = gl.getUniformLocation(program, 'pointers')
     }
-    
+
     function draw(now) {
-      gl.clearColor(0, 0, 0, 1.)
+      gl.clearColor(
+        0, 0, 0, 1.
+      )
       gl.clear(gl.COLOR_BUFFER_BIT)
-      
+
       gl.useProgram(program)
       gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
-      
+
       gl.uniform1f(time, (now / 1000))
       gl.uniform2f(
         resolution,
         canvas.width,
         canvas.height
       )
-      gl.uniform2fv(pointers, touches);
-      gl.drawArrays(gl.TRIANGLES, 0, vertices.length * .5)
+      gl.uniform2fv(pointers, touches)
+      gl.drawArrays(
+        gl.TRIANGLES, 0, vertices.length * .5
+      )
     }
-    
+
     function loop(now) {
       // now表示requestAnimationFrame() 开始去执行回调函数的时刻
       draw(now)
       requestAnimationFrame(loop)
     }
-    
+
     function init() {
       setup()
       resize()
       loop(0)
     }
-    
+
     function clearTouches() {
       for (let i = 0; i < touches.length; i++) {
         touches[i] = .0
       }
     }
-    
+
     /** @param {TouchEvent} e */
     function handleTouch(e) {
-      const { height } = canvas
-      
+      const { height, } = canvas
+
       clearTouches()
-      
+
       let i = 0
-      for (let touch of e.touches) {
-        const { clientX: x, clientY: y } = touch
-        
+      for (const touch of e.touches) {
+        const { clientX: x, clientY: y, } = touch
+
+        // eslint-disable-next-line no-plusplus
         touches[i++] = x * dpr
-        touches[i++] = height - y * dpr
+        // eslint-disable-next-line no-plusplus
+        touches[i++] = height - (y * dpr)
       }
     }
-    
+
     /** @param {{ clientX: number, clientY: number }[]} other */
     function mergeMouse(other) {
       return [
-        ...mouse.points.map(([clientX, clientY]) => { return { clientX, clientY } }),
+        ...mouse.points.map(([clientX, clientY]) => ({ clientX, clientY, })),
         ...other]
     }
-    
+
     init()
-    
+
     canvas.ontouchstart = handleTouch
     canvas.ontouchmove = handleTouch
     canvas.ontouchend = clearTouches
-    
+
     window.onresize = resize
-    
+
     function handleMouseMove(e) {
       handleTouch({
-        touches: mergeMouse([{ clientX: e.clientX, clientY: e.clientY }])
+        touches: mergeMouse([{ clientX: e.clientX, clientY: e.clientY, }]),
       })
     }
-    
+
     function handleMouseDown() {
-      canvas.addEventListener("mousemove", handleMouseMove)
+      canvas.addEventListener('mousemove', handleMouseMove)
     }
-    
+
     function handleMouseUp() {
-      canvas.removeEventListener("mousemove", handleMouseMove)
-      
+      canvas.removeEventListener('mousemove', handleMouseMove)
+
       clearTouches()
-      handleTouch({ touches: mergeMouse([]) })
+      handleTouch({ touches: mergeMouse([]), })
     }
-    
-    if (!window.matchMedia("(pointer: coarse)").matches) {
-      canvas.addEventListener("mousedown", handleMouseDown)
-      canvas.addEventListener("mouseup", handleMouseUp)
+
+    if (!window.matchMedia('(pointer: coarse)').matches) {
+      canvas.addEventListener('mousedown', handleMouseDown)
+      canvas.addEventListener('mouseup', handleMouseUp)
     }
-    
+
   }
-  
+
   render() {
     return (
       <div>
         <canvas id="home-canvas"></canvas>
       </div>
-    );
+    )
   }
 }

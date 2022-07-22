@@ -17,6 +17,9 @@ module.exports = {
     'react'
   ],
   'rules': {
+    'react/display-name': ['error', { 'ignoreTranspilerName': false, }],
+    'react/jsx-uses-react': 'error',
+    'react/jsx-uses-vars': 'error',
     'semi': ['error', 'never'], // 分号禁止
     'quotes': ['error', 'single'], // 使用单引号
     'no-param-reassign': ['error'], // 不要直接给函数参数赋值.
@@ -114,7 +117,7 @@ module.exports = {
     'space-in-parens': ['error', 'never'], // 括号内不使用空格
     'array-bracket-spacing': ['error', 'never'], // 不要在数组括号内添加空格
     'object-curly-spacing': ['error', 'always'], // 在花括号内添加空格
-    'max-len': ['error', { 'code': 180, }], // 避免超过 180 个字符（包括空格）的代码行。注意：根据上述，长字符串不受此规则的约束，不应分解
+    'max-len': ['error', { 'code': 1800, }], // 避免超过 1800 个字符（包括空格）的代码行。注意：根据上述，长字符串不受此规则的约束，不应分解
     'comma-spacing': ['error', { 'before': false, 'after': true, }], // 避免逗号前有空格，并要求逗号后有空格
     'computed-property-spacing': ['error', 'never', { 'enforceForClassMembers': true, }], // 在计算的属性括号内强制无间距
     'func-call-spacing': ['error', 'never'], // 避免函数及其调用之间的空格

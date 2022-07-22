@@ -1,6 +1,7 @@
-import React from "react";
+import React from 'react'
 
-export default class Index extends React.Component{
+
+export default class Index extends React.Component {
   componentDidMount() {
   }
   render() {

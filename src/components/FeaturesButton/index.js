@@ -1,10 +1,11 @@
-import React from "react";
+import React from 'react'
 import './style.scss'
-import {useNavigate} from "react-router-dom";
+import PropTypes from 'prop-types'
+import { useNavigate } from 'react-router-dom'
 
-export default function Index ({handleSearch = (()=>({}))}){
+export default function Index ({ handleSearch = (() => ({})), }) {
   const navigate = useNavigate()
-  const handleNavigate = (path)=> {
+  const handleNavigate = (path) => {
     navigate(path)
   }
   return (
@@ -17,16 +18,16 @@ export default function Index ({handleSearch = (()=>({}))}){
           <span className="features-button-menu-dot"></span>
         </label>
         <ul className="features-button-menu-items">
-          <li className="features-button-menu-item" onClick={()=>handleNavigate('/')}>
+          <li className="features-button-menu-item" onClick={() => handleNavigate('/')}>
             主页
           </li>
-          <li className="features-button-menu-item" onClick={()=>handleNavigate('/admin')}>
+          <li className="features-button-menu-item" onClick={() => handleNavigate('/admin')}>
             管理
           </li>
-          <li className="features-button-menu-item" onClick={()=>handleNavigate('/LoginPage')}>
+          <li className="features-button-menu-item" onClick={() => handleNavigate('/LoginPage')}>
             登录
           </li>
-          <li className="features-button-menu-item" onClick={()=>handleSearch()}>
+          <li className="features-button-menu-item" onClick={() => handleSearch()}>
             搜索
           </li>
         </ul>
@@ -34,4 +35,7 @@ export default function Index ({handleSearch = (()=>({}))}){
       </nav>
     </div>
   )
+}
+Index.propTypes = {
+  handleSearch: PropTypes.func,
 }

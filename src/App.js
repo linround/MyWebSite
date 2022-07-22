@@ -1,11 +1,10 @@
 import React from 'react'
-import {AuthProvider,RequireAuth} from './components/AuthProvider'
-import {Routes,Route} from 'react-router-dom'
+import { AuthProvider, RequireAuth } from './components/AuthProvider'
+import { Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
 import AdminHome from './pages/AdminHome'
 import MyLayout from './layout'
 import CSSDemo from './pages/cssDemo'
-import LoginPage from './pages/login'
 
 // css动画相关
 import AnimationDemo from './pages/animationDemo'
@@ -13,10 +12,10 @@ import Menus from './pages/menus'
 import Demo2 from './pages/demo2'
 import Buttons from './pages/cssDemo/buttons'
 import LoginForm from './pages/login/index'
-import {Waves} from './pages/cssDemo/waves'
-import {NavBarDemo} from './pages/cssDemo/navBar'
-import {LoginFish} from './pages/login/fish'
-import {P404} from './pages/P404'
+import { Waves } from './pages/cssDemo/waves'
+import { NavBarDemo } from './pages/cssDemo/navBar'
+import { LoginFish } from './pages/login/fish'
+import { P404 } from './pages/P404'
 import Horse from './pages/Horse'
 import MobileIndex from './pages/mobile/index'
 import GridArt from './pages/GridArt'
@@ -51,15 +50,17 @@ export default function App() {
             </RequireAuth>
           }>
           <Route index element={<AdminHome />}></Route>
-          <Route path='/admin/AnimationDemo' element={<AnimationDemo />}></Route>
-          
-          
+          <Route
+            path='/admin/AnimationDemo'
+            element={<AnimationDemo />}>
+          </Route>
+
           <Route path='/admin/VisualizationDemo' element={<VisualizationDemo />} />
           <Route path='/admin/VisualizationDemo/ThreeJs' element={<ThreeJs />} />
           <Route path='/admin/VisualizationDemo/Canvas' element={<Canvas />} />
           <Route path='/admin/Progress' element={<Progress />} />
-          
-          
+
+
           <Route path='/admin/CSSDemo' element={<CSSDemo />} />
           <Route path='/admin/CSSDemo/Menus' element={<Menus />} />
           <Route path='/admin/CSSDemo/Demo2' element={<Demo2 />} />
@@ -86,6 +87,6 @@ export default function App() {
         <Route path='*' element={<P404 />}></Route>
       </Routes>
     </AuthProvider>
-    
+
   )
 }

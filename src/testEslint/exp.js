@@ -1,6 +1,5 @@
- function a(){}
- function b(){}
- 
- export {
-a,b
-}
+function a() {}
+function b() {}
+
+
+export { a, b }

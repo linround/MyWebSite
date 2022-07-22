@@ -1,17 +1,18 @@
-import React from "react";
+import React from 'react'
 import './style.scss'
-import {Link} from 'react-router-dom'
-import {CustomButton12} from "../cssDemo/buttons";
-import ImgProperty from "../cssDemo/imgProperty";
-import BounceWebgl from "./bounceWebgl";
-import TimeMaskLayer from "./timeMaskLayer";
-import DropDownOptions from "../../components/DropDown";
+import { Link } from 'react-router-dom'
+import { CustomButton12 } from '../cssDemo/buttons'
+import ImgProperty from '../cssDemo/imgProperty'
+import BounceWebgl from './bounceWebgl'
+import TimeMaskLayer from './timeMaskLayer'
+import DropDownOptions from '../../components/DropDown'
 import RippleButton from '../../components/RippleButton'
 
-export default class Home extends React.Component{
+
+export default class Home extends React.Component {
   componentDidMount() {
   }
-  
+
   render() {
     return (
       <div className='ly-home-container'>
@@ -26,6 +27,6 @@ export default class Home extends React.Component{
         <DropDownOptions></DropDownOptions>
         <BounceWebgl></BounceWebgl>
       </div>
-    );
+    )
   }
 }

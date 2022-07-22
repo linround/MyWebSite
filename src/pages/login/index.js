@@ -1,24 +1,23 @@
-import React, {useState} from "react";
-import {useLocation, useNavigate} from "react-router-dom";
-import {signIn} from "../../store/user";
-import {useDispatch} from "react-redux";
+import React, { useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { signIn } from '../../store/user'
+import { useDispatch } from 'react-redux'
 import './style.css'
 
-export default function LoginForm(){
+
+export default function LoginForm() {
   const navigate = useNavigate()
   const loaction = useLocation()
   const dispatch = useDispatch()
-  const [userName,setUsername] = useState('')
-  const from = loaction.state?.from?.pathname || "/admin"
-  const onChange = (e)=>{
+  const [userName, setUsername] = useState('')
+  const from = loaction.state?.from?.pathname || '/admin'
+  const onChange = (e) => {
     const value = e.target.value
     setUsername(value)
   }
-  const handleSubmit = ()=>{
-    dispatch(signIn(
-      userName
-    ))
-    navigate(from, {replace: true});
+  const handleSubmit = () => {
+    dispatch(signIn(userName))
+    navigate(from, { replace: true, })
   }
   return (
     <div className="login-box">

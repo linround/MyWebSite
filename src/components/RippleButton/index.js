@@ -1,35 +1,36 @@
-import React from "react";
+import React from 'react'
 import './style.scss'
 
-export default class Index extends React.Component{
+export default class Index extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.onRippleButtonClick = this.onRippleButtonClick.bind(this)
   }
   componentDidMount() {
+
   }
-  onRippleButtonClick(e){
+  onRippleButtonClick(e) {
     const rippleButton = e.currentTarget
     function mousePositionToCustomProp(event, element) {
       // 鼠标相对于事件触发元素对象的最表位置
-      let posX = event.offsetX;
-      let posY = event.offsetY;
+      const posX = event.offsetX
+      const posY = event.offsetY
       console.log(element)
-      console.log(posX,posY)
-    
-      element.style.setProperty("--x", posX + "px");
-      element.style.setProperty("--y", posY + "px");
+      console.log(posX, posY)
+
+      element.style.setProperty('--x', posX + 'px')
+      element.style.setProperty('--y', posY + 'px')
     }
-  
-    mousePositionToCustomProp(e.nativeEvent, rippleButton);
-    rippleButton.classList.add("pulse");
+
+    mousePositionToCustomProp(e.nativeEvent, rippleButton)
+    rippleButton.classList.add('pulse')
     rippleButton.addEventListener(
-      "animationend",
+      'animationend',
       () => {
-        rippleButton.classList.remove("pulse");
+        rippleButton.classList.remove('pulse')
       },
-      { once: true }
-    );
+      { once: true, }
+    )
   }
   render() {
     return (

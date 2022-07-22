@@ -1,51 +1,52 @@
-import {createSlice} from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
+
 
 
 const initialState = {
   name: '',
-  theme: 'dark'
+  theme: 'dark',
 }
 
 function storageSetUser(user = {}) {
   localStorage.setItem('user', JSON.stringify(user))
 }
-function storageGetUser(){
+function storageGetUser() {
   return JSON.parse(localStorage.getItem('user'))
 }
 
 
 const userSlice = createSlice({
-  name:'user',
+  name: 'user',
   initialState,
-  reducers:{
-    signIn(state,action){
+  reducers: {
+    signIn(state, action) {
       state.name = action.payload
       const localUser = storageGetUser()
       storageSetUser({
-        name:  state.name,
-        theme: localUser?.theme || state.theme
+        name: state.name,
+        theme: localUser?.theme || state.theme,
       })
     },
     signOut(state) {
       state.name = ''
       localStorage.removeItem('user')
     },
-    toggleTheme(state,action) {
+    toggleTheme(state, action) {
       state.theme = state.theme === 'dark' ? 'light' : 'dark'
       storageSetUser({
         name: action.payload.name,
-        theme: state.theme
+        theme: state.theme,
       })
-    }
-  }
+    },
+  },
 })
 
 
-export const userSelector = state =>{
+export const userSelector = (state) => {
   const userInfo = storageGetUser() || {}
   return userInfo || state.user
 }
 
 
-export const { signIn,signOut,toggleTheme } = userSlice.actions
+export const { signIn, signOut, toggleTheme, } = userSlice.actions
 export default userSlice.reducer

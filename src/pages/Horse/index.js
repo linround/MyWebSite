@@ -1,7 +1,8 @@
-import React from "react";
+import React from 'react'
 import './style.scss'
 
-export default class Horse extends React.Component{
+
+export default class Horse extends React.Component {
   componentDidMount() {
   }
   render() {
@@ -11,7 +12,7 @@ export default class Horse extends React.Component{
           <input type="checkbox" id="toggle" />
           <label htmlFor="toggle" >
             <div className="floor"></div>
-    
+
             <div className=" ly-horse animate">
               <div className="front-leg right">
                 <div className="shoulder">
@@ -68,7 +69,7 @@ export default class Horse extends React.Component{
                 </div>
                 <div className="back-side"></div>
               </div>
-      
+
               <div className="neck">
                 <div className="under"></div>
                 <div className="front"></div>
@@ -91,7 +92,7 @@ export default class Horse extends React.Component{
                   </div>
                 </div>
               </div>
-      
+
               <div className="back-leg left">
                 <div className="top">
                   <div className="thigh">
@@ -103,7 +104,7 @@ export default class Horse extends React.Component{
                   </div>
                 </div>
               </div>
-      
+
               <div className="head">
                 <div className="skull"></div>
                 <div className="nose"></div>
@@ -115,7 +116,7 @@ export default class Horse extends React.Component{
                 <div className="eye"></div>
               </div>
             </div>
-    
+
             <div className="dust front">
               <div className="particle"></div>
               <div className="particle"></div>
@@ -182,7 +183,7 @@ export default class Horse extends React.Component{
             </div>
           </label>
         </div>
-        
+
       </>
     )
   }

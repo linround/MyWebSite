@@ -1,4 +1,5 @@
-export default function Demo(){
+import React from 'react'
+export default function Demo() {
   return (
     <div>
       cssDemo

@@ -1,64 +1,64 @@
-import React from "react";
+import React from 'react'
 import './style.css'
 
-export default class Demo extends React.Component{
-  
+export default class Demo extends React.Component {
+
   componentDidMount() {
-  
-    const body = document.body;
-    const bgColorsBody = ["#ffb457", "#ff96bd", "#9999fb", "#ffe797", "#cffff1"];
-    const menu = body.querySelector(".menu");
-    const menuItems = menu.querySelectorAll(".menu__item");
-    const menuBorder = menu.querySelector(".menu__border");
-    let activeItem = menu.querySelector(".active");
+
+    const body = document.body
+    const bgColorsBody = ['#ffb457', '#ff96bd', '#9999fb', '#ffe797', '#cffff1']
+    const menu = body.querySelector('.menu')
+    const menuItems = menu.querySelectorAll('.menu__item')
+    const menuBorder = menu.querySelector('.menu__border')
+    let activeItem = menu.querySelector('.active')
 
     function clickItem(item, index) {
 
-      menu.style.removeProperty("--timeOut");
+      menu.style.removeProperty('--timeOut')
 
-      if (activeItem == item) return;
+      if (activeItem === item) return
 
       if (activeItem) {
-        activeItem.classList.remove("active");
+        activeItem.classList.remove('active')
       }
 
 
-      item.classList.add("active");
-      body.style.backgroundColor = bgColorsBody[index];
-      activeItem = item;
-      offsetMenuBorder(activeItem, menuBorder);
+      item.classList.add('active')
+      body.style.backgroundColor = bgColorsBody[index]
+      activeItem = item
+      offsetMenuBorder(activeItem, menuBorder)
 
 
     }
 
     function offsetMenuBorder(element, menuBorder) {
 
-      const offsetActiveItem = element.getBoundingClientRect();
-      const left = Math.floor(offsetActiveItem.left - menu.offsetLeft - (menuBorder.offsetWidth  - offsetActiveItem.width) / 2) +  "px";
-      menuBorder.style.transform = `translate3d(${left}, 0 , 0)`;
+      const offsetActiveItem = element.getBoundingClientRect()
+      const left = Math.floor(offsetActiveItem.left - menu.offsetLeft - ((menuBorder.offsetWidth  - offsetActiveItem.width) / 2)) +  'px'
+      menuBorder.style.transform = `translate3d(${left}, 0 , 0)`
 
     }
 
-    offsetMenuBorder(activeItem, menuBorder);
+    offsetMenuBorder(activeItem, menuBorder)
 
     menuItems.forEach((item, index) => {
 
-      item.addEventListener("click", () => clickItem(item, index));
+      item.addEventListener('click', () => clickItem(item, index))
 
     })
 
-    window.addEventListener("resize", () => {
-      offsetMenuBorder(activeItem, menuBorder);
-      menu.style.setProperty("--timeOut", "none");
-    });
+    window.addEventListener('resize', () => {
+      offsetMenuBorder(activeItem, menuBorder)
+      menu.style.setProperty('--timeOut', 'none')
+    })
   }
   render() {
     return (
       <div>
         <menu className="menu">
-        
+
           <button className="menu__item active" style={{
-            '--bgColorItem': '#ff8c00'
+            '--bgColorItem': '#ff8c00',
           }}>
             <svg className="icon" viewBox="0 0 24 24">
               <path d="M3.8,6.6h16.4"/>
@@ -66,9 +66,9 @@ export default class Demo extends React.Component{
               <path d="M3.8,17.5h16.4"/>
             </svg>
           </button>
-        
+
           <button className="menu__item" style={{
-            '--bgColorItem': '#f54888'
+            '--bgColorItem': '#f54888',
           }}>
             <svg className="icon" viewBox="0 0 24 24">
               <path d="M6.7,4.8h10.7c0.3,0,0.6,0.2,0.7,0.5l2.8,7.3c0,0.1,0,0.2,0,0.3v5.6c0,0.4-0.4,0.8-0.8,0.8H3.8
@@ -76,9 +76,9 @@ export default class Demo extends React.Component{
               <path d="M3.4,12.9H8l1.6,2.8h4.9l1.5-2.8h4.6"/>
             </svg>
           </button>
-        
+
           <button className="menu__item" style={{
-            '--bgColorItem': '#4343f5'
+            '--bgColorItem': '#4343f5',
           }}>
             <svg className="icon" viewBox="0 0 24 24">
               <path d="M3.4,11.9l8.8,4.4l8.4-4.4"/>
@@ -86,9 +86,9 @@ export default class Demo extends React.Component{
               <path d="M3.7,7.8l8.6-4.5l8,4.5l-8,4.3L3.7,7.8z"/>
             </svg>
           </button>
-        
+
           <button className="menu__item" style={{
-            '--bgColorItem': '#e0b115;'
+            '--bgColorItem': '#e0b115;',
           }}>
             <svg className="icon" viewBox="0 0 24 24">
               <path d="M5.1,3.9h13.9c0.6,0,1.2,0.5,1.2,1.2v13.9c0,0.6-0.5,1.2-1.2,1.2H5.1c-0.6,0-1.2-0.5-1.2-1.2V5.1
@@ -97,9 +97,9 @@ export default class Demo extends React.Component{
               <path d="M9.1,9.5v10.3"/>
             </svg>
           </button>
-        
+
           <button className="menu__item" style={{
-            '--bgColorItem':'#65ddb7;'
+            '--bgColorItem': '#65ddb7;',
           }}>
             <svg className="icon" viewBox="0 0 24 24">
               <path d="M5.1,3.9h13.9c0.6,0,1.2,0.5,1.2,1.2v13.9c0,0.6-0.5,1.2-1.2,1.2H5.1c-0.6,0-1.2-0.5-1.2-1.2V5.1
@@ -109,11 +109,11 @@ export default class Demo extends React.Component{
                 d="M10.4,8.8c0,0.9-0.7,1.6-1.6,1.6c-0.9,0-1.6-0.7-1.6-1.6C7.3,8,8,7.3,8.9,7.3C9.7,7.3,10.4,8,10.4,8.8z"/>
             </svg>
           </button>
-        
+
           <div className="menu__border"></div>
-      
+
         </menu>
-      
+
         <div className="svg-container">
           <svg viewBox="0 0 202.9 45.5">
             <clipPath id="menu" clipPathUnits="objectBoundingBox" transform="scale(0.0049285362247413 0.021978021978022)">
@@ -126,6 +126,6 @@ export default class Demo extends React.Component{
       </div>
     )
   }
-  
-  
+
+
 }
