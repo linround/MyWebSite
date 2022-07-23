@@ -88,12 +88,11 @@ export default class DropDownOptions extends React.Component {
         <path d={path} />
       </svg>
     )
-
   }
   onMainButtonClick() {
     const listItems = this.state?.listItems
     const listWrapperSizes = 3.5 // margins, paddings & borders
-    const dropdownOpenHeight = 4.6 * listItems.length + listWrapperSizes
+    const dropdownOpenHeight = (4.6 * listItems.length) + listWrapperSizes
     const showOptions = this.state.showOptions
     this.setState({
       showOptions: !showOptions,

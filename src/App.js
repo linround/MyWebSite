@@ -5,6 +5,7 @@ import Home from './pages/Home'
 import AdminHome from './pages/AdminHome'
 import MyLayout from './layout'
 import CSSDemo from './pages/cssDemo'
+import { WindowPage } from './pages/window'
 
 // css动画相关
 import AnimationDemo from './pages/animationDemo'
@@ -83,7 +84,8 @@ export default function App() {
           <Route path='/common/ThreeJs' element={<CommonThreeJs />}></Route>
           <Route path='/common/Components' element={<CommonComponents />}></Route>
         </Route>
-        <Route path='/' element={<GridArt />} />
+        <Route path='/GridArt' element={<GridArt />} />
+        <Route path='/' element={<WindowPage />}></Route>
         <Route path='*' element={<P404 />}></Route>
       </Routes>
     </AuthProvider>
