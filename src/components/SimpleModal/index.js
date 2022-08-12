@@ -32,9 +32,9 @@ export function SimpleDialogContainer(props) {
     document.onmousemove = eleDrag
   }
 
-  const setPos = (pos0, pos1) => {
-    container.style.top = pos0 + 'px'
-    container.style.left = pos1 + 'px'
+  const setPos = (top, left) => {
+    container.style.top = top + 'px'
+    container.style.left = left + 'px'
   }
 
 
@@ -44,9 +44,9 @@ export function SimpleDialogContainer(props) {
      * 弹框位置
      * 原始的定位 + 开始点击处的位置与移动过程中事件的位置之差
      */
-    const pos0 = posP[0] + (e.clientY - posM[0])
-    const pos1 = posP[1] + (e.clientX - posM[1])
-    setPos(pos0, pos1)
+    const top = posP[0] + (e.clientY - posM[0])
+    const left = posP[1] + (e.clientX - posM[1])
+    setPos(top, left)
   }
 
   const closeDrag = () => {
@@ -77,7 +77,7 @@ export function SimpleDialogContainer(props) {
             X
           </div>
         </div>
-        <div className={`${styles.simpleModalBody} ${styles.win11Scroll}`}>
+        <div className={`${styles.simpleModalBody}`}>
           {props.children || null}
         </div>
         <div className={styles.simpleModalFooter}></div>

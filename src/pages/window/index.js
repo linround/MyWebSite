@@ -45,9 +45,8 @@ function WindowPage() {
         </div>
         <div className={styles.windowFooterRight}>
 
-          <TeamOutlined />
-          <TeamOutlined />
-          <TeamOutlined />
+          { new Date()
+            .toDateString() }
         </div>
       </div>
     </div>
