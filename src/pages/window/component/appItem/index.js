@@ -3,6 +3,17 @@ import styles from './style.less'
 import PropTypes from 'prop-types'
 import { SimpleDialogContainer } from '../../../../components/SimpleModal'
 
+/**
+ *
+ * @param props
+ * @returns {JSX.Element}
+ * @constructor
+ * 这是一个APP应用
+ *
+ * APP应用的弹框的内容
+ * APP的名称
+ * APP的图标
+ */
 export function AppItem(props) {
   const appName = props.appName
   const Content = props.dialogContent
@@ -15,6 +26,7 @@ export function AppItem(props) {
     e.preventDefault()
     console.log(appName, e)
   }
+
   return (
     <>
       <div
