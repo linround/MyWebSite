@@ -59,6 +59,18 @@
 }
 .simpleModalBody {
   flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.5);
+    background-clip: padding-box;
+    border: 6px solid transparent;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.5);
+  }
+  &::-webkit-scrollbar{
+    width: 5px;
+  }
 }
 .simpleModalFooter {
 

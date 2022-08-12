@@ -77,7 +77,7 @@ export function SimpleDialogContainer(props) {
             X
           </div>
         </div>
-        <div className={styles.simpleModalBody}>
+        <div className={`${styles.simpleModalBody} ${styles.win11Scroll}`}>
           {props.children || null}
         </div>
         <div className={styles.simpleModalFooter}></div>

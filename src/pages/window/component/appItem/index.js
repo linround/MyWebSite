@@ -5,6 +5,7 @@ import { SimpleDialogContainer } from '../../../../components/SimpleModal'
 
 export function AppItem(props) {
   const appName = props.appName
+  const Content = props.dialogContent
   const [active, setActive] = useState(false)
   const onDoubleClick = function onDoubleClick(e) {
     setActive(true)
@@ -28,7 +29,7 @@ export function AppItem(props) {
         </div>
       </div>
       <SimpleDialogContainer active={active} appName={appName} close={() => setActive(false)}>
-        { appName }
+        { Content || '暂无内容' }
       </SimpleDialogContainer>
     </>
   )
@@ -37,4 +38,8 @@ export function AppItem(props) {
 AppItem.propTypes = {
   appName: PropTypes.string,
   children: PropTypes.element,
+  dialogContent: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.string
+  ]),
 }
