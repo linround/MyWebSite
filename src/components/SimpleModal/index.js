@@ -14,16 +14,51 @@ export function SimpleDialogContainer(props) {
   // 移动弹框
   const [sTop] = useState('50%')
   const [sLeft] = useState('50%')
-  const onMoverMouseDown = (e) => {
-    console.log(e)
+  let posP = [0, 0]
+  let posM = [0, 0]
+  let container = {}
+
+  const toolDrag = (e) => {
+    e.preventDefault()
+    // 点击事件触发的位置
+    posM = [e.clientY, e.clientX]
+    container = e.target.parentElement && e.target.parentElement.parentElement
+
+    posP = [container.offsetTop, container.offsetLeft]
+
+    console.log('posP:', posP)
+    console.log('container:', container.getBoundingClientRect())
+
+    document.onmouseup = closeDrag
+    document.onmousemove = eleDrag
   }
+
+  const setPos = (pos0, pos1) => {
+    container.style.top = pos0 + 'px'
+    container.style.left = pos1 + 'px'
+  }
+
+
+  const eleDrag = (e) => {
+    e.preventDefault()
+
+    const pos0 = posP[0] + e.clientY - posM[0]
+    const pos1 = posP[1] + e.clientX - posM[1]
+    setPos(pos0, pos1)
+  }
+
+  const closeDrag = () => {
+    document.onmouseup = null
+    document.onmousemove = null
+  }
+
+
   return (
     <>
       <div
         className={
           `${styles.simpleModalContent} ` + (active ? `${styles.simpleModalActive}` : '')
         }
-        onMouseDown={onMoverMouseDown}
         style={{
           width: curWidth,
           height: curHeight,
@@ -32,11 +67,8 @@ export function SimpleDialogContainer(props) {
         }}
       >
         <div className={styles.simpleModalHeader}>
-          <div className={styles.simpleModalHeaderTitle}>
-            <div
-              className={styles.simpleModalContentMover}
-              data-value='moverMouseDown'
-            ></div>
+          <div className={styles.simpleModalHeaderTitle}
+            onMouseDown={toolDrag}>
             { appName }
           </div>
           <div className={ styles.simpleModalHeaderIcons  } onClick={close}>
