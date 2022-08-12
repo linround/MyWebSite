@@ -14,15 +14,16 @@ export function SimpleDialogContainer(props) {
   // 移动弹框
   const [sTop] = useState('50%')
   const [sLeft] = useState('50%')
-  let posP = [0, 0]
-  let posM = [0, 0]
-  let container = {}
+  let posP = [0, 0] // 记录初始点击的位置
+  let posM = [0, 0] // 记录鼠标移动到的位置
+  let container = {} // 记录需要移动的目标元素
 
   const toolDrag = (e) => {
     e.preventDefault()
     // 点击事件触发的位置
     posM = [e.clientY, e.clientX]
     container = e.target.parentElement && e.target.parentElement.parentElement
+
     // offsetParent 指向最近的包含该元素的定位元素，如果该元素的 style.position 被设置为 "fixed"，则该属性返回 null
     // 获取其相对于第一个定位元素的位置
     posP = [container.offsetTop, container.offsetLeft]
