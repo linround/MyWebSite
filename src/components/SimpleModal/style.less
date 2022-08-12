@@ -1,4 +1,5 @@
-
+@size-value: 2px;
+@mover-size-value: 5px;
 .simpleModalContent { // modal
   position: fixed;
   top: 50%;
@@ -8,34 +9,59 @@
   z-index: 100;
   visibility: visible;
   pointer-events: none;
-
   opacity: 0;
-  transition: 0.5s ease-out;
-  transform: translate(0);
   display: flex;
   flex-direction: column;
   border-radius: 10px;
   border: 1px solid #978383;
+  &Top {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: @size-value;
+    cursor: s-resize;
+  }
+  &Right {
 
+  }
+  &Bottom {
+
+  }
+  &Left {
+
+  }
+  &Mover {
+    position: absolute;
+    top: @size-value;
+    width: 100%;
+    height: @mover-size-value;
+    cursor: pointer;
+  }
 
 }
 .simpleModalHeader {
   display: flex;
   justify-content: space-between;
-  padding: 5px 10px;
+  border-bottom: 1px solid #4d4b4b;
   &Title {
     flex: 1;
     display: flex;
     align-items: center;
+    border-radius: 10px 0 0 0;
+    padding-left: 10px;
+    position: relative;
   }
   &Icons {
+    border-radius: 0 8px 0 0;
     cursor: pointer;
-    border: 0;
     width: 35px;
     height: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
+    &:hover {
+      background: darkolivegreen;
+    }
   }
 }
 .simpleModalBody {
