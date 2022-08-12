@@ -23,11 +23,10 @@ export function SimpleDialogContainer(props) {
     // 点击事件触发的位置
     posM = [e.clientY, e.clientX]
     container = e.target.parentElement && e.target.parentElement.parentElement
-
+    // offsetParent 指向最近的包含该元素的定位元素，如果该元素的 style.position 被设置为 "fixed"，则该属性返回 null
+    // 获取其相对于第一个定位元素的位置
     posP = [container.offsetTop, container.offsetLeft]
 
-    console.log('posP:', posP)
-    console.log('container:', container.getBoundingClientRect())
 
     document.onmouseup = closeDrag
     document.onmousemove = eleDrag
@@ -41,9 +40,12 @@ export function SimpleDialogContainer(props) {
 
   const eleDrag = (e) => {
     e.preventDefault()
-
-    const pos0 = posP[0] + e.clientY - posM[0]
-    const pos1 = posP[1] + e.clientX - posM[1]
+    /**
+     * 弹框位置
+     * 原始的定位 + 开始点击处的位置与移动过程中事件的位置之差
+     */
+    const pos0 = posP[0] + (e.clientY - posM[0])
+    const pos1 = posP[1] + (e.clientX - posM[1])
     setPos(pos0, pos1)
   }
 
