@@ -1,4 +1,4 @@
-@size-value: 2px;
+@size-value: 8px;
 @mover-size-value: 5px;
 .simpleModalContent { // modal
   position: fixed;
@@ -16,8 +16,8 @@
   border: 1px solid #978383;
   &Top {
     position: absolute;
-    top: 0;
-    width: 100%;
+    top: -@size-value;
+    width: 85%;
     height: @size-value;
     cursor: s-resize;
   }

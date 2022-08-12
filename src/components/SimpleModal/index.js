@@ -14,8 +14,8 @@ export function SimpleDialogContainer(props) {
   // 移动弹框
   const [sTop] = useState('50%')
   const [sLeft] = useState('50%')
-  let posP = [0, 0] // 记录初始点击的位置
-  let posM = [0, 0] // 记录鼠标移动到的位置
+  let posP = [0, 0] // 记录初始的元素的位置信息
+  let posM = [0, 0] // 记录鼠标第一次按下时的位置
   let container = {} // 记录需要移动的目标元素
 
   const toolDrag = (e) => {
