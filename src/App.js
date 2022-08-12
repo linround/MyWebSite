@@ -6,6 +6,7 @@ import AdminHome from './pages/AdminHome'
 import MyLayout from './layout'
 import CSSDemo from './pages/cssDemo'
 import { WindowPage } from './pages/window'
+import { MacModal } from './pages/macModal'
 
 // css动画相关
 import AnimationDemo from './pages/animationDemo'
@@ -85,6 +86,7 @@ export default function App() {
           <Route path='/common/Components' element={<CommonComponents />}></Route>
         </Route>
         <Route path='/GridArt' element={<GridArt />} />
+        <Route path='/MacModal' element={<MacModal />} />
         <Route path='/' element={<WindowPage />}></Route>
         <Route path='*' element={<P404 />}></Route>
       </Routes>

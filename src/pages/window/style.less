@@ -17,5 +17,34 @@
 
 .windowFooter {
   height: 50px;
+  padding: 10px 10px;
   border: 1px solid black;
+  display: flex;
+  overflow: hidden;
+  &Left{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex: 1;
+  }
+  &Right {
+    display: flex;
+    flex: 1;
+    flex-direction: row-reverse;
+    align-items: center;
+  }
+}
+.modal-svg {
+  position:absolute;
+  top:0;
+  left:0;
+  height:100%;
+  width:100%;
+  border-radius:3px;
+  rect {
+    stroke: #fff;
+    stroke-width: 2px;
+    stroke-dasharray: 778;
+    stroke-dashoffset: 778;
+  }
 }

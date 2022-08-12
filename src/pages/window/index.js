@@ -1,8 +1,10 @@
 import React from 'react'
 import styles from './style.less'
 import { AppItem } from './component/appItem'
+import { FooterMenuItem } from './component/footerMenuItem'
 import {
-  InteractionOutlined, WechatOutlined, TeamOutlined
+  InteractionOutlined, WechatOutlined, TeamOutlined,
+  WindowsOutlined, SearchOutlined
 } from '@ant-design/icons'
 
 function WindowPage() {
@@ -20,7 +22,22 @@ function WindowPage() {
         </AppItem>
 
       </div>
-      <div className={styles.windowFooter}></div>
+      <div className={styles.windowFooter}>
+        <div className={styles.windowFooterLeft}>
+          <FooterMenuItem>
+            <WindowsOutlined />
+          </FooterMenuItem>
+          <FooterMenuItem>
+            <SearchOutlined />
+          </FooterMenuItem>
+        </div>
+        <div className={styles.windowFooterRight}>
+
+          <TeamOutlined />
+          <TeamOutlined />
+          <TeamOutlined />
+        </div>
+      </div>
     </div>
   )
 }

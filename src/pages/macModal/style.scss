@@ -1,0 +1,70 @@
+
+html,
+body {
+  display: table;
+  width: 100%;
+  height: 100%;
+  background: #005C97; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to left, #005C97 , #363795); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to left, #005C97 , #363795); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+
+.main-ctr {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
+
+#element {
+  fill: white;
+}
+
+#step-0,
+#step-1,
+#step-2,
+#step-3 {
+  opacity: 0;
+}
+
+#modal-with-genie-effect #close {
+  cursor: pointer;
+  position: relative;
+  transition: .3s all ease;
+  opacity: 1;
+}
+
+#modal-with-genie-effect #word {
+  transition: .3s all ease;
+  opacity: 1;
+  position: relative;
+}
+
+#modal-with-genie-effect {
+
+  &.active {
+    #close {
+      opacity: 0;
+      pointer-events: none;
+      transition: .3s all ease .15s;
+    }
+
+    #word {
+      opacity: 0;
+      transition: .3s all ease .3s;
+    }
+  }
+}
+
+#open-modal-ctr {
+  opacity: 0;
+  pointer-events: none;
+  cursor: pointer;
+  transition: .3s all ease;
+
+  &.active {
+    opacity: 1;
+    transition: .3s all ease .1s;
+    pointer-events: auto;
+  }
+}
