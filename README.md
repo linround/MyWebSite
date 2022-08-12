@@ -1,5 +1,5 @@
 ## 部署方式
-
+## [网站地址](http://linyuan.social/)
 ## 本地构建
 ```javascript
 npm build
