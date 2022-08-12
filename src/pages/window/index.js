@@ -14,7 +14,7 @@ function WeiXin() {
       姓名：林园 <br/>
       电话：18811786170 <br/>
       微信：18811786170 <br/>
-      github：<a href={github} target={'_blank'} rel="noreferrer">{ github}</a>
+      Github：<a href={github} target={'_blank'} rel="noreferrer">{ github}</a>
     </div>
   )
 }
