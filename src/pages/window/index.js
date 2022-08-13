@@ -10,11 +10,29 @@ import {
 function WeiXin() {
   const github = 'https://github.com/linyuan1105'
   return (
-    <div className={styles.wxContent}>
+    <div className={styles.APPContentPadding}>
       姓名：林园 <br/>
       电话：18811786170 <br/>
       微信：18811786170 <br/>
       Github：<a href={github} target={'_blank'} rel="noreferrer">{ github}</a>
+    </div>
+  )
+}
+
+function MyBlog() {
+  return (
+    <div className={styles.APPContentPadding}>
+      计划中·····<br />
+      这是一个<strong><a>学习笔记资料</a></strong>文件夹，以文件夹的方式记录学习的相关资料
+    </div>
+  )
+}
+
+function RecycleBin() {
+  return (
+    <div className={styles.APPContentPadding}>
+      计划中·····<br />
+      这是一个<strong><a>删除的资料</a></strong>文件夹，以文件夹链接的方式记录不重要或者繁琐的内容
     </div>
   )
 }
@@ -26,10 +44,10 @@ function WindowPage() {
         <AppItem dialogId='wx' appName='联系方式' dialogContent={<WeiXin />}>
           <WechatOutlined />
         </AppItem>
-        <AppItem dialogId='recycle-bin' appName='回收站' >
+        <AppItem dialogId='recycle-bin' appName='回收站' dialogContent={<RecycleBin />} >
           <InteractionOutlined />
         </AppItem>
-        <AppItem dialogId='blog' appName='Blog文件信息' >
+        <AppItem dialogId='blog' appName='Blog文件信息' dialogContent={<MyBlog />}>
           <TeamOutlined />
         </AppItem>
 
