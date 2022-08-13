@@ -1,0 +1,20 @@
+.FolderTree{
+  &Container {
+    min-width: 200px;
+    width: 200px;
+    position: relative;
+    padding: 5px 6px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    &::after{
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: 1px;
+      background: white;
+      transform: scale(.2,1);
+    }
+  }
+}

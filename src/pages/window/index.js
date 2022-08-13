@@ -19,14 +19,6 @@ function WeiXin() {
   )
 }
 
-function MyBlog() {
-  return (
-    <div className={styles.APPContentPadding}>
-      计划中·····<br />
-      这是一个<strong><a>学习笔记资料</a></strong>文件夹，以文件夹的方式记录学习的相关资料
-    </div>
-  )
-}
 
 function RecycleBin() {
   return (
@@ -55,7 +47,7 @@ function WindowPage() {
         <AppItem dialogId='recycle-bin' appName='回收站' dialogContent={<RecycleBin />} >
           <DesktopOutlined />
         </AppItem>
-        <AppItem dialogId='blog' appName='Blog文件信息' dialogContent={<MyBlog />}>
+        <AppItem dialogId='blog' appName='Blog文件信息' >
           <TeamOutlined />
         </AppItem>
         <AppItem dialogId='components' appName='组件' dialogContent={<Components />}>

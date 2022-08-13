@@ -4,6 +4,10 @@ import styles from './style.less'
 import { useSelector } from 'react-redux'
 import { dialogSelector } from '../../store/dialog'
 import { MenusFunction } from '../../pages/window/component/MenusFunction'
+import { FolderBody } from '../../pages/window/component/FolderBody'
+
+const minHeight = 200
+const minWidth = 200
 
 export function SimpleDialogContainer(props) {
   const active = props.active
@@ -80,9 +84,9 @@ export function SimpleDialogContainer(props) {
     if (operation === 0) {
       setPos(top, left)
     } else {
-      //
-      height = Math.max(height, 100)
-      width = Math.max(width, 100)
+
+      height = Math.max(height, minHeight)
+      width = Math.max(width, minWidth)
       // 对于元素位置的处理，需要考虑之前的transform位置
       top = posP[0] + (Math.min(vec[0], 0) * (height - dimP[0]))
       left = posP[1] + (Math.min(vec[1], 0) * (width - dimP[1]))
@@ -113,7 +117,7 @@ export function SimpleDialogContainer(props) {
         </div>
         <MenusFunction />
         <div className={`${styles.simpleModalBody}`}>
-          {props.children || null}
+          {props.children || <FolderBody />}
         </div>
 
 

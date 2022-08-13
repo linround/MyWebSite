@@ -56,7 +56,7 @@ export function AppItem(props) {
         appName={appName}
         handleActivateAction={activateAction}
         close={() => setActive(false)}>
-        { Content || '暂无内容' }
+        { Content || null }
       </SimpleDialogContainer>
     </>
   )

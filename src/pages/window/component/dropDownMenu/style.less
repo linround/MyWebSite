@@ -1,0 +1,30 @@
+.DropDownMenu {
+  &Container {
+    display: flex;
+    flex-direction: column;
+    margin: 5px 0;
+  }
+  &Title{
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    &:hover{
+      &::before{
+        content: "";
+        position: absolute;
+        left: 5px;
+        width: 95%;
+        height: 1.5em;
+        border-radius: 2px;
+        pointer-events: none;
+        background: rgba(136, 136, 136, 0.24);
+
+      }
+    }
+
+  }
+  &Content {
+    padding-left: 3em;
+  }
+}
