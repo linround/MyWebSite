@@ -1,13 +1,12 @@
 import React from 'react'
 import styles from './styles.less'
-import { PlusCircleOutlined } from '@ant-design/icons'
-
+import { MyIcon } from '../../../../components/Icon'
 export function MenusFunction() {
   return (
     <div className={styles.MenusFunctionContainer}>
       <div className={styles.MenusFunctionLeft}>
         <div className={styles.MenusFunctionLeftCreateButton}>
-          <PlusCircleOutlined />
+          <MyIcon iconName='faCirclePlus' />
           新建
         </div>
       </div>
