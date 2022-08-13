@@ -23,13 +23,13 @@ function WindowPage() {
   return (
     <div className={styles.windowContainer}>
       <div className={styles.windowBody}>
-        <AppItem appName='微信' dialogContent={<WeiXin />}>
+        <AppItem appName='联系方式' dialogContent={<WeiXin />}>
           <WechatOutlined />
         </AppItem>
         <AppItem appName='回收站' >
           <InteractionOutlined />
         </AppItem>
-        <AppItem appName='此电脑' >
+        <AppItem appName='Blog文件信息' >
           <TeamOutlined />
         </AppItem>
 

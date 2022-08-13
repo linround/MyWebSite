@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React  from 'react'
 import PropTypes from 'prop-types'
 import styles from './style.less'
 
@@ -6,14 +6,10 @@ export function SimpleDialogContainer(props) {
   const active = props.active
   const appName = props.appName
   const close = props.close || (() => {})
-  const [curWidth] = useState('30%')
-  const [curHeight] = useState('30%')
 
   // 顶部拉伸
 
   // 移动弹框
-  const [sTop] = useState('50%')
-  const [sLeft] = useState('50%')
   let posP = [0, 0] // 记录初始的元素的位置信息
   let posM = [0, 0] // 记录鼠标第一次按下时的位置
   let container = {} // 记录需要移动的目标元素
@@ -53,10 +49,15 @@ export function SimpleDialogContainer(props) {
   const setPos = (top, left) => {
     container.style.top = top + 'px'
     container.style.left = left + 'px'
+    // 这里处理在位置改变后的圆角
+    container.style.borderRadius = '10px'
+
   }
   const setDim = (height, width) => {
     container.style.height = height + 'px'
     container.style.width = width + 'px'
+    // 这里处理在位置改变后的圆角
+    container.style.borderRadius = '10px'
   }
 
   const eleDrag = (e) => {
@@ -77,18 +78,13 @@ export function SimpleDialogContainer(props) {
       //
       height = Math.max(height, 100)
       width = Math.max(width, 100)
-      // 这里因为有上下都会因为定位和宽高的影响，所以最终只取一半即可
+      // 对于元素位置的处理，需要考虑之前的transform位置
       top = posP[0] + (Math.min(vec[0], 0) * (height - dimP[0]))
       left = posP[1] + (Math.min(vec[1], 0) * (width - dimP[1]))
-      console.log('==========')
-      console.log('lastTop：', lastTop)
-      console.log('distance:', height - dimP[0])
-      lastTop = top
       setDim(height, width)
       setPos(top, left)
     }
   }
-  let lastTop = 0
 
   const closeDrag = () => {
     document.onmouseup = null
@@ -101,18 +97,11 @@ export function SimpleDialogContainer(props) {
       <div
         className={
           `${styles.simpleModalContent} ` + (active ? `${styles.simpleModalActive}` : '')
-        }
-        style={{
-          width: curWidth,
-          height: curHeight,
-          top: sTop,
-          left: sLeft,
-        }}
-      >
+        }>
         <div className={styles.simpleModalHeader}>
           <div className={styles.simpleModalHeaderTitle}
             onMouseDown={(e) => toolDrag(e, 0)}>
-            { appName }
+            <span className={styles.simpleModalHeaderTitleSpan}>{ appName }</span>
           </div>
           <div className={ styles.simpleModalHeaderIcons  } onClick={close}>
             X
