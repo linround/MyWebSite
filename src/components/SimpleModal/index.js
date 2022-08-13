@@ -1,12 +1,16 @@
 import React  from 'react'
 import PropTypes from 'prop-types'
 import styles from './style.less'
+import { useSelector } from 'react-redux'
+import { dialogSelector } from '../../store/dialog'
 
 export function SimpleDialogContainer(props) {
   const active = props.active
   const appName = props.appName
   const close = props.close || (() => {})
-
+  const handleActivateAction = props.handleActivateAction || (() => {})
+  const currentDialogId = useSelector(dialogSelector)
+  const dialogId = props.dialogId
   // 顶部拉伸
 
   // 移动弹框
@@ -97,7 +101,12 @@ export function SimpleDialogContainer(props) {
       <div
         className={
           `${styles.simpleModalContent} ` + (active ? `${styles.simpleModalActive}` : '')
-        }>
+        }
+        style={{
+          zIndex: currentDialogId === dialogId ? '9999' : '100',
+        }}
+        onClick={handleActivateAction}
+      >
         <div className={styles.simpleModalHeader}>
           <div className={styles.simpleModalHeaderTitle}
             onMouseDown={(e) => toolDrag(e, 0)}>
@@ -151,6 +160,8 @@ SimpleDialogContainer.propTypes = {
     PropTypes.element,
     PropTypes.string
   ]),
+  dialogId: PropTypes.string,
   close: PropTypes.func,
   appName: PropTypes.string,
+  handleActivateAction: PropTypes.func,
 }
