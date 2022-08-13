@@ -76,9 +76,11 @@ const GitHubProFolder = () => {
 
 export function FolderTree() {
   return (
-    <div className={`${styles.FolderTreeContainer} ${scrollStyles.ScrollStyle}`}>
-      <BlogFolder></BlogFolder>
-      <GitHubProFolder></GitHubProFolder>
+    <div className={styles.FolderTreeContainer}>
+      <div className={`${styles.FolderTreeContainerContent} ${scrollStyles.ScrollStyle}`}>
+        <BlogFolder></BlogFolder>
+        <GitHubProFolder></GitHubProFolder>
+      </div>
     </div>
   )
 }
