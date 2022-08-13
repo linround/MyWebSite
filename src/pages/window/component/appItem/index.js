@@ -47,7 +47,7 @@ export function AppItem(props) {
           { props.children }
         </div>
         <div className={styles.appItemName}>
-          {appName}
+          <span>{appName}</span>
         </div>
       </div>
       <SimpleDialogContainer

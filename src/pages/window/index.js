@@ -4,7 +4,7 @@ import { AppItem } from './component/appItem'
 import { FooterMenuItem } from './component/footerMenuItem'
 import {
   InteractionOutlined, WechatOutlined, TeamOutlined,
-  WindowsOutlined, SearchOutlined
+  WindowsOutlined, SearchOutlined, DesktopOutlined
 } from '@ant-design/icons'
 
 function WeiXin() {
@@ -37,6 +37,14 @@ function RecycleBin() {
   )
 }
 
+function Components() {
+  return (
+    <div className={styles.APPContentPadding}>
+      计划中·····<br />
+      这是一个<strong><a>记录一些组件样式和功能</a></strong>文件夹
+    </div>
+  )
+}
 function WindowPage() {
   return (
     <div className={styles.windowContainer}>
@@ -45,10 +53,13 @@ function WindowPage() {
           <WechatOutlined />
         </AppItem>
         <AppItem dialogId='recycle-bin' appName='回收站' dialogContent={<RecycleBin />} >
-          <InteractionOutlined />
+          <DesktopOutlined />
         </AppItem>
         <AppItem dialogId='blog' appName='Blog文件信息' dialogContent={<MyBlog />}>
           <TeamOutlined />
+        </AppItem>
+        <AppItem dialogId='components' appName='组件' dialogContent={<Components />}>
+          <InteractionOutlined />
         </AppItem>
 
       </div>
