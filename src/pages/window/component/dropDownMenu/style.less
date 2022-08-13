@@ -18,13 +18,19 @@
         height: 1.5em;
         border-radius: 2px;
         pointer-events: none;
-        background: rgba(136, 136, 136, 0.24);
+        background: rgb(136 109 109 / 15%);;
 
+      }
+    }
+    &:active{
+      &::before{
+        background: rgb(136 109 109 / 10%);;
       }
     }
 
   }
   &Content {
     padding-left: 3em;
+    position: relative;
   }
 }
