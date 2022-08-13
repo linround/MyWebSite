@@ -4,7 +4,7 @@ import { AppItem } from './component/appItem'
 import { FooterMenuItem } from './component/footerMenuItem'
 import {
   InteractionOutlined, WechatOutlined, TeamOutlined,
-  WindowsOutlined, SearchOutlined, DesktopOutlined
+  WindowsOutlined, SearchOutlined, DesktopOutlined, GithubOutlined
 } from '@ant-design/icons'
 
 function WeiXin() {
@@ -38,6 +38,7 @@ function Components() {
   )
 }
 function WindowPage() {
+  const githubLink = 'https://github.com/linyuan1105'
   return (
     <div className={styles.windowContainer}>
       <div className={styles.windowBody}>
@@ -52,6 +53,12 @@ function WindowPage() {
         </AppItem>
         <AppItem dialogId='components' appName='组件' dialogContent={<Components />}>
           <InteractionOutlined />
+        </AppItem>
+
+        <AppItem dialogId='GitHub' appName='GitHub'>
+          <a href={githubLink} target={'_blank'} rel="noreferrer">
+            <GithubOutlined />
+          </a>
         </AppItem>
 
       </div>
