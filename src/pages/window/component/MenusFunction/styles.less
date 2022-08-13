@@ -1,0 +1,38 @@
+.MenusFunction {
+  &Container{
+    padding: 10px 10px 5px 10px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #4d4b4b;
+    font-size: 13px;
+  }
+  &Left {
+    border-right: 1px solid #635858;
+    display: flex;
+    align-items: center;
+    &CreateButton{
+      padding: 3px 10px;
+      border-radius: 5px;
+      margin-right: 5px;
+      cursor: pointer;
+      position: relative;
+      border: 1px solid transparent;
+      font-size: 12px;
+      &:active{
+        border-color: white;
+      }
+      &:hover{
+        background: #454545;
+      }
+      svg {
+        color: #0697cf;
+        height: 12px;
+      }
+    }
+  }
+  &Center {
+    flex: 1;
+  }
+  &Right {
+  }
+}

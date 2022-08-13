@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styles from './style.less'
 import { useSelector } from 'react-redux'
 import { dialogSelector } from '../../store/dialog'
+import { MenusFunction } from '../../pages/window/component/MenusFunction'
 
 export function SimpleDialogContainer(props) {
   const active = props.active
@@ -98,15 +99,9 @@ export function SimpleDialogContainer(props) {
 
   return (
     <>
-      <div
-        className={
-          `${styles.simpleModalContent} ` + (active ? `${styles.simpleModalActive}` : '')
-        }
-        style={{
-          zIndex: currentDialogId === dialogId ? '9999' : '100',
-        }}
-        onMouseDown={handleActivateAction}
-      >
+      <div className={ `${styles.simpleModalContent} ` + (active ? `${styles.simpleModalActive}` : '') }
+        style={{ zIndex: currentDialogId === dialogId ? '9999' : '100', }}
+        onMouseDown={handleActivateAction}>
         <div className={styles.simpleModalHeader}>
           <div className={styles.simpleModalHeaderTitle}
             onMouseDown={(e) => toolDrag(e, 0)}>
@@ -116,8 +111,7 @@ export function SimpleDialogContainer(props) {
             X
           </div>
         </div>
-
-
+        <MenusFunction />
         <div className={`${styles.simpleModalBody}`}>
           {props.children || null}
         </div>
