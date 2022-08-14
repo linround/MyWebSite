@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 export const FolderItem = (props) => {
   const folderTitle = props.folderTitle
   const folderChildren = props.folderChildren || []
-
+  const onSelected = props.onSelected
   const [isOpen, setOpen] = useState(false)
   const None = () => (<></>)
   const handleOpen = () => {
@@ -30,6 +30,8 @@ export const FolderItem = (props) => {
       <DropDownMenu
         isFolder
         isOpen
+        onSelected={onSelected}
+        itemKey={folderTitle}
         NavTitle={<FolderTitle />}
         directionIcon={isOpen ? 'faAngleDown' : 'faAngleRight'}
         handleOpen={handleOpen}>
@@ -42,4 +44,5 @@ export const FolderItem = (props) => {
 FolderItem.propTypes = {
   folderTitle: PropTypes.string, // 文件夹的名称
   folderChildren: PropTypes.array, // 文件夹的子元素
+  onSelected: PropTypes.func, // 选中的节点信息
 }

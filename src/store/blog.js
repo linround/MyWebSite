@@ -38,9 +38,14 @@ const blogsSlice = createSlice({
   name: 'dialog',
   initialState,
   reducers: {
-    addItem(state, action) {
-      const type = action.payload.type
-      state[type].push(action.payload.data)
+    addBlogItem(state, action) {
+      const { type, data, } = action.payload
+      const source = state[type]
+      if (source.includes(data)) {
+        state[type].push(`${data}${Date.now()}`)
+      } else {
+        state[type].push(data)
+      }
     },
   },
 })
@@ -50,5 +55,5 @@ export const blogsSelector = (state) => state.blogs.blogs
 export const githubSelector = (state) => state.blogs.github
 
 
-export const { addItem, } = blogsSlice.actions
+export const { addBlogItem, } = blogsSlice.actions
 export default blogsSlice.reducer

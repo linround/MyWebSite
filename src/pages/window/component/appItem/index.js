@@ -21,6 +21,7 @@ export function AppItem(props) {
   const appName = props.appName
   const Content = props.dialogContent
   const dialogId = props.dialogId
+  const onAdd = props.onAdd || (() => {})
   const [active, setActive] = useState(false)
   const dispatch = useDispatch()
   const onDoubleClick = function onDoubleClick(e) {
@@ -54,6 +55,7 @@ export function AppItem(props) {
         dialogId={dialogId}
         active={active}
         appName={appName}
+        onAdd={onAdd}
         handleActivateAction={activateAction}
         close={() => setActive(false)}>
         { Content || null }
@@ -70,4 +72,5 @@ AppItem.propTypes = {
     PropTypes.element,
     PropTypes.string
   ]),
+  onAdd: PropTypes.func, // 与弹框的新建操作相关
 }

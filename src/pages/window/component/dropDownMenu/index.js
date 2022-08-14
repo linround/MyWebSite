@@ -8,13 +8,18 @@ const DefaultNav = () => (
 )
 
 export function DropDownMenu(props) {
+  const handleSelected = props.onSelected || (() => {})
   const directionIcon = props.directionIcon
   const handleOpen = props.handleOpen || (() => {})
+
+  const onSelected = () => {
+    handleSelected(props.itemKey)
+  }
   const isFolder = props.isFolder || false
   const titleIcon = props.titleIcon || 'faFolderBlank'
   return (
     <div className={styles.DropDownMenuContainer}>
-      <div className={styles.DropDownMenuTitle}>
+      <div className={styles.DropDownMenuTitle} onClick={onSelected}>
         {isFolder ? <MyIcon iconName={directionIcon} onClick={handleOpen}></MyIcon> : ''}
         {<MyIcon iconName={titleIcon} />}
         {props.NavTitle || <DefaultNav /> }
@@ -43,5 +48,7 @@ DropDownMenu.propTypes = {
   handleOpen: PropTypes.func, // 切换打开该文件夹起
   isFolder: PropTypes.bool, // 是否文件夹（文件夹具有可折叠的方向图标）
   isOpen: PropTypes.bool, // 是否打开
+  onSelected: PropTypes.func, // 选择当前项目
+  itemKey: PropTypes.string, // 记录当前节点的key值
 }
 

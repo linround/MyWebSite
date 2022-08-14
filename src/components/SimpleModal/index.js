@@ -7,6 +7,7 @@ import { MenusFunction } from '../../pages/window/component/MenusFunction'
 import { FolderBody } from '../../pages/window/component/FolderBody'
 import { MyIcon } from '../Icon'
 
+
 const minHeight = 200
 const minWidth = 200
 
@@ -17,6 +18,7 @@ export function SimpleDialogContainer(props) {
   const handleActivateAction = props.handleActivateAction || (() => {})
   const currentDialogId = useSelector(dialogSelector)
   const dialogId = props.dialogId
+  const onAdd = props.onAdd || (() => {})
   // 顶部拉伸
 
   // 移动弹框
@@ -116,7 +118,7 @@ export function SimpleDialogContainer(props) {
             <MyIcon iconName='faX'/>
           </div>
         </div>
-        <MenusFunction />
+        <MenusFunction onAdd={onAdd}/>
         <div className={`${styles.simpleModalBody}`}>
           {props.children || <FolderBody />}
         </div>
@@ -163,4 +165,5 @@ SimpleDialogContainer.propTypes = {
   close: PropTypes.func, // 关闭弹框的操作
   appName: PropTypes.string, // 打开弹框后的 弹框标题
   handleActivateAction: PropTypes.func, // 激活当前弹框（即层级优先显示）
+  onAdd: PropTypes.func, // 菜单栏的新建操作
 }

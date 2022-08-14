@@ -6,6 +6,8 @@ import {
   InteractionOutlined, WechatOutlined, TeamOutlined,
   WindowsOutlined, SearchOutlined, DesktopOutlined, GithubOutlined
 } from '@ant-design/icons'
+import { addBlogItem } from '../../store/blog'
+import { useDispatch } from 'react-redux'
 
 function WeiXin() {
   const github = 'https://github.com/linyuan1105'
@@ -38,6 +40,13 @@ function Components() {
   )
 }
 function WindowPage() {
+  const dispatch = useDispatch()
+  const handleAddBlog = () => {
+    dispatch(addBlogItem({
+      type: 'blogs',
+      data: '新建',
+    }))
+  }
   const githubLink = 'https://github.com/linyuan1105'
   return (
     <div className={styles.windowContainer}>
@@ -48,7 +57,7 @@ function WindowPage() {
         <AppItem dialogId='recycle-bin' appName='回收站' dialogContent={<RecycleBin />} >
           <DesktopOutlined />
         </AppItem>
-        <AppItem dialogId='blog' appName='Blog文件信息' >
+        <AppItem dialogId='blog' appName='Blog文件信息' onAdd={handleAddBlog}>
           <TeamOutlined />
         </AppItem>
         <AppItem dialogId='components' appName='组件' dialogContent={<Components />}>

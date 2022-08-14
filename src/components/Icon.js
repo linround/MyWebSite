@@ -5,8 +5,12 @@ import PropTypes from 'prop-types'
 
 export function MyIcon(props) {
   const iconName = props.iconName
-  const onClick = props.onClick || (() => {})
-  return (<FontAwesomeIcon icon={AllIcons[iconName]} onClick={() => onClick()} />)
+  const onClick = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    props.onClick && props.onClick()
+  }
+  return (<FontAwesomeIcon icon={AllIcons[iconName]} onClick={(e) => onClick(e)} />)
 }
 MyIcon.propTypes = {
   iconName: PropTypes.string,
