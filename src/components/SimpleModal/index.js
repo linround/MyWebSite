@@ -36,9 +36,9 @@ export function SimpleDialogContainer(props) {
     operation = op
     // 点击事件触发的位置
     posM = [e.clientY, e.clientX]
-    container = e.target.parentElement && e.target.parentElement.parentElement
+    container = e.currentTarget.parentElement && e.currentTarget.parentElement.parentElement
     if (operation === 1) {
-      container = e.target.parentElement
+      container = e.currentTarget.parentElement
       // 记录当前的方向变化
       vec = v
     }
