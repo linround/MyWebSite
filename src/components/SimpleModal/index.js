@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 import { dialogSelector } from '../../store/dialog'
 import { MenusFunction } from '../../pages/window/component/MenusFunction'
 import { FolderBody } from '../../pages/window/component/FolderBody'
+import { MyIcon } from '../Icon'
 
 const minHeight = 200
 const minWidth = 200
@@ -112,7 +113,7 @@ export function SimpleDialogContainer(props) {
             <span className={styles.simpleModalHeaderTitleSpan}>{ appName }</span>
           </div>
           <div className={ styles.simpleModalHeaderIcons  } onClick={close}>
-            X
+            <MyIcon iconName='faX'/>
           </div>
         </div>
         <MenusFunction />
@@ -153,13 +154,13 @@ export function SimpleDialogContainer(props) {
   )
 }
 SimpleDialogContainer.propTypes = {
-  active: PropTypes.bool,
-  children: PropTypes.oneOfType([
+  active: PropTypes.bool, // 激活弹框
+  children: PropTypes.oneOfType([ // 弹框的内容 默认是文件夹的弹框
     PropTypes.element,
     PropTypes.string
   ]),
-  dialogId: PropTypes.string,
-  close: PropTypes.func,
-  appName: PropTypes.string,
-  handleActivateAction: PropTypes.func,
+  dialogId: PropTypes.string, // 弹框的ID 这个与后续弹框的层级显示有关
+  close: PropTypes.func, // 关闭弹框的操作
+  appName: PropTypes.string, // 打开弹框后的 弹框标题
+  handleActivateAction: PropTypes.func, // 激活当前弹框（即层级优先显示）
 }

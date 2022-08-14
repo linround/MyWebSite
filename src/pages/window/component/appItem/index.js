@@ -63,10 +63,10 @@ export function AppItem(props) {
 }
 
 AppItem.propTypes = {
-  appName: PropTypes.string,
-  children: PropTypes.element,
-  dialogId: PropTypes.string,
-  dialogContent: PropTypes.oneOfType([
+  appName: PropTypes.string, // app 应的名称
+  children: PropTypes.element, // app 图标组件
+  dialogId: PropTypes.string, // app的唯一ID
+  dialogContent: PropTypes.oneOfType([ // app弹框后显示的内容
     PropTypes.element,
     PropTypes.string
   ]),
