@@ -39,6 +39,8 @@ function Components() {
     </div>
   )
 }
+
+
 function WindowPage() {
   const module = useSelector(moduleSelector)
   const dispatch = useDispatch()

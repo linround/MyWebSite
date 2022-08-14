@@ -49,6 +49,10 @@ const blogsSlice = createSlice({
         state[type].push(data)
       }
     },
+    setBlogItem(state, action) {
+      const { type, data, } = action.payload
+      state[type] = data
+    },
     setCurrentModule(state, action) {
       state.currentModule = action.payload
     },
@@ -61,5 +65,5 @@ export const githubSelector = (state) => state.blogs.github
 export const moduleSelector = (state) => state.blogs.currentModule
 
 
-export const { addBlogItem, setCurrentModule, } = blogsSlice.actions
+export const { addBlogItem, setCurrentModule, setBlogItem, } = blogsSlice.actions
 export default blogsSlice.reducer
