@@ -5,9 +5,12 @@ import PropTypes from 'prop-types'
 
 export function MyIcon(props) {
   const iconName = props.iconName
+  const noBubble = props.noBubble !== undefined ? props.noBubble : false
   const onClick = (e) => {
-    e.preventDefault()
-    e.stopPropagation()
+    if (noBubble) {
+      e.preventDefault()
+      e.stopPropagation()
+    }
     props.onClick && props.onClick()
   }
   return (<FontAwesomeIcon icon={AllIcons[iconName]} onClick={(e) => onClick(e)} />)
@@ -15,4 +18,5 @@ export function MyIcon(props) {
 MyIcon.propTypes = {
   iconName: PropTypes.string,
   onClick: PropTypes.func,
+  noBubble: PropTypes.bool, // 是否支持冒泡 因为树状图不能冒泡  默认是支持冒泡的
 }

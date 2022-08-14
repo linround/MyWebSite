@@ -20,7 +20,7 @@ export function DropDownMenu(props) {
   return (
     <div className={styles.DropDownMenuContainer}>
       <div className={styles.DropDownMenuTitle} onClick={onSelected}>
-        {isFolder ? <MyIcon iconName={directionIcon} onClick={handleOpen}></MyIcon> : ''}
+        {isFolder ? <MyIcon iconName={directionIcon} onClick={handleOpen} noBubble={true}></MyIcon> : ''}
         {<MyIcon iconName={titleIcon} />}
         {props.NavTitle || <DefaultNav /> }
       </div>
