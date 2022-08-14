@@ -34,7 +34,6 @@ const initialState = {
 }
 
 
-
 const blogsSlice = createSlice({
   name: 'dialog',
   initialState,

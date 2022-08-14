@@ -1,14 +1,36 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './styles.less'
 import PropTypes from 'prop-types'
 import scrollStyles from '../../../style.less'
 import { MyIcon } from '../../../../../components/Icon'
+import { ReactSortable } from 'react-sortablejs'
+import { moduleSelector, setBlogItem } from '../../../../../store/blog'
+import { useSelector, useDispatch } from 'react-redux'
 
 export function FolderItems(props) {
-  const items = props.items
+  const dispatch = useDispatch()
+  const currentModule = useSelector(moduleSelector)
+  const items = props.items || []
+  const [state, setState] = useState([...items])
+  const onSort = () => {
+    dispatch(setBlogItem({
+      type: currentModule,
+      data: state.map((item) => item.toString()),
+    }))
+  }
+  useEffect(() => {
+    setState(items)
+  }, [items])
   return (
-    <div className={`${styles.FolderItemsContainer}  ${scrollStyles.ScrollStyle}`}>
-      {items && items.map((item) => (
+    <ReactSortable
+      list={state}
+      animation={200}
+      onSort={onSort}
+      delayOnTouchStart={true}
+      delay={2}
+      setList={setState}
+      className={`${styles.FolderItemsContainer}  ${scrollStyles.ScrollStyle}`}>
+      {state && state.map((item) => (
         <div key={item} className={styles.FolderItemsItem}>
           <div className={styles.FolderItemsItemIcon}>
             <MyIcon iconName='faFolderClosed'></MyIcon>
@@ -16,7 +38,7 @@ export function FolderItems(props) {
           <div className={styles.FolderItemsItemText}>{item}</div>
         </div>
       ))}
-    </div>
+    </ReactSortable>
   )
 }
 
