@@ -13,8 +13,7 @@ function WeiXin() {
   const github = 'https://github.com/linyuan1105'
   return (
     <div className={styles.APPContentPadding}>
-      姓名：林园 <br/>
-      电话：18811786170 <br/>
+      姓名：林 <br/>
       微信：18811786170 <br/>
       Github：<a href={github} target={'_blank'} rel="noreferrer">{ github}</a>
     </div>

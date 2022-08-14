@@ -18,6 +18,7 @@ export function FolderItems(props) {
       data: state.map((item) => item.toString()),
     }))
   }
+
   useEffect(() => {
     setState(items)
   }, [items])
