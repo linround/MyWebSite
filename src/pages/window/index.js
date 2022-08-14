@@ -6,8 +6,8 @@ import {
   InteractionOutlined, WechatOutlined, TeamOutlined,
   WindowsOutlined, SearchOutlined, DesktopOutlined, GithubOutlined
 } from '@ant-design/icons'
-import { addBlogItem } from '../../store/blog'
-import { useDispatch } from 'react-redux'
+import { addBlogItem, moduleSelector } from '../../store/blog'
+import { useDispatch, useSelector } from 'react-redux'
 
 function WeiXin() {
   const github = 'https://github.com/linyuan1105'
@@ -40,10 +40,11 @@ function Components() {
   )
 }
 function WindowPage() {
+  const module = useSelector(moduleSelector)
   const dispatch = useDispatch()
   const handleAddBlog = () => {
     dispatch(addBlogItem({
-      type: 'blogs',
+      type: module,
       data: '新建',
     }))
   }

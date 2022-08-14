@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
+  currentModule: '',
   blogs: ['TypeScript', 'Vue源码解读'],
   github: [
     'gitPractice',
@@ -41,11 +42,15 @@ const blogsSlice = createSlice({
     addBlogItem(state, action) {
       const { type, data, } = action.payload
       const source = state[type]
+      if (!source) return
       if (source.includes(data)) {
         state[type].push(`${data}${Date.now()}`)
       } else {
         state[type].push(data)
       }
+    },
+    setCurrentModule(state, action) {
+      state.currentModule = action.payload
     },
   },
 })
@@ -53,7 +58,8 @@ const blogsSlice = createSlice({
 
 export const blogsSelector = (state) => state.blogs.blogs
 export const githubSelector = (state) => state.blogs.github
+export const moduleSelector = (state) => state.blogs.currentModule
 
 
-export const { addBlogItem, } = blogsSlice.actions
+export const { addBlogItem, setCurrentModule, } = blogsSlice.actions
 export default blogsSlice.reducer

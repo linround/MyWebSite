@@ -16,7 +16,7 @@ export function DropDownMenu(props) {
     handleSelected(props.itemKey)
   }
   const isFolder = props.isFolder || false
-  const titleIcon = props.titleIcon || 'faFolderBlank'
+  const titleIcon = props.titleIcon || 'faFolder'
   return (
     <div className={styles.DropDownMenuContainer}>
       <div className={styles.DropDownMenuTitle} onClick={onSelected}>
