@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   currentModule: '',
-  blogs: ['TypeScript', 'Vue源码解读'],
+  blogs: ['TypeScript', 'Vue源码解读', 'Sortable源码解读'],
   github: [
     'gitPractice',
     'ssrD-demo ',
