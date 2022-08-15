@@ -9,8 +9,7 @@
     padding: 10px;
   }
   &Item {
-    height: 120px;
-    width: 120px;
+    width: 15%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -19,11 +18,17 @@
     overflow: hidden;
     padding: 10px;
     border-radius: 10px;
+    border: 1px solid #564444;
     &:hover{
       background: rgb(136 136 136 / 10%);
+      border-color: #8c5757;
+      box-shadow: 2px 2px teal;
     }
     &:active {
-      background: rgb(136 136 136 / 30%)
+      background: rgb(136 136 136 / 30%);
+      border-color: #bc9e9e;
+      transition: all 0.5s ease;
+      transform: scale(0.8);
     }
     &Icon{
       flex: 1;
