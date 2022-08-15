@@ -24,10 +24,9 @@ export function AppItem(props) {
   const onAdd = props.onAdd || (() => {})
   const [active, setActive] = useState(false)
   const dispatch = useDispatch()
-  const onDoubleClick = function onDoubleClick(e) {
+  const onDoubleClick = function onDoubleClick() {
     setActive(true)
     activateAction()
-    console.log(appName, e)
   }
   // 用于激活某个弹框
   const activateAction = () => {

@@ -9,6 +9,7 @@ import { WindowPage } from './pages/window'
 import { MacModal } from './pages/macModal'
 import { FaIcons } from './pages/FaIcons'
 import { BasicReactSortable } from './pages/ReactSortable'
+import { DragDemo } from './pages/drag'
 
 // css动画相关
 import AnimationDemo from './pages/animationDemo'
@@ -89,6 +90,7 @@ export default function App() {
         </Route>
         <Route path='/GridArt' element={<GridArt />} />
         <Route path='/MacModal' element={<MacModal />} />
+        <Route path='/DragDemo' element={<DragDemo />} />
         <Route path='/BasicReactSortable' element={<BasicReactSortable />} />
         <Route path='/FaIcons' element={<FaIcons />} />
         <Route path='/' element={<WindowPage />}></Route>
