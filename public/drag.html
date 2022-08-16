@@ -23,7 +23,10 @@
       #dest_copy, #dest_move {
         border: 5px solid blue;
         width: 300px;
-        height: 50px;
+        height: 500px;
+      }
+      .item{
+        border: 10px solid black;
       }
     </style>
     <script>
@@ -76,7 +79,13 @@
 <div draggable="true" id="src_copy" ondragstart="dragstart_handler(event);" ondragend="dragend_handler(event);">
     Select this element and drag to the <strong>Copy Drop Zone</strong>.
 </div>
-<div id="dest_copy" ondrop="drop_handler(event);" ondragover="dragover_handler(event);"><strong>Copy Drop Zone</strong></div>
+<div id="dest_copy" ondrop="drop_handler(event);" ondragover="dragover_handler(event);">
+    <strong>Copy Drop Zone</strong>
+    <div class="item">2</div>
+    <div class="item">2</div>
+    <div class="item">2</div>
+    <div class="item">2</div>
+</div>
 
 
 

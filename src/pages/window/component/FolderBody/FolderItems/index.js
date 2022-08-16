@@ -22,6 +22,10 @@ export function FolderItems(props) {
   useEffect(() => {
     setState(items)
   }, [items])
+
+  const onDragStart = (ev) => {
+    ev.dataTransfer.setData('text', 'myData')
+  }
   return (
     <ReactSortable
       list={state}
@@ -32,7 +36,7 @@ export function FolderItems(props) {
       setList={setState}
       className={`${styles.FolderItemsContainer}  ${scrollStyles.ScrollStyle}`}>
       {state && state.map((item) => (
-        <div key={item} className={styles.FolderItemsItem}>
+        <div key={item} className={styles.FolderItemsItem} onDragStart={onDragStart}>
           <div className={styles.FolderItemsItemIcon}>
             <MyIcon iconName='faFolderClosed'></MyIcon>
           </div>

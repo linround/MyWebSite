@@ -1,4 +1,4 @@
-import React from 'react'
+import React  from 'react'
 import styles from './style.less'
 import PropTypes from 'prop-types'
 import { MyIcon } from '../../../../components/Icon'
@@ -12,7 +12,8 @@ export function DropDownMenu(props) {
   const directionIcon = props.directionIcon
   const handleOpen = props.handleOpen || (() => {})
 
-  const onSelected = () => {
+  const onSelected = (ev) => {
+    ev.preventDefault()
     handleSelected(props.itemKey)
   }
   const isFolder = props.isFolder || false
@@ -20,7 +21,7 @@ export function DropDownMenu(props) {
   return (
     <div className={styles.DropDownMenuContainer}>
       <div className={styles.DropDownMenuTitle} onClick={onSelected}>
-        {isFolder ? <MyIcon iconName={directionIcon} onClick={handleOpen} noBubble={true}></MyIcon> : ''}
+        {isFolder ? <MyIcon iconName={directionIcon} onClick={handleOpen} noBubble={true} /> : ''}
         {<MyIcon iconName={titleIcon} />}
         {props.NavTitle || <DefaultNav /> }
       </div>

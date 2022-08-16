@@ -6,6 +6,13 @@
     padding: 5px 6px;
     overflow: hidden;
     display: flex;
+    &Dropping {
+      background: #3c2e2e;
+      border-radius: 5px;
+      & *{
+        pointer-events: none;
+      }
+    }
     &::after{
       content: '';
       position: absolute;

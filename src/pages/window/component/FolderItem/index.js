@@ -26,18 +26,16 @@ export const FolderItem = (props) => {
 
 
   return (
-    <div>
-      <DropDownMenu
-        isFolder
-        isOpen
-        onSelected={onSelected}
-        itemKey={folderTitle}
-        NavTitle={<FolderTitle />}
-        directionIcon={isOpen ? 'faAngleDown' : 'faAngleRight'}
-        handleOpen={handleOpen}>
-        {isOpen ? <FolderContent /> : <None />}
-      </DropDownMenu>
-    </div>
+    <DropDownMenu
+      isFolder
+      isOpen
+      onSelected={onSelected}
+      itemKey={folderTitle}
+      NavTitle={<FolderTitle />}
+      directionIcon={isOpen ? 'faAngleDown' : 'faAngleRight'}
+      handleOpen={handleOpen}>
+      {isOpen ? <FolderContent /> : <None />}
+    </DropDownMenu>
   )
 }
 
