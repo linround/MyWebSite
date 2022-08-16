@@ -41,7 +41,7 @@ export function SimpleDialogContainer(props) {
     operation = op
     // 点击事件触发的位置
     if (isMobile()) {
-      posM = [e.touches[0].clientY, e.touches[0].clientX]
+      posM = [e.touches[0].pageY, e.touches[0].pageX]
     } else {
       posM = [e.clientY, e.clientX]
     }
@@ -98,8 +98,8 @@ export function SimpleDialogContainer(props) {
 
     let x; let y
     if (isMobile()) {
-      x = e.touches[0].clientX
-      y = e.touches[0].clientY
+      x = e.touches[0].pageX
+      y = e.touches[0].pageY
     } else {
       x = e.clientX
       y = e.clientY

@@ -27,10 +27,12 @@ export function FolderItems(props) {
   const onDragStart = (ev, key) => {
     ev.dataTransfer.setData('text', key)
   }
+
+  console.log(isMobile())
   return (
     <ReactSortable
       list={state}
-      forceFallback={true}
+      forceFallback={isMobile()}
       disabled={isMobile()}
       animation={200}
       onSort={onSort}
