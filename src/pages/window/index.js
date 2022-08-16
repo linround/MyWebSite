@@ -8,6 +8,7 @@ import {
 } from '@ant-design/icons'
 import { addBlogItem, moduleSelector } from '../../store/blog'
 import { useDispatch, useSelector } from 'react-redux'
+import { ContextModal } from '../../components/ContextModal'
 
 function WeiXin() {
   const github = 'https://github.com/linyuan1105'
@@ -88,6 +89,7 @@ function WindowPage() {
             .toDateString() }
         </div>
       </div>
+      <ContextModal />
     </div>
   )
 }
