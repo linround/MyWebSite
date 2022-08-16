@@ -6,7 +6,7 @@ import { MyIcon } from '../../../../../components/Icon'
 import { ReactSortable } from 'react-sortablejs'
 import { moduleSelector, setBlogItem } from '../../../../../store/blog'
 import { useSelector, useDispatch } from 'react-redux'
-import { message } from 'antd'
+import { isMobile } from '../../../../../utils/devices'
 
 export function FolderItems(props) {
   const dispatch = useDispatch()
@@ -26,11 +26,12 @@ export function FolderItems(props) {
 
   const onDragStart = (ev, key) => {
     ev.dataTransfer.setData('text', key)
-    message.info(key)
   }
   return (
     <ReactSortable
       list={state}
+      forceFallback={true}
+      disabled={isMobile()}
       animation={200}
       onSort={onSort}
       setList={setState}
@@ -38,7 +39,7 @@ export function FolderItems(props) {
       {state && state.map((item) => (
         <div
           key={item}
-          draggable
+          draggable={true}
           className={styles.FolderItemsItem}
           onDragStart={(e) => onDragStart(e, item)}>
           <div className={styles.FolderItemsItemIcon}>

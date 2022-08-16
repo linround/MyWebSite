@@ -14,7 +14,7 @@ export function MenusFunction(props) {
         </div>
       </div>
       <div className={styles.MenusFunctionCenter}>
-        PC支持拖拽文件
+        支持拖拽文件,移動端不支持排序
       </div>
       <div className={styles.MenusFunctionRight}></div>
     </div>
