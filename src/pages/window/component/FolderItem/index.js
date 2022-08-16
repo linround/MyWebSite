@@ -39,7 +39,7 @@ export const FolderItem = (props) => {
   }
 
   // 和推拽有关的事件
-  const wait = 1000 / 30 // 为了使得拖拽时的帧的流畅度 取30帧即可满足流畅问题 等待超过这个时间节点才会执行
+  const wait = 1000 / 60 // 为了使得拖拽时的帧的流畅度 取30帧即可满足流畅问题 等待超过这个时间节点才会执行
   let enterStartTime = 0 // 记录下 进入的时间点
   const onDragOver = (ev) => {
     ev.preventDefault()

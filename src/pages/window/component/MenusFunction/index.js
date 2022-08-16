@@ -13,7 +13,9 @@ export function MenusFunction(props) {
           新建
         </div>
       </div>
-      <div className={styles.MenusFunctionCenter}></div>
+      <div className={styles.MenusFunctionCenter}>
+        PC支持拖拽文件
+      </div>
       <div className={styles.MenusFunctionRight}></div>
     </div>
   )
