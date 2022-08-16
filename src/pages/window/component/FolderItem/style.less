@@ -2,5 +2,12 @@
   &Container {
     background: #3c2e2e;
     border-radius: 5px;
+    &Dropping {
+      background: #3c2e2e;
+      border-radius: 5px;
+      & *{
+        pointer-events: none;
+      }
+    }
   }
 }

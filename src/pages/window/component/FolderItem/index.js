@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import { DropDownMenu } from '../dropDownMenu'
 import PropTypes from 'prop-types'
-
+import classNames from 'classnames'
+import styles from './style.less'
+import { useDispatch } from 'react-redux'
+import { addBlogItem } from '../../../../store/blog'
 
 export const FolderItem = (props) => {
   const folderTitle = props.folderTitle
@@ -24,18 +27,53 @@ export const FolderItem = (props) => {
     </>
   )
 
+  const dispatch = useDispatch()
+  const [dropping, setDropping] = useState(false)
+  const onDrop = (ev, folderKey) => {
+    setDropping(false)
+    const data = ev.dataTransfer.getData('text')
+    dispatch(addBlogItem({
+      type: folderKey,
+      data: data,
+    }))
+  }
 
+  // 和推拽有关的事件
+  const onDragOver = (ev) => {
+    ev.preventDefault()
+    setDropping(true)
+  }
+  const onDragEnter = () => {
+    setDropping(true)
+    console.log('onDragEnter')
+  }
+  const onDragLeave = () => {
+    setDropping(false)
+    console.log('onDragLeave')
+  }
+  const containerClassName = classNames({
+    [styles.FolderItemContainerDropping]: dropping,
+  })
   return (
-    <DropDownMenu
-      isFolder
-      isOpen
-      onSelected={onSelected}
-      itemKey={folderTitle}
-      NavTitle={<FolderTitle />}
-      directionIcon={isOpen ? 'faAngleDown' : 'faAngleRight'}
-      handleOpen={handleOpen}>
-      {isOpen ? <FolderContent /> : <None />}
-    </DropDownMenu>
+    <div
+      className={containerClassName}
+      onDrop={(e) => onDrop(e, folderTitle)}
+      onDragOver={onDragOver}
+      onDragEnter={onDragEnter}
+      onDragLeave={onDragLeave}
+    >
+      <DropDownMenu
+        isFolder
+        isOpen
+        onSelected={onSelected}
+        itemKey={folderTitle}
+        NavTitle={<FolderTitle />}
+        directionIcon={isOpen ? 'faAngleDown' : 'faAngleRight'}
+        handleOpen={handleOpen}>
+        {isOpen ? <FolderContent /> : <None />}
+      </DropDownMenu>
+    </div>
+
   )
 }
 
