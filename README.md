@@ -39,11 +39,11 @@ docker rm <CONTAINER ID> #移除容器
 
 //运行容器
 // 替换nginx配置
-docker run
+docker run 
 -p 80:80  
 -v /data/nginx/nginx.conf:/etc/nginx/nginx.conf 
 -v /data/nginx/conf/conf.d/:/etc/nginx/conf.d  
--v /data/nginx/logs/:/var/log/nginx/ --privileged=true
+-v /data/nginx/logs/:/var/log/nginx/ --privileged=true 
 -d 673609957/my-website
 
 ```
