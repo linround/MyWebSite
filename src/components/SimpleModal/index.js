@@ -34,7 +34,7 @@ export function SimpleDialogContainer(props) {
   const toolDrag = (
     e, op, v
   ) => {
-    e.preventDefault()
+    // e.preventDefault()
     // 记录操作类型（0常规位移，1是进行大小缩放）
     operation = op
     // 点击事件触发的位置
