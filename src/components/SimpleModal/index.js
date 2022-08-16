@@ -6,11 +6,13 @@ import { dialogSelector } from '../../store/dialog'
 import { MenusFunction } from '../../pages/window/component/MenusFunction'
 import { FolderBody } from '../../pages/window/component/FolderBody'
 import { MyIcon } from '../Icon'
+import * as VConsole from 'vconsole'
+import { isMobile } from '../../utils/devices'
 
 
 const minHeight = 200
 const minWidth = 200
-
+new VConsole()
 export function SimpleDialogContainer(props) {
   const active = props.active
   const appName = props.appName
@@ -38,7 +40,11 @@ export function SimpleDialogContainer(props) {
     // 记录操作类型（0常规位移，1是进行大小缩放）
     operation = op
     // 点击事件触发的位置
-    posM = [e.clientY, e.clientX]
+    if (isMobile()) {
+      posM = [e.touches[0].clientY, e.touches[0].clientX]
+    } else {
+      posM = [e.clientY, e.clientX]
+    }
     container = e.currentTarget.parentElement && e.currentTarget.parentElement.parentElement
     if (operation === 1) {
       container = e.currentTarget.parentElement
@@ -50,12 +56,21 @@ export function SimpleDialogContainer(props) {
     posP = [container.offsetTop, container.offsetLeft]
     // 记录按下按钮时，弹框容器的大小
     dimP = [
-      parseFloat(getComputedStyle(container).height.replaceAll('px', '')),
-      parseFloat(getComputedStyle(container).width.replaceAll('px', ''))
+      parseFloat(String(getComputedStyle(container).height)
+        .replace('px', '')),
+      parseFloat(String(getComputedStyle(container).width)
+        .replace('px', ''))
     ]
 
-    document.onmouseup = closeDrag
-    document.onmousemove = eleDrag
+    if (isMobile()) {
+      document.ontouchend = closeDrag
+
+      document.ontouchmove = eleDrag
+    } else {
+
+      document.onmouseup = closeDrag
+      document.onmousemove = eleDrag
+    }
   }
 
   const setPos = (top, left) => {
@@ -73,17 +88,29 @@ export function SimpleDialogContainer(props) {
   }
 
   const eleDrag = (e) => {
-    e.preventDefault()
+    // e.preventDefault()
     /**
      * 弹框位置
      * 原始的定位 + 开始点击处的位置与移动过程中事件的位置之差
      */
-    let top = posP[0] + (e.clientY - posM[0])
-    let left = posP[1] + (e.clientX - posM[1])
+
+
+
+    let x; let y
+    if (isMobile()) {
+      x = e.touches[0].clientX
+      y = e.touches[0].clientY
+    } else {
+      x = e.clientX
+      y = e.clientY
+    }
+    let top = posP[0] + (y - posM[0])
+    let left = posP[1] + (x - posM[1])
     // 高度 = (开始的高度) + 鼠标坐标点Y轴的变化
-    let height = dimP[0] + (vec[0] * (e.clientY - posM[0]))
+    let height = dimP[0] + (vec[0] * (y - posM[0]))
     // 宽度 = (开始的宽度) + 鼠标坐标点X轴的变化
-    let width = dimP[1] + (vec[1] * (e.clientX - posM[1]))
+    let width = dimP[1] + (vec[1] * (x - posM[1]))
+
     if (operation === 0) {
       setPos(top, left)
     } else {
@@ -100,6 +127,9 @@ export function SimpleDialogContainer(props) {
 
   const closeDrag = () => {
     document.onmouseup = null
+    document.ontouchend = null
+
+    document.ontouchmove = null
     document.onmousemove = null
   }
 
@@ -111,6 +141,7 @@ export function SimpleDialogContainer(props) {
         onMouseDown={handleActivateAction}>
         <div className={styles.simpleModalHeader}>
           <div className={styles.simpleModalHeaderTitle}
+            onTouchStart={(e) => toolDrag(e, 0)}
             onMouseDown={(e) => toolDrag(e, 0)}>
             <span className={styles.simpleModalHeaderTitleSpan}>{ appName }</span>
           </div>

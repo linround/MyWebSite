@@ -6,6 +6,7 @@ import { MyIcon } from '../../../../../components/Icon'
 import { ReactSortable } from 'react-sortablejs'
 import { moduleSelector, setBlogItem } from '../../../../../store/blog'
 import { useSelector, useDispatch } from 'react-redux'
+import { message } from 'antd'
 
 export function FolderItems(props) {
   const dispatch = useDispatch()
@@ -25,18 +26,21 @@ export function FolderItems(props) {
 
   const onDragStart = (ev, key) => {
     ev.dataTransfer.setData('text', key)
+    message.info(key)
   }
   return (
     <ReactSortable
       list={state}
       animation={200}
       onSort={onSort}
-      delayOnTouchStart={true}
-      delay={2}
       setList={setState}
       className={`${styles.FolderItemsContainer}  ${scrollStyles.ScrollStyle}`}>
       {state && state.map((item) => (
-        <div key={item} className={styles.FolderItemsItem} onDragStart={(e) => onDragStart(e, item)}>
+        <div
+          key={item}
+          draggable
+          className={styles.FolderItemsItem}
+          onDragStart={(e) => onDragStart(e, item)}>
           <div className={styles.FolderItemsItemIcon}>
             <MyIcon iconName='faFolderClosed'></MyIcon>
           </div>

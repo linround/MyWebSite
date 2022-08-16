@@ -37,6 +37,7 @@ export function DragDemo() {
       'onDrop Data', data, name
     )
     setDragData(data)
+    ev.currentTarget.style.background = ''
     ev.preventDefault()
   }
 

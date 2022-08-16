@@ -5,6 +5,7 @@ import classNames from 'classnames'
 import styles from './style.less'
 import { useDispatch } from 'react-redux'
 import { addBlogItem } from '../../../../store/blog'
+import { message } from 'antd'
 
 export const FolderItem = (props) => {
   const folderTitle = props.folderTitle
@@ -31,7 +32,9 @@ export const FolderItem = (props) => {
   const [dropping, setDropping] = useState(false)
   const onDrop = (ev, folderKey) => {
     setDropping(false)
+    message.info('onDrop')
     const data = ev.dataTransfer.getData('text')
+    ev.dataTransfer.clearData()
     dispatch(addBlogItem({
       type: folderKey,
       data: data,
