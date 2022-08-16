@@ -45,11 +45,9 @@ export const FolderItem = (props) => {
   }
   const onDragEnter = () => {
     setDropping(true)
-    console.log('onDragEnter')
   }
   const onDragLeave = () => {
     setDropping(false)
-    console.log('onDragLeave')
   }
   const containerClassName = classNames({
     [styles.FolderItemContainerDropping]: dropping,
