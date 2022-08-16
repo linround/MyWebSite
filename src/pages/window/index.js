@@ -4,7 +4,7 @@ import { AppItem } from './component/appItem'
 import { FooterMenuItem } from './component/footerMenuItem'
 import {
   InteractionOutlined, WechatOutlined, TeamOutlined,
-  WindowsOutlined, SearchOutlined, DesktopOutlined, GithubOutlined
+  WindowsOutlined, SearchOutlined, DesktopOutlined, GithubOutlined, ReadOutlined
 } from '@ant-design/icons'
 import { addBlogItem, moduleSelector } from '../../store/blog'
 import { useDispatch, useSelector } from 'react-redux'
@@ -51,6 +51,7 @@ function WindowPage() {
     }))
   }
   const githubLink = 'https://github.com/linyuan1105'
+  const gitbook = 'https://github.com/linyuan1105/gitBook'
   return (
     <div className={styles.windowContainer}>
       <div className={styles.windowBody}>
@@ -67,9 +68,14 @@ function WindowPage() {
           <InteractionOutlined />
         </AppItem>
 
-        <AppItem dialogId='GitHub' appName='GitHub'>
+        <AppItem dialogId='GitHub' appName='GitHub' isLink={true}>
           <a href={githubLink} target={'_blank'} rel="noreferrer">
             <GithubOutlined />
+          </a>
+        </AppItem>
+        <AppItem dialogId='gitbook' appName='gitbook' isLink={true}>
+          <a href={gitbook} target={'_blank'} rel="noreferrer">
+            <ReadOutlined />
           </a>
         </AppItem>
 

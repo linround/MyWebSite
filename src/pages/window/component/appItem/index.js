@@ -21,10 +21,12 @@ export function AppItem(props) {
   const appName = props.appName
   const Content = props.dialogContent
   const dialogId = props.dialogId
+  const isLink = props.isLink || false
   const onAdd = props.onAdd || (() => {})
   const [active, setActive] = useState(false)
   const dispatch = useDispatch()
   const onDoubleClick = function onDoubleClick() {
+    if (isLink) return
     setActive(true)
     activateAction()
   }
@@ -72,4 +74,5 @@ AppItem.propTypes = {
     PropTypes.string
   ]),
   onAdd: PropTypes.func, // 与弹框的新建操作相关
+  isLink: PropTypes.bool, //判断是否只是一个链接
 }
