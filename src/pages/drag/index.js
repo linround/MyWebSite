@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styles from './style.less'
 
 export function DragDemo() {
+  const [dragData, setDragData] = useState('')
+  const [data] = useState('da lin')
   // 开始推拽一个元素时触发 (只能用在被拖拽的元素上面)
   const onDragStart = (ev, name) => {
     console.log('onDragStart', name)
     ev.currentTarget.style.border = '20px'
 
-    ev.dataTransfer.setData('text', '===============dataTransfer')
+    ev.dataTransfer.setData('text', data)
     ev.effectAllowed = 'copyMove'
   }
   // 当拖拽操作结束时触发 (比如松开鼠标按键或敲“Esc”键). (只能用在被拖拽的元素上面)
@@ -30,9 +32,11 @@ export function DragDemo() {
   }
   // 当元素或选中的文本在可释放目标上被释放时触发
   const onDrop = (ev, name) => { // onDrop的调用是在被放置的目标元素上 在onDrop上才可以获取到数据
+    const data =  ev.dataTransfer.getData('text')
     console.log(
-      'onDrop Data', ev.dataTransfer.getData('text'), name
+      'onDrop Data', data, name
     )
+    setDragData(data)
     ev.preventDefault()
   }
 
@@ -70,7 +74,7 @@ export function DragDemo() {
           onDragLeave={(e) => onDragLeave(e, 'source')}
           onDrag={(e) => onDrag(e, 'source')}
         >
-          item
+          { data }
         </div>
         <div
           className={styles.DragContainer}
@@ -82,7 +86,7 @@ export function DragDemo() {
           onDragLeave={(e) => onDragLeave(e, 'target')}
           onDrag={(e) => onDrag(e, 'target')}
         >
-          container
+          {dragData}
         </div>
       </div>
     </>
