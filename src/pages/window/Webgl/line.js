@@ -1,42 +1,9 @@
 import webglUtils from '../../../utils/webgl-utils'
-
-// 创建着色器方法，输入参数：渲染上下文，着色器类型，数据源
-export function createShader(
-  gl, type, source
-) {
-  const shader = gl.createShader(type) // 创建着色器对象
-  gl.shaderSource(shader, source) // 提供数据源
-  gl.compileShader(shader) // 编译 -> 生成着色器
-  const success = gl.getShaderParameter(shader, gl.COMPILE_STATUS)
-  if (success) {
-    return shader
-  }
-
-  console.log('getShaderInfoLog', gl.getShaderInfoLog(shader))
-  gl.deleteShader(shader)
-}
+import { createShader, createProgram } from './TRIANGLES'
 
 
-// 然后我们将这两个着色器 link（链接）到一个 program（着色程序）
-export function createProgram(
-  gl, vertexShader, fragmentShader
-) {
-  const program = gl.createProgram()
-  gl.attachShader(program, vertexShader)
-  gl.attachShader(program, fragmentShader)
-  gl.linkProgram(program)
 
-  const success = gl.getProgramParameter(program, gl.LINK_STATUS)
-  if (success) {
-    return program
-  }
-
-  console.log(gl.getProgramInfoLog(program))
-  gl.deleteProgram(program)
-}
-
-
-export function triangles(canvas) {
+export function line(canvas) {
   // Get A WebGL context
   const gl = canvas.getContext('webgl')
   if (!gl) {
@@ -47,13 +14,26 @@ export function triangles(canvas) {
   // 顶点着色器源
   const vertexShaderSource = `
           // 一个属性值，从缓冲区获取数据
-        attribute vec4 a_position;
-    
+        attribute vec2 a_position;
+        // 添加了一个uniform（全局变量）叫做u_resolution
+        //
+        uniform vec2 u_resolution;
+        
         // 所有的着色器都有一个main函数
         void main() {
     
-        // gl_Position 是一个顶点着色器主要设置的变量
-        gl_Position = a_position;
+        // 从像素坐标转换到 0 -> 1
+        vec2 zeroToOne = a_position / u_resolution;
+     
+        // 再把 0->1 转换 0->2
+        vec2 zeroToTwo = zeroToOne * 2.0;
+     
+        // 把 0->2 转换到 -1->+1 (裁剪空间)
+        vec2 clipSpace = zeroToTwo - 1.0;
+     
+        gl_Position = vec4(clipSpace, 0, 1);
+        // 需翻转y轴
+        // gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
       }
           `
   // 片段着色器
@@ -90,6 +70,10 @@ export function triangles(canvas) {
   // 寻找属性值位置应该在初始化的时候完成，而不是在渲染时完成
   const positionAttributeLocation = gl.getAttribLocation(program, 'a_position')
 
+  // 为了设置它的值我们需要找到它的位置。
+  const resolutionUniformLocation = gl.getUniformLocation(program, 'u_resolution')
+
+
   // 属性值从缓冲区获取，所以创建一个缓冲
   const positionBuffer = gl.createBuffer()
 
@@ -98,12 +82,18 @@ export function triangles(canvas) {
   // 以下我们绑定位置信息缓冲（下面的绑定点就是ARRAY_BUFFER）
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
 
-  // 三个二维点坐标
+
+  // 通过设置u_resolution为画布的分辨率， 着色器将会从positionBuffer中获取像素坐标将之转换为对应的裁剪空间坐标。
+  // 通过绘制两个三角形来绘制一个矩形， 每个三角形有三个点。
   const positions = [
     0, 0,
-    0, 1,
-    -1, 0
+    0, 100,
+    100, 100,
+    100, 100,
+    100, 0,
+    0, 0
   ]
+
   // webgl需要强数据类型。所以 new Float32Array(positions) 创建了32位浮点型数据序列
   // 并从positions中复制数据待序列中，
   // gl.bufferData复制这些数据到GPU的positionBuffer对象上
@@ -111,15 +101,24 @@ export function triangles(canvas) {
   // 最后一个参数gl.STATIC_DRAW是提示WebGL我们将怎么使用这些数据
   // WebGL会根据提示做出一些优化。
   // gl.STATIC_DRAW提示WebGL我们不会经常改变这些数据。
+
   gl.bufferData(
     gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW
   )
+
+
+  // 告诉webgl运行哪个着色程序
+  // 设置好使用这个着色程序后，可以设置刚才创建的全局变量的值。 gl.useProgram就与之前讲到的gl.bindBuffer相似，
+  // 设置当前使用的着色程序。 之后所有类似gl.uniformXXX格式的方法都是设置当前着色程序的全局变量
+  gl.useProgram(program)
 
   // 以上都是初始代码，在页面加载时只会运行一次.
   // 以下是渲染代码
 
   // 防止canvas选然后像素模糊的问题
   webglUtils.resizeCanvasToDisplaySize(gl.canvas)
+
+
   // 告诉webgl怎样吧提供的gl_Position裁剪空间坐标对应到画布像素坐标（通常画布像素坐标也叫屏幕坐标）
   // 需要调用gl.viewport 方法并传递画布的当前尺寸
   // 这样就告诉webgl裁剪空间的-1=>+1分别对应到X轴的0=>gl.canvas.width 和y轴的 0 -> gl.canvas.height
@@ -133,12 +132,14 @@ export function triangles(canvas) {
   )
   gl.clear(gl.COLOR_BUFFER_BIT)
 
-  // 告诉webgl运行哪个着色程序
-  gl.useProgram(program)
-
+  // 在同一个canvas上调用多次渲染时，这部分代码是必须要执行的，可以抽取为一个公共模块
+  // ==========================================================================================
   // 告诉webgl怎么从我们之前准备的缓冲中获取数据给着色器中的属性
   // 首先需要启用对应的属性
+
   gl.enableVertexAttribArray(positionAttributeLocation)
+  // ==========================================================================================
+
 
   // 将绑定点绑定到缓冲数据（positionBuffer）
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
@@ -162,9 +163,13 @@ export function triangles(canvas) {
   // 属性默认值是0, 0, 0, 1，然后属性将会从缓冲中获取前两个值（ x 和 y ）。 z和w还是默认值 0 和 1 。
 
 
+  // 设置全局变量 分辨率
+  gl.uniform2f(
+    resolutionUniformLocation, gl.canvas.width, gl.canvas.height
+  )
 
   // 开始绘制
-  // 因为count = 3，所以顶点着色器将运行三次
+  // 因为count = 6，所以顶点着色器将运行6次
   // 第一次运行将会从位置缓冲中读取前两个值赋给属性值a_position.x和a_position.y
   // 第二次运行a_position.xy将会被赋予后两个值，最后一次运行将被赋予最后两个值
   // 最后一次运行将被赋予最后两个值
@@ -173,7 +178,7 @@ export function triangles(canvas) {
   // WebGL将会根据三个gl_Position值绘制一个三角形，
   // 不论我们的画布大小是多少，在裁剪空间中每个方向的坐标范围都是 -1 到 1 。
   const primitiveType = gl.TRIANGLES
-  const count = 3
+  const count = 6
 
 
   // WebGL将会把它们从裁剪空间转换到屏幕空间并在屏幕空间绘制一个三角形， 如果画布大小是400×300我们会得到类似以下的转换
@@ -188,6 +193,7 @@ export function triangles(canvas) {
   gl.drawArrays(
     primitiveType, offset, count
   )
+
 }
 
 
@@ -200,7 +206,5 @@ export function triangles(canvas) {
  * 如果想要实现三位渲染，那么就需要提供合适的着色器将三维坐标转换到裁剪空间坐标
  * 因为webgl只是一个光栅化的API
  *
- * 裁剪空间的x坐标范围是 -1 到 +1. 这就意味着0在中间并且正值在它右边。
- * 裁剪空间中 -1 是最底端 +1 是最顶端
- * 对于描述二维空间中的物体，比起裁剪空间坐标你可能更希望使用屏幕像素坐标
+ * WebGL认为左下角是 0，0 。 想要像传统二维API那样起点在左上角，我们只需翻转y轴即可
  */
