@@ -65,13 +65,14 @@ export function line(canvas) {
     gl, vertexShader, fragmentShader
   )
 
+  // 为了设置它的值我们需要找到它的位置。
+  const resolutionUniformLocation = gl.getUniformLocation(program, 'u_resolution')
+
   // 创建好了着色程序，我们还需要对他提供数据
   // glsl着色程序唯一输入是一个属性值a_position，从刚创建的着色程序找到这个属性值所在位置
   // 寻找属性值位置应该在初始化的时候完成，而不是在渲染时完成
   const positionAttributeLocation = gl.getAttribLocation(program, 'a_position')
 
-  // 为了设置它的值我们需要找到它的位置。
-  const resolutionUniformLocation = gl.getUniformLocation(program, 'u_resolution')
 
 
   // 属性值从缓冲区获取，所以创建一个缓冲
@@ -107,10 +108,6 @@ export function line(canvas) {
   )
 
 
-  // 告诉webgl运行哪个着色程序
-  // 设置好使用这个着色程序后，可以设置刚才创建的全局变量的值。 gl.useProgram就与之前讲到的gl.bindBuffer相似，
-  // 设置当前使用的着色程序。 之后所有类似gl.uniformXXX格式的方法都是设置当前着色程序的全局变量
-  gl.useProgram(program)
 
   // 以上都是初始代码，在页面加载时只会运行一次.
   // 以下是渲染代码
@@ -132,6 +129,10 @@ export function line(canvas) {
   )
   gl.clear(gl.COLOR_BUFFER_BIT)
 
+  // 告诉webgl运行哪个着色程序
+  // 设置好使用这个着色程序后，可以设置刚才创建的全局变量的值。 gl.useProgram就与之前讲到的gl.bindBuffer相似，
+  // 设置当前使用的着色程序。 之后所有类似gl.uniformXXX格式的方法都是设置当前着色程序的全局变量
+  gl.useProgram(program)
   // 在同一个canvas上调用多次渲染时，这部分代码是必须要执行的，可以抽取为一个公共模块
   // ==========================================================================================
   // 告诉webgl怎么从我们之前准备的缓冲中获取数据给着色器中的属性

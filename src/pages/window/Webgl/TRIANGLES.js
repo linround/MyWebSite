@@ -46,7 +46,12 @@ export function triangles(canvas) {
   // Get the strings for our GLSL shaders
   // 顶点着色器源
   const vertexShaderSource = `
-          // 一个属性值，从缓冲区获取数据
+        // 一个属性值，从缓冲区获取数据
+        // a_position属性的数据类型是vec4
+        // vec4是一个有四个浮点数据的数据类型。
+        // 在JavaScript中你可以把它想象成 a_position = {x: 0, y: 0, z: 0, w: 0}。之前我们设置的size = 2，
+        // 属性默认值是0, 0, 0, 1，然后属性将会从缓冲中获取前两个值（ x 和 y ）。 z和w还是默认值 0 和 1 。
+        
         attribute vec4 a_position;
     
         // 所有的着色器都有一个main函数
@@ -156,10 +161,6 @@ export function triangles(canvas) {
     positionAttributeLocation, size, type, normalize, stride, offset
   )
 
-  // a_position属性的数据类型是vec4
-  // vec4是一个有四个浮点数据的数据类型。
-  // 在JavaScript中你可以把它想象成 a_position = {x: 0, y: 0, z: 0, w: 0}。之前我们设置的size = 2，
-  // 属性默认值是0, 0, 0, 1，然后属性将会从缓冲中获取前两个值（ x 和 y ）。 z和w还是默认值 0 和 1 。
 
 
 
