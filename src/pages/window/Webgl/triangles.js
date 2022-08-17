@@ -1,4 +1,4 @@
-import webglUtils from '../../../utils/webgl-utils'
+
 
 // 创建着色器方法，输入参数：渲染上下文，着色器类型，数据源
 export function createShader(
@@ -123,8 +123,6 @@ export function triangles(canvas) {
   // 以上都是初始代码，在页面加载时只会运行一次.
   // 以下是渲染代码
 
-  // 防止canvas选然后像素模糊的问题
-  webglUtils.resizeCanvasToDisplaySize(gl.canvas)
   // 告诉webgl怎样吧提供的gl_Position裁剪空间坐标对应到画布像素坐标（通常画布像素坐标也叫屏幕坐标）
   // 需要调用gl.viewport 方法并传递画布的当前尺寸
   // 这样就告诉webgl裁剪空间的-1=>+1分别对应到X轴的0=>gl.canvas.width 和y轴的 0 -> gl.canvas.height

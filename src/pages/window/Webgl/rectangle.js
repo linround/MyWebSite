@@ -1,4 +1,4 @@
-import webglUtils from '../../../utils/webgl-utils'
+
 import { createShader, createProgram } from './triangles'
 
 
@@ -113,8 +113,6 @@ export function rectangle(canvas) {
   // 以上都是初始代码，在页面加载时只会运行一次.
   // 以下是渲染代码
 
-  // 防止canvas选然后像素模糊的问题
-  webglUtils.resizeCanvasToDisplaySize(gl.canvas)
 
 
   // 告诉webgl怎样吧提供的gl_Position裁剪空间坐标对应到画布像素坐标（通常画布像素坐标也叫屏幕坐标）

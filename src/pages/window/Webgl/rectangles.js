@@ -1,4 +1,3 @@
-import webglUtils from '../../../utils/webgl-utils'
 import { createShader, createProgram } from './triangles'
 
 
@@ -81,7 +80,6 @@ export function rectangles(gl) {
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
 
 
-  webglUtils.resizeCanvasToDisplaySize(gl.canvas)
 
 
   // 告诉webgl怎样吧提供的gl_Position裁剪空间坐标对应到画布像素坐标（通常画布像素坐标也叫屏幕坐标）
