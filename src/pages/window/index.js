@@ -9,6 +9,7 @@ import {
 import { addBlogItem, moduleSelector } from '../../store/blog'
 import { useDispatch, useSelector } from 'react-redux'
 import { ContextModal } from '../../components/ContextModal'
+import { ComponentsItems } from './component/ComponentsItems'
 
 function WeiXin() {
   const github = 'https://github.com/linyuan1105'
@@ -31,14 +32,6 @@ function RecycleBin() {
   )
 }
 
-function Components() {
-  return (
-    <div className={styles.APPContentPadding}>
-      计划中·····<br />
-      这是一个<strong><a>记录一些组件样式和功能</a></strong>文件夹
-    </div>
-  )
-}
 
 
 function WindowPage() {
@@ -64,7 +57,7 @@ function WindowPage() {
         <AppItem dialogId='blog' appName='Blog文件信息' onAdd={handleAddBlog}>
           <TeamOutlined />
         </AppItem>
-        <AppItem dialogId='components' appName='组件' dialogContent={<Components />}>
+        <AppItem dialogId='components' appName='组件' dialogContent={<ComponentsItems />}>
           <InteractionOutlined />
         </AppItem>
 

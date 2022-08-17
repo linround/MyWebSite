@@ -10,6 +10,7 @@ import { MacModal } from './pages/macModal'
 import { FaIcons } from './pages/FaIcons'
 import { BasicReactSortable } from './pages/ReactSortable'
 import { DragDemo } from './pages/drag'
+import { Webgl } from './pages/window/Webgl'
 
 // css动画相关
 import AnimationDemo from './pages/animationDemo'
@@ -91,6 +92,7 @@ export default function App() {
         <Route path='/GridArt' element={<GridArt />} />
         <Route path='/MacModal' element={<MacModal />} />
         <Route path='/DragDemo' element={<DragDemo />} />
+        <Route path='/Webgl' element={<Webgl />} />
         <Route path='/BasicReactSortable' element={<BasicReactSortable />} />
         <Route path='/FaIcons' element={<FaIcons />} />
         <Route path='/' element={<WindowPage />}></Route>
