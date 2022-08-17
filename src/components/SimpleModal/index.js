@@ -137,7 +137,7 @@ export function SimpleDialogContainer(props) {
   return (
     <>
       <div className={ `${styles.simpleModalContent} ` + (active ? `${styles.simpleModalActive}` : '') }
-        style={{ zIndex: currentDialogId === dialogId ? '9999' : '100', }}
+        style={{ zIndex: currentDialogId === dialogId ? '99' : '10', }}
         onMouseDown={handleActivateAction}>
         <div className={styles.simpleModalHeader}>
           <div className={styles.simpleModalHeaderTitle}

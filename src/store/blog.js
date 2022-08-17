@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
   currentModule: '',
   blogs: ['TypeScript', 'Vue源码解读', 'Sortable源码解读'],
+  visualization: ['webglFundamentals'],
   github: [
     'gitPractice',
     'ssrD-demo ',
@@ -62,6 +63,7 @@ const blogsSlice = createSlice({
 export const blogsSelector = (state) => state.blogs.blogs
 export const githubSelector = (state) => state.blogs.github
 export const moduleSelector = (state) => state.blogs.currentModule
+export const visualizationSelector = (state) => state.blogs.visualization
 
 
 export const { addBlogItem, setCurrentModule, setBlogItem, } = blogsSlice.actions
