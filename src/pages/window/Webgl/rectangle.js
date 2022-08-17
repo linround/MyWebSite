@@ -1,9 +1,9 @@
 import webglUtils from '../../../utils/webgl-utils'
-import { createShader, createProgram } from './TRIANGLES'
+import { createShader, createProgram } from './triangles'
 
 
 
-export function line(canvas) {
+export function rectangle(canvas) {
   // Get A WebGL context
   const gl = canvas.getContext('webgl')
   if (!gl) {
@@ -30,10 +30,11 @@ export function line(canvas) {
      
         // 把 0->2 转换到 -1->+1 (裁剪空间)
         vec2 clipSpace = zeroToTwo - 1.0;
-     
+        
+        // 以下未翻转等同于 gl_Position = vec4(clipSpace*vec2(1,1), 0, 1);
         gl_Position = vec4(clipSpace, 0, 1);
         // 需翻转y轴
-        // gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
+        gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
       }
           `
   // 片段着色器

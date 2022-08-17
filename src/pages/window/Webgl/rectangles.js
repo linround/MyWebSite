@@ -1,5 +1,5 @@
 import webglUtils from '../../../utils/webgl-utils'
-import { createShader, createProgram } from './TRIANGLES'
+import { createShader, createProgram } from './triangles'
 
 
 export function rectangles(gl) {

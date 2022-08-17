@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import styles from './style.less'
-import { triangles } from './TRIANGLES'
-import { line } from './line'
+import { triangles } from './triangles'
+import { rectangle } from './rectangle'
 import { rectangles } from './rectangles'
 
 export function Webgl() {
@@ -10,7 +10,7 @@ export function Webgl() {
     triangles(canvasRef.current)
   }
   const drawLine = () => {
-    line(canvasRef.current)
+    rectangle(canvasRef.current)
   }
   const drawRectangles = () => {
     rectangles(canvasRef.current.getContext('webgl'))
