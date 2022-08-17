@@ -1,5 +1,8 @@
 
 ### bug
+#### 20220818
+- justify-content值不要使用start,尽量使用flex-start
+
 #### 20220816
 - 针对在子元素在dragleave和dragenter不断切换执行的问题，使用类似防抖的手法进行解决该问题
 
