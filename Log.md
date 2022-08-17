@@ -3,6 +3,7 @@
 #### 20220818
 - justify-content值不要使用start,尽量使用flex-start
 - 使用tag进行版本控制和自动化构建
+- 在webstorm添加tag，在push资源时进行勾选即可将对应的tag提交（之前已经提交的tag不会影响到本次的tag提交）
 #### 20220816
 - 针对在子元素在dragleave和dragenter不断切换执行的问题，使用类似防抖的手法进行解决该问题
 
