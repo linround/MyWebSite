@@ -1,5 +1,5 @@
 
-import { createShader, createProgram } from './triangles'
+import { createProgramFromStrings } from '../webglCommon'
 
 
 
@@ -52,18 +52,9 @@ export function rectangle(canvas) {
       }
           `
 
-  // 创建顶点着色器
-  const vertexShader = createShader(
-    gl, gl.VERTEX_SHADER, vertexShaderSource
-  )
-  // 创建片段着色器
-  const fragmentShader = createShader(
-    gl, gl.FRAGMENT_SHADER, fragmentShaderSource
-  )
-
   // 将两个着色器链接在一起
-  const program = createProgram(
-    gl, vertexShader, fragmentShader
+  const program = createProgramFromStrings(
+    gl, vertexShaderSource, fragmentShaderSource
   )
 
   // 为了设置它的值我们需要找到它的位置。

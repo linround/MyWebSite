@@ -1,39 +1,4 @@
-
-
-// 创建着色器方法，输入参数：渲染上下文，着色器类型，数据源
-export function createShader(
-  gl, type, source
-) {
-  const shader = gl.createShader(type) // 创建着色器对象
-  gl.shaderSource(shader, source) // 提供数据源
-  gl.compileShader(shader) // 编译 -> 生成着色器
-  const success = gl.getShaderParameter(shader, gl.COMPILE_STATUS)
-  if (success) {
-    return shader
-  }
-
-  console.log('getShaderInfoLog', gl.getShaderInfoLog(shader))
-  gl.deleteShader(shader)
-}
-
-
-// 然后我们将这两个着色器 link（链接）到一个 program（着色程序）
-export function createProgram(
-  gl, vertexShader, fragmentShader
-) {
-  const program = gl.createProgram()
-  gl.attachShader(program, vertexShader)
-  gl.attachShader(program, fragmentShader)
-  gl.linkProgram(program)
-
-  const success = gl.getProgramParameter(program, gl.LINK_STATUS)
-  if (success) {
-    return program
-  }
-
-  console.log(gl.getProgramInfoLog(program))
-  gl.deleteProgram(program)
-}
+import { createShader, createProgram } from '../webglCommon'
 
 
 export function triangles(canvas) {
@@ -107,6 +72,10 @@ export function triangles(canvas) {
   const positions = [
     0, 0,
     0, 1,
+    -1, 0,
+    // 添加下面三点即可利用三角形绘制矩形
+    -1, 1,
+    0, 1,
     -1, 0
   ]
   // webgl需要强数据类型。所以 new Float32Array(positions) 创建了32位浮点型数据序列
@@ -172,7 +141,7 @@ export function triangles(canvas) {
   // WebGL将会根据三个gl_Position值绘制一个三角形，
   // 不论我们的画布大小是多少，在裁剪空间中每个方向的坐标范围都是 -1 到 1 。
   const primitiveType = gl.TRIANGLES
-  const count = 3
+  const count = 6
 
 
   // WebGL将会把它们从裁剪空间转换到屏幕空间并在屏幕空间绘制一个三角形， 如果画布大小是400×300我们会得到类似以下的转换
