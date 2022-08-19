@@ -11,31 +11,31 @@ export function rectangle(canvas) {
 
 
   const vertexShaderSource = `
-
+    // 定义顶点二维向量
     attribute vec2 a_position;
-    // 颜色属性
+    // 颜色属性 四维向量 rgba
     attribute vec4 a_color;
-    // 全局变量矩阵
+    // 全局变量矩阵 3*3的方阵
     uniform mat3 u_matrix;
-    // 可变量颜色
-    varying vec4 v_color;
+    // 可变量颜色 思维向量
+    varying vec4 to_f_color;
     
     void main() {
       //
-      // Multiply the position by the matrix.
+      // 位置乘以矩阵
       gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
     
       // Copy the color from the attribute to the varying.
-      v_color = a_color;
+      to_f_color = a_color;
     }
   `
   const fragmentShaderSource = `
     precision mediump float;
+    varying vec4 to_f_color;
     
-    varying vec4 v_color;
     
     void main() {
-      gl_FragColor = v_color;
+      gl_FragColor = to_f_color;
     }
   `
   /**
@@ -62,6 +62,11 @@ export function rectangle(canvas) {
   /**
    * 创建一个顶点信息缓冲区
    * 将缓冲区绑定到绑定点
+   * tips:
+   * gl.createBuffer 创建一个缓冲
+   * gl.bindBuffer 设置缓冲为当前使用的缓冲
+   * gl.bufferData将数据拷贝到缓冲，这个操作一般在初始化完成
+   * 以下操作完成了将数据拷贝到 positionBuffer
    * @type {WebGLBuffer | AudioBuffer}
    */
   const positionBuffer = gl.createBuffer()
@@ -129,8 +134,9 @@ export function rectangle(canvas) {
 
     // 开启位置属性
     gl.enableVertexAttribArray(positionLocation)
-
-    // 绑定顶点缓冲区
+    // 之前数据已经拷贝到了 positionBuffer
+    // 绑定顶点缓冲区 (当前缓冲使用 positionBuffer)
+    //
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
 
     // 告诉属性怎么从positionBuffer中读取数据 (ARRAY_BUFFER)
@@ -139,6 +145,22 @@ export function rectangle(canvas) {
     let normalize = false // 不需要归一化数据
     let stride = 0        // 0 = 移动单位数量 * 每个单位占用内存（sizeof(type)）每次迭代运行运动多少内存到下一个数据开始点
     let offset = 0        // 从缓冲起始位置开始读取
+    /**
+     * tips
+     * 因为当前的ARRAY_BUFFER是positionBuffer
+     * 也就是将当前的positionBuffer数据写入在了顶点属性位置positionLocation
+     *
+     * 每个顶点有几个单位的数据(1 - 4)，
+     * 单位数据类型是什么(BYTE, FLOAT, INT, UNSIGNED_SHORT, 等等...)，
+     * stride 是从一个数据到下一个数据要跳过多少位，
+     * 最后是数据在缓冲的什么位置。
+     *
+     * todo 关于webgl的性能方面的优化点
+     * 如果每个类型的数据都用一个缓冲存储，stride 和 offset 都是 0 。
+     * 对 stride 来说 0 表示 “用符合单位类型和单位个数的大小”。 对 offset 来说 0 表示从缓冲起始位置开始读取。
+     * 它们使用 0 以外的值时会复杂得多，虽然这样会取得一些性能能上的优势，
+     * 但是一般情况下并不值得，除非你想充分压榨WebGL的性能。
+     */
     // 一个额外的信息是gl.vertexAttribPointer是将属性绑定到当前的ARRAY_BUFFER。
     // 换句话说就是绑定到 positionBuffer上。
     // 这也意味着现在利用绑定点随意将 ARRAY_BUFFER绑定到其它数据上后，该属性依然从positionBuffer上读取数据
@@ -150,14 +172,26 @@ export function rectangle(canvas) {
     gl.enableVertexAttribArray(colorLocation)
 
     // 绑定颜色缓冲区
+    // 在此设置当前绑定点是colorBuffer
     gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer)
 
     // 告诉属性怎么从colorBuffer中读取数据
     size = 4          // 每次迭代运行提取4个单位数据  todo (颜色是 rgba 格式的 所以是由四个数据)
-    type = gl.FLOAT   // 每个单位的数据类型是32位浮点型
-    normalize = false // 不需要归一化数据
+
+    // todo 这里对颜色使用了归一化处理，当然也可以对
+    // type = gl.FLOAT   // 每个单位的数据类型是32位浮点型
+    // normalize = false // 不需要归一化数据
+
+    type = gl.UNSIGNED_BYTE  // 数据类型是8位的 UNSIGNED_BYTE 类型。
+    normalize = true
+
     stride = 0        // 0 = 移动单位数量 * 每个单位占用内存（sizeof(type)）每次迭代运行运动多少内存到下一个数据开始点
     offset = 0        // 从缓冲起始位置开始读取
+    /**
+     * tips
+     * 因为当前的ARRAY_BUFFER是colorBuffer
+     * 也就是将当前的colorBuffer数据写入在了颜色属性上
+     */
     gl.vertexAttribPointer(
       colorLocation, size, type, normalize, stride, offset
     )
@@ -186,6 +220,7 @@ export function rectangle(canvas) {
     )
 
     // 在矩阵位置设置该矩阵
+    // 这里设置了矩阵信息
     gl.uniformMatrix3fv(
       matrixLocation, false, matrix
     )
@@ -202,9 +237,9 @@ export function rectangle(canvas) {
     const count = 6
     /**
      *  todo
-     *  执行渲染，这里会调用着色器的main函数，此时矩阵已经被设置好
-     *  执行对应的矩阵变换，即可渲染图像
-     *  即绘制三角形
+     *  执行渲染，
+     *  此时矩阵数据，颜色属性，顶点属性已经被设置好
+     *  可直接绘制三角形
      */
     gl.drawArrays(
       primitiveType, offset, count
@@ -227,6 +262,7 @@ export function rectangle(canvas) {
 // WebGL会根据提示做出一些优化。
 // gl.STATIC_DRAW提示WebGL我们不会经常改变这些数据。
 function setGeometry(gl) {
+  //gl.bufferData将数据拷贝到缓冲，这个操作一般在初始化完成
   gl.bufferData(
     gl.ARRAY_BUFFER,
     new Float32Array([
@@ -243,23 +279,49 @@ function setGeometry(gl) {
 // 用定义颜色的值填充缓冲区。
 // 将把值放在当前的任何缓冲区中
 // 绑定到 ARRAY_BUFFER 绑定点
+// function setColors(gl) {
+//   // 两种随机颜色
+//   const r1 = Math.random()
+//   const b1 = Math.random()
+//   const g1 = Math.random()
+//   const r2 = Math.random()
+//   const b2 = Math.random()
+//   const g2 = Math.random()
+//
+//   gl.bufferData(
+//     gl.ARRAY_BUFFER,
+//     new Float32Array([r1, b1, g1, 1,
+//       r1, b1, g1, 1,
+//       r1, b1, g1, 1,
+//       r2, b2, g2, 1,
+//       r2, b2, g2, 1,
+//       r2, b2, g2, 1]),
+//     gl.STATIC_DRAW
+//   )
+// }
+
+
+// todo 颜色归一化相关
+// 给矩形的两个三角形
+// 设置颜色值并发到缓冲
 function setColors(gl) {
-  // 两种随机颜色
-  const r1 = Math.random()
-  const b1 = Math.random()
-  const g1 = Math.random()
-  const r2 = Math.random()
-  const b2 = Math.random()
-  const g2 = Math.random()
+  // 设置两个随机颜色
+  const r1 = Math.random() * 256 // 0 到 255.99999 之间
+  const b1 = Math.random() * 256 // 这些数据
+  const g1 = Math.random() * 256 // 在存入缓冲时
+  const r2 = Math.random() * 256 // 将被截取成
+  const b2 = Math.random() * 256 // Uint8Array 类型
+  const g2 = Math.random() * 256
 
   gl.bufferData(
     gl.ARRAY_BUFFER,
-    new Float32Array([r1, b1, g1, 1,
-      r1, b1, g1, 1,
-      r1, b1, g1, 1,
-      r2, b2, g2, 1,
-      r2, b2, g2, 1,
-      r2, b2, g2, 1]),
+    // Uint8Array
+    new Uint8Array([r1, b1, g1, 255,
+      r1, b1, g1, 255,
+      r1, b1, g1, 255,
+      r2, b2, g2, 255,
+      r2, b2, g2, 255,
+      r2, b2, g2, 255]),
     gl.STATIC_DRAW
   )
 }
