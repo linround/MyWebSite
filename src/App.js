@@ -10,7 +10,6 @@ import { MacModal } from './pages/macModal'
 import { FaIcons } from './pages/FaIcons'
 import { BasicReactSortable } from './pages/ReactSortable'
 import { DragDemo } from './pages/drag'
-import { Webgl } from './pages/window/Webgl'
 
 // css动画相关
 import AnimationDemo from './pages/animationDemo'
@@ -42,6 +41,8 @@ import VisualizationDemo from './pages/visualizationDemo'
 import ThreeJs from './pages/threeJs'
 import Canvas from './pages/canvas'
 import Progress from './pages/progress'
+import { WebglHowItWorks } from './pages/window/WebglHowItWorks'
+import { Webgl } from './pages/window/Webgl'
 
 
 export default function App() {
@@ -93,6 +94,7 @@ export default function App() {
         <Route path='/MacModal' element={<MacModal />} />
         <Route path='/DragDemo' element={<DragDemo />} />
         <Route path='/Webgl' element={<Webgl />} />
+        <Route path='/WebglHowItWorks' element={<WebglHowItWorks />} />
         <Route path='/BasicReactSortable' element={<BasicReactSortable />} />
         <Route path='/FaIcons' element={<FaIcons />} />
         <Route path='/' element={<WindowPage />}></Route>

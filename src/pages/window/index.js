@@ -3,12 +3,13 @@ import styles from './style.less'
 import { AppItem } from './component/appItem'
 import { FooterMenuItem } from './component/footerMenuItem'
 import {
-  InteractionOutlined, WechatOutlined, TeamOutlined,
+  InteractionOutlined, WechatOutlined, TeamOutlined, CodeSandboxOutlined,
   WindowsOutlined, SearchOutlined, DesktopOutlined, GithubOutlined, ReadOutlined
 } from '@ant-design/icons'
 import { addBlogItem, moduleSelector } from '../../store/blog'
 import { useDispatch, useSelector } from 'react-redux'
 import { ContextModal } from '../../components/ContextModal'
+import { WebglItems } from './component/WebglItems'
 import { ComponentsItems } from './component/ComponentsItems'
 
 function WeiXin() {
@@ -56,6 +57,9 @@ function WindowPage() {
         </AppItem>
         <AppItem dialogId='blog' appName='Blog文件信息' onAdd={handleAddBlog}>
           <TeamOutlined />
+        </AppItem>
+        <AppItem dialogId='Webgl' appName='Webgl' dialogContent={<WebglItems />}>
+          <CodeSandboxOutlined />
         </AppItem>
         <AppItem dialogId='components' appName='组件' dialogContent={<ComponentsItems />}>
           <InteractionOutlined />

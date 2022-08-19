@@ -41,6 +41,7 @@
   }
 }(this, function() {
   'use strict'
+
   const topWindow = this
 
   /** @module webgl-utils */

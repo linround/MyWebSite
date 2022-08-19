@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import styles from './style.less'
+import styles from '../webglCommon/style.less'
 import { triangles } from './triangles'
 import { rectangle } from './rectangle'
 import { rectangles } from './rectangles'

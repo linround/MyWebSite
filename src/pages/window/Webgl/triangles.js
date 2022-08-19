@@ -141,6 +141,7 @@ export function triangles(canvas) {
   // WebGL将会根据三个gl_Position值绘制一个三角形，
   // 不论我们的画布大小是多少，在裁剪空间中每个方向的坐标范围都是 -1 到 1 。
   const primitiveType = gl.TRIANGLES
+  // 这里每6次顶点着色器处理成像素坐标点后才会渲染
   const count = 6
 
 
