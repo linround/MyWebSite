@@ -7,6 +7,7 @@ export function WebglItems() {
       <div className={styles.ComponentsItemsContainer}>
         <Item to='Webgl' name='Webgl基础' />
         <Item to='WebglHowItWorks' name='Webgl原理' />
+        <Item to='ShadersAndGLSL' name='ShadersAndGLSL' />
       </div>
     </>
   )
