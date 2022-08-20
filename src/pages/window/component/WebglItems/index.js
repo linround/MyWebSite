@@ -8,6 +8,7 @@ export function WebglItems() {
         <Item to='Webgl' name='Webgl基础' />
         <Item to='WebglHowItWorks' name='Webgl原理' />
         <Item to='ShadersAndGLSL' name='ShadersAndGLSL' />
+        <Item to='WebglImageProcessing' name='WebglImageProcessing' />
       </div>
     </>
   )

@@ -44,6 +44,7 @@ import Progress from './pages/progress'
 import { WebglHowItWorks } from './pages/window/WebglHowItWorks'
 import { Webgl } from './pages/window/Webgl'
 import { ShadersAndGLSL } from './pages/window/ShadersAndGLSL'
+import { WebglImageProcessing } from './pages/window/WebglImageProcessing'
 
 
 export default function App() {
@@ -96,6 +97,7 @@ export default function App() {
         <Route path='/DragDemo' element={<DragDemo />} />
         <Route path='/Webgl' element={<Webgl />} />
         <Route path='/WebglHowItWorks' element={<WebglHowItWorks />} />
+        <Route path='/WebglImageProcessing' element={<WebglImageProcessing />} />
         <Route path='/ShadersAndGLSL' element={<ShadersAndGLSL />} />
         <Route path='/BasicReactSortable' element={<BasicReactSortable />} />
         <Route path='/FaIcons' element={<FaIcons />} />

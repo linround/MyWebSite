@@ -11,7 +11,6 @@ export function rectangles(gl) {
           // 一个属性值，从缓冲区获取数据
         attribute vec2 a_position;
         // 添加了一个uniform（全局变量）叫做u_resolution
-        //
         uniform vec2 u_resolution;
         
         // 所有的着色器都有一个main函数
@@ -26,7 +25,7 @@ export function rectangles(gl) {
         // 把 0->2 转换到 -1->+1 (裁剪空间)
         vec2 clipSpace = zeroToTwo - 1.0;
      
-        gl_Position = vec4(clipSpace, 0, 1);
+        gl_Position = vec4(clipSpace, 0, -1);
         // 需翻转y轴
         // gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
       }
@@ -52,7 +51,6 @@ export function rectangles(gl) {
   const program = createProgramFromStrings(
     gl, vertexShaderSource, fragmentShaderSource
   )
-
 
   // 创建好了着色程序，我们还需要对他提供数据
   // glsl着色程序唯一输入是一个属性值a_position，从刚创建的着色程序找到这个属性值所在位置

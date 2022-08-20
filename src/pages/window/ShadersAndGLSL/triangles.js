@@ -73,7 +73,7 @@ export function triangles(canvas) {
 
   // 三个二维点坐标
   const positions = [
-    -0.2, 0.2,
+    -1, 0.2,
     0.2, 0.2,
     -0.2, -0.2,
     // 添加下面三点即可利用三角形绘制矩形
@@ -123,7 +123,7 @@ export function triangles(canvas) {
    * w 以自身中心点 来进缩放(-1,+无穷)开区间为放大缩小值
    */
   // 在绘制前为偏移量赋值
-  gl.uniform4fv(offsetLoc, [0, 0, 0, 8])  // 向右偏移一半屏幕宽度
+  gl.uniform4fv(offsetLoc, [0, 0, 0, 0])  // 向右偏移一半屏幕宽度
 
   // 告诉webgl怎么从我们之前准备的缓冲中获取数据给着色器中的属性
   // 首先需要启用对应的属性
