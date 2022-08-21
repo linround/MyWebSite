@@ -4,7 +4,7 @@ import { triangles } from './triangles'
 import { rectangle } from './rectangle'
 import { rectangles } from './rectangles'
 
-export function Webgl() {
+export default function Webgl() {
   const canvasRef = useRef(null)
   const drawTriangles = () => {
     triangles(canvasRef.current)

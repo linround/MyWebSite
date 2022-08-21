@@ -22,8 +22,8 @@ export function rectangle(canvas) {
     
     void main() {
       //
-      // 位置乘以矩阵
-      gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
+      // 位置乘以矩阵（该矩阵是一个缩放，旋转，平移的因子）
+      gl_Position = vec4((u_matrix * vec3(a_position, 1)).x,(u_matrix * vec3(a_position, 1)).y,   0,    1);
     
       // Copy the color from the attribute to the varying.
       to_f_color = a_color;

@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import styles from '../webglCommon/style.less'
 import { rectangle } from './canvasWebgl'
 
-export function WebglHowItWorks() {
+export default function WebglHowItWorks() {
   const canvasRef = useRef(null)
   const [updateHandlers, setHandlers] = useState({})
 

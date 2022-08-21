@@ -15,36 +15,57 @@ export function triangles(canvas, image) {
         varying vec2 v_texCoord;
         
         void main() {
-           // convert the rectangle from pixels to 0.0 to 1.0
+           // 像素空间转换到裁剪空间（-1，1）
            vec2 zeroToOne = a_position / u_resolution;
         
-           // convert from 0->1 to 0->2
+           // 转换 0->1 to 0->2
            vec2 zeroToTwo = zeroToOne * 2.0;
         
-           // convert from 0->2 to -1->+1 (clipspace)
+           // 转换 0->2 to -1->+1 (裁剪空间坐标)
            vec2 clipSpace = zeroToTwo - 1.0;
-        
+           // 将y轴反转
            gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
         
-           // pass the texCoord to the fragment shader
-           // The GPU will interpolate this value between points.
+           // 传入纹理坐标
            v_texCoord = a_texCoord;
         }
   `
+  /**
+   * todo
+   * sampler2D和vec2、float表示一种数据类型，
+   * 只不过sampler2D关键字声明的变量表示一种取样器类型变量，
+   * 简单点说就是该变量对应纹理图片的像素数据
+   * @type {string}
+   */
   const fragmentShaderSource = `
       precision mediump float;
       
-      // our texture
+      // 纹理信息
+      // 2d像素信息
       uniform sampler2D u_image;
+      // 纹理大小
       uniform vec2 u_textureSize;
+      // 卷积核
       uniform float u_kernel[9];
+      // 核权重
       uniform float u_kernelWeight;
       
-      // the texCoords passed in from the vertex shader.
+      // 顶点着色器传入的纹理坐标.
       varying vec2 v_texCoord;
       
       void main() {
+         // 1px 像素
+         // 图像处理需要其他像素的颜色值怎么办？
+         // 由于WebGL的纹理坐标范围是 0.0 到 1.0 ， 那我们可以简单计算出移动一个像素对应的距离
+         
          vec2 onePixel = vec2(1.0, 1.0) / u_textureSize;
+         
+         
+         // 以下
+         // 第一个参数代表图片纹理，第二个参数代表纹理坐标点，通过GLSL的内建函数texture2D来获取对应位置纹理的颜色RGBA值
+         // texture2D函数创建texture2D贴图，并对像素进行操作
+         // 取得当前纹理坐标周围坐标的像素值，然后做卷积运算
+         // 最终得到一个像素值，这个像素值就是当前片段着色器器的颜色值
          vec4 colorSum =
              texture2D(u_image, v_texCoord + onePixel * vec2(-1, -1)) * u_kernel[0] +
              texture2D(u_image, v_texCoord + onePixel * vec2( 0, -1)) * u_kernel[1] +
@@ -59,25 +80,25 @@ export function triangles(canvas, image) {
          gl_FragColor = vec4((colorSum / u_kernelWeight).rgb, 1);
       }
   `
-  // setup GLSL program
+  // 启动一个程序
   const program = createProgramFromStrings(
     gl, vertexShaderSource, fragmentShaderSource
   )
 
-  // look up where the vertex data needs to go.
+  // 找到顶点数据的位置
   const positionLocation = gl.getAttribLocation(program, 'a_position')
   const texcoordLocation = gl.getAttribLocation(program, 'a_texCoord')
 
-  // Create a buffer to put three 2d clip space points in
+  // 创建一个缓冲区，防止裁剪空间中的点
   const positionBuffer = gl.createBuffer()
-  // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
+  // 当当缓冲区指向 positionBuffer
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
-  // Set a rectangle the same size as the image.
+  // 建立一个和图片一样大的矩形（给positionBuffer中注入数据）
   setRectangle(
     gl, 0, 0, image.width, image.height
   )
 
-  // provide texture coordinates for the rectangle.
+  // 为提供一个纹理坐标缓存区
   const texcoordBuffer = gl.createBuffer()
   gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer)
   gl.bufferData(
@@ -91,36 +112,46 @@ export function triangles(canvas, image) {
     ]), gl.STATIC_DRAW
   )
 
-  // Create a texture.
+  // =========================================创建图像纹理=============START========================================
   const texture = gl.createTexture()
   gl.bindTexture(gl.TEXTURE_2D, texture)
 
-  // Set the parameters so we can render any size image.
+  // 设置纹理参数
+  // target: gl.TEXTURE_2D
+  // TEXTURE_WRAP_S 纹理坐标水平填充       默认值 gl.CLAMP_TO_EDGE
   gl.texParameteri(
     gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE
   )
+
+  // TEXTURE_WRAP_T纹理坐标垂直填充        默认值 gl.CLAMP_TO_EDGE
   gl.texParameteri(
     gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE
   )
+
+  // TEXTURE_MIN_FILTER     纹理缩小滤波器     默认值 gl.CLAMP_TO_EDGE
   gl.texParameteri(
     gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST
   )
+
+  // TEXTURE_MAG_FILTER  纹理放大滤波器       默认值 gl.NEAREST
   gl.texParameteri(
     gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST
   )
-
-  // Upload the image into the texture.
+  // 指定根据图像二维纹理图像
+  // 参数 ：target, level, internalformat, format, type, ImageData? pixels
   gl.texImage2D(
     gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image
   )
+  // =========================================创建图像纹理=============END========================================
 
-  // lookup uniforms
+
+  // 找到全局变量的位置
   const resolutionLocation = gl.getUniformLocation(program, 'u_resolution')
   const textureSizeLocation = gl.getUniformLocation(program, 'u_textureSize')
   const kernelLocation = gl.getUniformLocation(program, 'u_kernel[0]')
   const kernelWeightLocation = gl.getUniformLocation(program, 'u_kernelWeight')
 
-  // Define several convolution kernels
+  // 定义卷积核
   const kernels = {
     normal: [
       0, 0, 0,
@@ -225,7 +256,7 @@ export function triangles(canvas, image) {
   }
   const initialSelection = 'edgeDetect2'
 
-  // Setup UI to pick kernels.
+  // ===============定义一套UI交互=====================================================START===============
   const ui = document.querySelector('#ui')
   const select = document.createElement('select')
   for (const name in kernels) {
@@ -249,6 +280,8 @@ export function triangles(canvas, image) {
     })
     return weight <= 0 ? 1 : weight
   }
+
+  // ===============定义一套UI交互=====================================================END===================
 
   function drawWithKernel(name) {
 

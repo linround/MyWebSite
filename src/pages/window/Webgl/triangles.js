@@ -134,7 +134,7 @@ export function triangles(canvas) {
   // 开始绘制
   // 因为count = 3，所以顶点着色器将运行三次
   // 第一次运行将会从位置缓冲中读取前两个值赋给属性值a_position.x和a_position.y
-  // 第二次运行a_position.xy将会被赋予后两个值，最后一次运行将被赋予最后两个值
+  // 第二次运行a_position.xy将会被赋予后两个值
   // 最后一次运行将被赋予最后两个值
 
   // 因为我们设置primitiveType（图元类型）为 gl.TRIANGLES（三角形）， 顶点着色器每运行三次

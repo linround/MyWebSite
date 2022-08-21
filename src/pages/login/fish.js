@@ -1,6 +1,6 @@
 import React from 'react'
 
-export class LoginFish extends React.Component {
+export default class LoginFish extends React.Component {
   componentDidMount() {
 
   }

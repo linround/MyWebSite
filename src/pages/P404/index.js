@@ -6,7 +6,7 @@ import P404Demo2 from './demo2'
 
 
 export { P404Demo2 }
-export function P404() {
+export default function P404() {
   const navigate = useNavigate()
   const handleBack = () => {
     navigate('/')

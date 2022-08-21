@@ -4,7 +4,7 @@ import styles from '../webglCommon/style.less'
 import { triangles } from './triangles'
 import img from './leaves.jpg'
 
-export function WebglImageProcessing() {
+export default function WebglImageProcessing() {
   const canvasRef = useRef(null)
   const imgRef = useRef(null)
   const drawTriangles = () => {

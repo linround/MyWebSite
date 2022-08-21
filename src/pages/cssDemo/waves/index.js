@@ -2,7 +2,7 @@ import React from 'react'
 import './style.css'
 
 
-export function Waves() {
+export default function Waves() {
   return (
     <>
       <div className="waves-header">

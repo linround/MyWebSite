@@ -3,7 +3,7 @@ import React, { useRef } from 'react'
 import styles from '../webglCommon/style.less'
 import { triangles } from './triangles'
 
-export function ShadersAndGLSL() {
+export default function ShadersAndGLSL() {
   const canvasRef = useRef(null)
   const drawTriangles = () => {
     triangles(canvasRef.current)
