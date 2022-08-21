@@ -287,7 +287,7 @@ export function triangles(canvas, image) {
 
     // Tell WebGL how to convert from clip space to pixels
     gl.viewport(
-      0, 0, gl.canvas.width, gl.canvas.height
+      100, -100, gl.canvas.width, gl.canvas.height
     )
 
     // Clear the canvas
