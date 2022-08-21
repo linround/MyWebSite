@@ -98,14 +98,25 @@ export function triangles(canvas, image) {
     gl, 0, 0, image.width, image.height
   )
 
-  // 为提供一个纹理坐标缓存区
+  /**
+   * todo
+   * 为提供一个纹理坐标缓存区
+   * 纹理坐标就是纹理与图形的映射关系（顶点和纹理坐标必须按照一致的顺序进行映射）
+   * 图形中每个顶点都会关联一个纹理坐标，表示顶点需要从该位置读取纹理图像的数据。
+   *
+   * 纹理坐标的范围是 0 到 1 之间，
+   * 顶点坐标一般是用（ x，y，z）描述，而纹理坐标是用（ s，t，r）描述
+   * 常规情况下，纹理坐标默认左下角为（0，0），右上角为（1，1）
+   * 纹理坐标的映射关系并不是固定的，可以根据图片的翻转，进行不同的映射，但是不能让图片交叉
+   * @type {WebGLBuffer | AudioBuffer}
+   */
   const texcoordBuffer = gl.createBuffer()
   gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer)
   gl.bufferData(
     gl.ARRAY_BUFFER, new Float32Array([
-      0.0,  0.0,
       1.0,  0.0,
       0.0,  1.0,
+      0.0,  0.0,
       0.0,  1.0,
       1.0,  0.0,
       1.0,  1.0
@@ -285,67 +296,91 @@ export function triangles(canvas, image) {
 
   function drawWithKernel(name) {
 
-    // Tell WebGL how to convert from clip space to pixels
+    // 裁剪空间到像素空间
     gl.viewport(
-      100, -100, gl.canvas.width, gl.canvas.height
+      0, 0, gl.canvas.width, gl.canvas.height
     )
 
-    // Clear the canvas
+    // 清除
     gl.clearColor(
       0, 0, 0, 0
     )
     gl.clear(gl.COLOR_BUFFER_BIT)
 
-    // Tell it to use our program (pair of shaders)
+    // 使用着色器程序
     gl.useProgram(program)
 
-    // Turn on the position attribute
+    // 开启位置属性
     gl.enableVertexAttribArray(positionLocation)
 
-    // Bind the position buffer.
+    /**
+     * todo
+     * positionBuffer 缓冲区绑定点
+     * positionBuffer存储的是矩形的区域最表点
+     */
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
 
-    // Tell the position attribute how to get data out of positionBuffer (ARRAY_BUFFER)
-    let size = 2          // 2 components per iteration
-    let type = gl.FLOAT   // the data is 32bit floats
-    let normalize = false // don't normalize the data
-    let stride = 0        // 0 = move forward size * sizeof(type) each iteration to get the next position
-    let offset = 0        // start at the beginning of the buffer
+    // 设置从positionBuffer中读取数据时的一些参数
+    let size = 2          // 每次迭代运行提取两个单位数据
+    let type = gl.FLOAT   // 每个单位的数据类型是32位浮点型
+    let normalize = false // 不需要归一化数据
+    let stride = 0        // 0 = 移动单位数量 * 每个单位占用内存（sizeof(type)）每次迭代运行运动多少内存到下一个数据开始点
+    let offset = 0        // 从缓冲起始位置开始读取
+    // positionLocation 得到了 positionBuffer的数据
     gl.vertexAttribPointer(
       positionLocation, size, type, normalize, stride, offset
     )
 
-    // Turn on the texcoord attribute
+    // 开启纹理属性
     gl.enableVertexAttribArray(texcoordLocation)
 
-    // bind the texcoord buffer.
+    /**
+     * todo
+     * texcoordBuffer 缓冲区绑定点
+     * texcoordBuffer 存储的是矩形的纹理映射区域
+     */
     gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer)
+    // 设置从texcoordBuffer中读取数据时的一些参数
+    size = 2          // 每次迭代运行提取两个单位数据
+    type = gl.FLOAT   // 每个单位的数据类型是32位浮点型
+    normalize = false // 不需要归一化数据
+    stride = 0       // 0 = 移动单位数量 * 每个单位占用内存（sizeof(type)）每次迭代运行运动多少内存到下一个数据开始点
+    offset = 0        // 从缓冲起始位置开始读取
 
-    // Tell the texcoord attribute how to get data out of texcoordBuffer (ARRAY_BUFFER)
-    size = 2          // 2 components per iteration
-    type = gl.FLOAT   // the data is 32bit floats
-    normalize = false // don't normalize the data
-    stride = 0       // 0 = move forward size * sizeof(type) each iteration to get the next position
-    offset = 0        // start at the beginning of the buffer
+    // texcoordLocation 得到了 texcoordBuffer的数据
     gl.vertexAttribPointer(
       texcoordLocation, size, type, normalize, stride, offset
     )
 
-    // set the resolution
+    /**
+     * todo
+     * 设置全局变量 该变量用来处理
+     *
+     * 像素空间转换到裁剪空间（-1，1）
+     * vec2 zeroToOne = a_position / u_resolution;
+     */
     gl.uniform2f(
       resolutionLocation, gl.canvas.width, gl.canvas.height
     )
 
     // set the size of the image
+    /**
+     * todo
+     * 设置全局变量 该变量用来处理
+     *
+     * 纹理大小
+     * uniform vec2 u_textureSize;
+     */
     gl.uniform2f(
       textureSizeLocation, image.width, image.height
     )
 
-    // set the kernel and it's weight
+    // 设置全局变量卷积核
+    // 设置全局变量卷积核权重
     gl.uniform1fv(kernelLocation, kernels[name])
     gl.uniform1f(kernelWeightLocation, computeKernelWeight(kernels[name]))
 
-    // Draw the rectangle.
+    // 绘制三角形
     const primitiveType = gl.TRIANGLES
     offset = 0
     const  count = 6
@@ -364,9 +399,9 @@ function setRectangle(
   const y2 = y + height
   gl.bufferData(
     gl.ARRAY_BUFFER, new Float32Array([
-      x1, y1,
       x2, y1,
       x1, y2,
+      x1, y1,
       x1, y2,
       x2, y1,
       x2, y2
