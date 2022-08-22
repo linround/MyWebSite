@@ -44,6 +44,7 @@ const WebglHowItWorks = React.lazy(() => import('./pages/window/WebglHowItWorks/
 const Webgl = React.lazy(() => import('./pages/window/Webgl'))
 const ShadersAndGLSL = React.lazy(() => import('./pages/window/ShadersAndGLSL'))
 const WebglImageProcessing = React.lazy(() => import('./pages/window/WebglImageProcessing'))
+const WebglImageProcess2 = React.lazy(() => import('./pages/window/webglImageProcess2'))
 
 export default function App() {
   return (
@@ -152,6 +153,8 @@ export default function App() {
               <CommonDatabaseAndOperatingSystem />
             </React.Suspense>
           }></Route>
+
+
           <Route path='/common/ThreeJs' element={
             <React.Suspense fallback={<>...</>}>
               <CommonThreeJs />
@@ -174,6 +177,11 @@ export default function App() {
             <Webgl />
           </React.Suspense>
         } />
+        <Route path='/WebglImageProcess2' element={
+          <React.Suspense fallback={<>...</>}>
+            <WebglImageProcess2 />
+          </React.Suspense>
+        }></Route>
         <Route path='/WebglHowItWorks' element={
           <React.Suspense fallback={<>...</>}><WebglHowItWorks /></React.Suspense>
         } />
