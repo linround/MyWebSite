@@ -13,7 +13,7 @@ export function Item(props) {
         <div className={styles.ItemIcon}>
           <MyIcon iconName='faPaperPlane' />
         </div>
-        <div>{ name }</div>
+        <div className={styles.ItemContainerText}>{ name }</div>
       </div>
     </Link>
 
