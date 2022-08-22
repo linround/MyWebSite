@@ -1,7 +1,6 @@
 import { createProgramFromStrings } from '../webglCommon'
 
 export function triangles(canvas, image) {
-  // Get A WebGL context
   const gl = canvas.getContext('webgl')
   if (!gl) {
     return
@@ -41,7 +40,7 @@ export function triangles(canvas, image) {
       precision mediump float;
       
       // 纹理信息
-      // 2d像素信息
+      // 2d采样器
       uniform sampler2D u_image;
       // 纹理大小
       uniform vec2 u_textureSize;
@@ -66,6 +65,17 @@ export function triangles(canvas, image) {
          // texture2D函数创建texture2D贴图，并对像素进行操作
          // 取得当前纹理坐标周围坐标的像素值，然后做卷积运算
          // 最终得到一个像素值，这个像素值就是当前片段着色器器的颜色值
+         
+         
+         
+         // vec4 texture2D(sampler2D sampler, vec2 coord)
+         // vec4 texture2D(sampler2D sampler, vec2 coord, float bias)
+         // 因为texImage2D指定了被绑定的纹理图像
+         // 参数1是一个采样器，这个采样器（u_image）会被绑定到当前的纹理图像
+         // 参数1： sampler指定将从中检索纹素的纹理绑定到的采样器 。
+         // 参数2： coord指定纹理将被采样的纹理坐标。
+         // 参数3： bias指定在详细级别计算期间要应用的可选偏差
+         // texture2D 函数返回一个纹素，即给定坐标的纹理（颜色）值
          vec4 colorSum =
              texture2D(u_image, v_texCoord + onePixel * vec2(-1, -1)) * u_kernel[0] +
              texture2D(u_image, v_texCoord + onePixel * vec2( 0, -1)) * u_kernel[1] +
@@ -114,9 +124,9 @@ export function triangles(canvas, image) {
   gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer)
   gl.bufferData(
     gl.ARRAY_BUFFER, new Float32Array([
+      0.0,  0.0,
       1.0,  0.0,
       0.0,  1.0,
-      0.0,  0.0,
       0.0,  1.0,
       1.0,  0.0,
       1.0,  1.0
@@ -125,8 +135,12 @@ export function triangles(canvas, image) {
 
   // =========================================创建图像纹理=============START========================================
   const texture = gl.createTexture()
+  /**
+   * todo
+   * 所有支持WebGL的环境，在片断着色器中至少有8个纹理单元，顶点着色器中可以是0个。
+   */
+  gl.activeTexture(gl.TEXTURE0) // 可写可不写
   gl.bindTexture(gl.TEXTURE_2D, texture)
-
   // 设置纹理参数
   // target: gl.TEXTURE_2D
   // TEXTURE_WRAP_S 纹理坐标水平填充       默认值 gl.CLAMP_TO_EDGE
@@ -148,11 +162,18 @@ export function triangles(canvas, image) {
   gl.texParameteri(
     gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST
   )
-  // 指定根据图像二维纹理图像
-  // 参数 ：target, level, internalformat, format, type, ImageData? pixels
+  /**
+   * todo
+   *
+   *
+   * 指定根据图像二维纹理图像
+   * 参数 ：target, level, internalformat, format, type, ImageData? pixels
+   *
+   */
   gl.texImage2D(
     gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image
   )
+
   // =========================================创建图像纹理=============END========================================
 
 
@@ -399,9 +420,9 @@ function setRectangle(
   const y2 = y + height
   gl.bufferData(
     gl.ARRAY_BUFFER, new Float32Array([
-      x2, y1,
       x1, y2,
       x1, y1,
+      x2, y1,
       x1, y2,
       x2, y1,
       x2, y2
