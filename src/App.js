@@ -45,6 +45,8 @@ const Webgl = React.lazy(() => import('./pages/window/Webgl'))
 const ShadersAndGLSL = React.lazy(() => import('./pages/window/ShadersAndGLSL'))
 const WebglImageProcessing = React.lazy(() => import('./pages/window/WebglImageProcessing'))
 const WebglImageProcess2 = React.lazy(() => import('./pages/window/webglImageProcess2'))
+const Webgl2dTranslation = React.lazy(() => import('./pages/window/webgl2dTranslation'))
+
 
 export default function App() {
   return (
@@ -177,6 +179,12 @@ export default function App() {
             <Webgl />
           </React.Suspense>
         } />
+
+        <Route path='/Webgl2dTranslation' element={
+          <React.Suspense fallback={<>...</>}>
+            <Webgl2dTranslation />
+          </React.Suspense>
+        }></Route>
         <Route path='/WebglImageProcess2' element={
           <React.Suspense fallback={<>...</>}>
             <WebglImageProcess2 />
