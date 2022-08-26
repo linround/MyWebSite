@@ -47,7 +47,7 @@ const WebglImageProcessing = React.lazy(() => import('./pages/window/WebglImageP
 const WebglImageProcess2 = React.lazy(() => import('./pages/window/webglImageProcess2'))
 const Webgl2dTranslation = React.lazy(() => import('./pages/window/webgl2dTranslation'))
 const Webgl2dRotation = React.lazy(() => import('./pages/window/Webgl2dRotation'))
-
+const Webgl2dMatrices = React.lazy(() => import('./pages/window/Webgl2dMatrices'))
 export default function App() {
   return (
     <AuthProvider>
@@ -179,6 +179,12 @@ export default function App() {
             <Webgl />
           </React.Suspense>
         } />
+
+        <Route path='/Webgl2dMatrices' element={
+          <React.Suspense fallback={<>...</>}>
+            <Webgl2dMatrices />
+          </React.Suspense>
+        }></Route>
         <Route path='/Webgl2dRotation' element={
           <React.Suspense fallback={<>...</>}>
             <Webgl2dRotation />

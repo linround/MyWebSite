@@ -19,11 +19,15 @@ export function render(canvas) {
       uniform vec2 u_translation;
       // 缩放值
       uniform vec2 u_scale;
+      
+      uniform mat3 u_move;
       void main() {
+        // 这里只需要将原有的顶点坐标乘以位移矩阵，即可绕规定的点进行旋转，这里是相当于改变原点坐标
+        vec2 move_position = (u_move * vec3(a_position, 1)).xy;
          // 旋转位置
          vec2 rotatedPosition = vec2(
-           a_position.x * u_rotation.y + a_position.y * u_rotation.x,
-           a_position.y * u_rotation.y - a_position.x * u_rotation.x);
+           move_position.x * u_rotation.y + move_position.y * u_rotation.x,
+           move_position.y * u_rotation.y - move_position.x * u_rotation.x);
            // 对旋转后的坐标进行缩放
            vec2 scaledPosition = rotatedPosition * u_scale;
          // 位置=原来的位置信息+位置信息
@@ -63,6 +67,7 @@ export function render(canvas) {
   // 找到全局变量
   // 存储缩放信息
   const scaleLocation = gl.getUniformLocation(program, 'u_scale')
+  const moveLocation = gl.getUniformLocation(program, 'u_move')
   // 存储旋转因子
   const rotationLocation = gl.getUniformLocation(program, 'u_rotation')
 
@@ -144,7 +149,13 @@ export function render(canvas) {
       gl.uniform2f(
         resolutionLocation, gl.canvas.width, gl.canvas.height
       )
-
+      gl.uniformMatrix3fv(
+        moveLocation, false, [
+          1, 0, 0,
+          0, 1, 0,
+          -30, -90, 1
+        ]
+      )
       // 设置颜色
       gl.uniform4fv(colorLocation, color)
       // 设置缩放

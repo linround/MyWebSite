@@ -12,6 +12,7 @@ export function WebglItems() {
         <Item to='WebglImageProcess2' name='WebglImageProcess2' />
         <Item to='Webgl2dTranslation' name='Webgl2dTranslation' />
         <Item to='Webgl2dRotation' name='Webgl2dRotation' />
+        <Item to='Webgl2dMatrices' name='Webgl2dMatrices' />
       </div>
     </>
   )
