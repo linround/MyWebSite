@@ -13,12 +13,17 @@ export function render(canvas) {
       attribute vec2 a_position;
       // 存储映射空间的宽高数据
       uniform vec2 u_resolution;
+      // 设置旋转的角度
+      uniform vec2 u_rotation;
       // 顶点的位移信息
       uniform vec2 u_translation;
-      
       void main() {
+         // 旋转位置
+         vec2 rotatedPosition = vec2(
+           a_position.x * u_rotation.y + a_position.y * u_rotation.x,
+           a_position.y * u_rotation.y - a_position.x * u_rotation.x);
          // 位置=原来的位置信息+位置信息
-         vec2 position = a_position + u_translation;
+         vec2 position = rotatedPosition + u_translation;
       
          // 将图像信息归一化到裁剪空间 即位置信息/宽高信息 转换到（0，1）范围
          vec2 zeroToOne = position / u_resolution;
@@ -52,6 +57,9 @@ export function render(canvas) {
   const positionLocation = gl.getAttribLocation(program, 'a_position')
 
   // 找到全局变量
+  // 存储旋转因子
+  const rotationLocation = gl.getUniformLocation(program, 'u_rotation')
+
   // 存储像素空间的宽高
   const resolutionLocation = gl.getUniformLocation(program, 'u_resolution')
   // 片段着色器中的颜色值变量
@@ -67,14 +75,19 @@ export function render(canvas) {
   setGeometry(gl)
 
   const translation = [0, 0]
+  const rotation = [0, 1]
   const color = [Math.random(), Math.random(), Math.random(), 1]
 
   drawScene()
 
-  function updatePosition(value) {
+  function updatePosition(value, rota) {
     if (value) {
       translation[0] = value[0]
       translation[1] = value[1]
+    }
+    if (rota) {
+      rotation[0] = rota[0]
+      rotation[1] = rota[1]
     }
     drawScene()
   }
@@ -121,7 +134,8 @@ export function render(canvas) {
 
     // 设置位移全局变量
     gl.uniform2fv(translationLocation, translation)
-
+    // 设置旋转
+    gl.uniform2fv(rotationLocation, rotation)
     // 开始绘制
     const primitiveType = gl.TRIANGLES
     offset = 0

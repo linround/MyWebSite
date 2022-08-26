@@ -46,7 +46,7 @@ const ShadersAndGLSL = React.lazy(() => import('./pages/window/ShadersAndGLSL'))
 const WebglImageProcessing = React.lazy(() => import('./pages/window/WebglImageProcessing'))
 const WebglImageProcess2 = React.lazy(() => import('./pages/window/webglImageProcess2'))
 const Webgl2dTranslation = React.lazy(() => import('./pages/window/webgl2dTranslation'))
-const Webgl2dRotation = React.lazy(() => import('./pages/window/webgl2dRotation'))
+const Webgl2dRotation = React.lazy(() => import('./pages/window/Webgl2dRotation'))
 
 export default function App() {
   return (
