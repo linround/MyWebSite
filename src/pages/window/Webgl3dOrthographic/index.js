@@ -4,22 +4,25 @@ import { render } from './gl'
 
 export default function Webgl3dOrthographic() {
   const canvasRef = useRef(null)
-  const [tx, setValueTX] = useState(0)
-  const [ty, setValueTY] = useState(0)
+  const [tx, setValueTX] = useState(200)
+  const [ty, setValueTY] = useState(79)
   const [tz, setValueTZ] = useState(0)
-  const [sx, setValueSX] = useState(0)
-  const [sy, setValueSY] = useState(0)
-  const [sz, setValueSZ] = useState(0)
   const [rx, setValueRX] = useState(0)
-  const [ry, setValueRY] = useState(0)
-  const [rz, setValueRZ] = useState(0)
+  const [ry, setValueRY] = useState(33)
+  const [rz, setValueRZ] = useState(33)
+  const [sx, setValueSX] = useState(71)
+  const [sy, setValueSY] = useState(66)
+  const [sz, setValueSZ] = useState(100)
+
   const handler = {
     update: () => ({}),
   }
   const [fn, setFn] = useState(handler)
 
   const drawTriangles = () => {
-    const func = render(canvasRef.current)
+    const func = render(canvasRef.current, {
+      rx, ry, rz, tx, ty, tz, sx: sx / 25, sy: +sy / 25, sz: +sz / 25,
+    })
     setFn(func)
   }
   const onScale = (value, index) => {
@@ -61,45 +64,45 @@ export default function Webgl3dOrthographic() {
   }
   return (
     <div>
-      <canvas className={ styles.canvasContainer} ref={canvasRef} width={400} height={300} ></canvas>
-      <div>
+      <canvas className={ styles.canvasContainer} ref={canvasRef} width={500} height={500} ></canvas>
+      <div className={styles.canvasOperates}>
         <div>
           X：<input
             type='range' max={400} min={0}
             onChange={(e) => onTranslation(e.target.value, 0)}
-            value={tx}/>
+            value={tx}/>{tx}
         </div>
         <div>
           Y：<input
             type='range' max={400} min={0}
             onChange={(e) => onTranslation(e.target.value, 1)}
-            value={ty}/>
+            value={ty}/>{ty}
         </div>
         <div>
           Z：<input
             type='range'
             max={400} min={0}
             onChange={(e) => onTranslation(e.target.value, 2)}
-            value={tz}/>
+            value={tz}/>{tz}
         </div>
         <div>
           旋转X：<input
             type='range' max={360} min={0}
             onChange={(e) => onRotation(e.target.value, 0)}
-            value={rx}/>
+            value={rx}/>{rx}
         </div>
         <div>
           旋转Y：<input
             type='range' max={360} min={0}
             onChange={(e) => onRotation(e.target.value, 1)}
-            value={ry}/>
+            value={ry}/>{ry}
         </div>
         <div>
           旋转Z：<input
             type='range'
             max={360} min={0}
             onChange={(e) => onRotation(e.target.value, 2)}
-            value={rz}/>
+            value={rz}/>{rz}
         </div>
         <div>
           缩放X：
@@ -108,7 +111,7 @@ export default function Webgl3dOrthographic() {
             max={100}
             min={0}
             onChange={(e) => onScale(e.target.value, 0)}
-            value={sx}/>
+            value={sx}/>{sx}
         </div>
         <div>
           缩放Y：
@@ -117,16 +120,16 @@ export default function Webgl3dOrthographic() {
             max={100}
             min={0}
             onChange={(e) => onScale(e.target.value, 1)}
-            value={sy}/>
+            value={sy}/>{sy}
         </div>
         <div>
           缩放Z：
           <input
             type='range'
             max={100}
-            min={0}
+            min={-100}
             onChange={(e) => onScale(e.target.value, 2)}
-            value={sz}/>
+            value={sz}/>{sz}
         </div>
         <div className={styles.canvasButton} onClick={drawTriangles}>绘制图形</div>
       </div>

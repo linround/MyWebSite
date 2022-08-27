@@ -1,37 +1,43 @@
 import { createProgramFromStrings } from '../webglCommon'
 
-export function render(canvas) {
+export function render(canvas, initialValue) {
   const  gl = canvas.getContext('webgl')
   if (!gl) {
     return
   }
   const vertexShaderSource = `
   attribute vec4 a_position;
-
-  uniform mat4 u_matrix;
   
+  // 定义一个顶点颜色属性
+  attribute vec4 a_color;
+  // 定义一个可变量 传入片元着色器
+  varying vec4 v_color;
+  
+  uniform mat4 u_matrix;
   void main() {
     // 矩阵*位置得到新的位置
     gl_Position = u_matrix * a_position;
+    // 将颜色传递给片断着色器
+    v_color = a_color;
   }
   `
   const fragmentShaderSource = `
   precision mediump float;
-
-  uniform vec4 u_color;
+  // 从顶点着色器中传入
+  varying vec4 v_color;
+  
+  
   
   void main() {
-     gl_FragColor = u_color;
+     gl_FragColor = v_color;
   }
   `
   // 创建着色器程序
   const program = createProgramFromStrings(
     gl, vertexShaderSource, fragmentShaderSource
   )
-
+  const colorLocation = gl.getAttribLocation(program, 'a_color')
   const positionLocation = gl.getAttribLocation(program, 'a_position')
-
-  const colorLocation = gl.getUniformLocation(program, 'u_color')
   const matrixLocation = gl.getUniformLocation(program, 'u_matrix')
 
   const positionBuffer = gl.createBuffer()
@@ -40,15 +46,20 @@ export function render(canvas) {
   setGeometry(gl)
 
 
+  const colorBuffer = gl.createBuffer()
+  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer)
+  // 将颜色值传入缓冲
+  setColors(gl)
+
   function degToRad(d) {
     return d * Math.PI / 180
   }
+  const { rx, ry, rz, tx, ty, tz, sx, sy, sz, } = initialValue
+  const translation = [tx, ty, tz]
+  const rotation = [degToRad(rx), degToRad(ry), degToRad(rz)]
+  const scale = [sx, sy, sz]
 
-  const translation = [0, 0, 0]
-  const rotation = [degToRad(0), degToRad(0), degToRad(0)]
-  const scale = [1, 1, 1]
-  const color = [Math.random(), Math.random(), Math.random(), 1]
-
+  gl.enable(gl.DEPTH_TEST)
   drawScene()
 
   function updatePosition(index, value) {
@@ -78,7 +89,7 @@ export function render(canvas) {
       0, 0, gl.canvas.width, gl.canvas.height
     )
 
-    gl.clear(gl.COLOR_BUFFER_BIT)
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
     gl.useProgram(program)
 
     // 启用位置属性（只有启用了之后才能够为这个属性进行赋值）
@@ -92,17 +103,32 @@ export function render(canvas) {
      * @type {number}
      */
     // 告诉属性怎么从 positionBuffer (ARRAY_BUFFER) 中读取位置
-    const size = 3          // 每次迭代使用 3 个单位的数据
-    const type = gl.FLOAT   // 单位数据类型是32位的浮点型
-    const normalize = false // 不需要归一化数据
-    const stride = 0        // 0 = 移动距离 * 单位距离长度sizeof(type)  每次迭代跳多少距离到下一个数据
+    let size = 3          // 每次迭代使用 3 个单位的数据
+    let type = gl.FLOAT   // 单位数据类型是32位的浮点型
+    let normalize = false // 不需要归一化数据
+    let stride = 0        // 0 = 移动距离 * 单位距离长度sizeof(type)  每次迭代跳多少距离到下一个数据
     let offset = 0        // 从绑定缓冲的起始处开始
     gl.vertexAttribPointer(
       positionLocation, size, type, normalize, stride, offset
     )
 
-    // set the color
-    gl.uniform4fv(colorLocation, color)
+
+
+    // 启用颜色属性
+    gl.enableVertexAttribArray(colorLocation)
+
+    // 绑定颜色缓冲
+    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer)
+
+    // 告诉颜色属性怎么从 colorBuffer (ARRAY_BUFFER) 中读取颜色值
+    size = 3                 // 每次迭代使用3个单位的数据
+    type = gl.UNSIGNED_BYTE  // 单位数据类型是无符号 8 位整数
+    normalize = true         // 标准化数据 (从 0-255 转换到 0.0-1.0)
+    stride = 0               // 0 = 移动距离 * 单位距离长度sizeof(type)  每次迭代跳多少距离到下一个数据
+    offset = 0               // 从绑定缓冲的起始处开始
+    gl.vertexAttribPointer(
+      colorLocation, size, type, normalize, stride, offset
+    )
 
     // 计算出这个空间矩阵
     let matrix = m4.projection(
@@ -139,7 +165,7 @@ export function render(canvas) {
     // 开始绘制
     const primitiveType = gl.TRIANGLES
     offset = 0
-    const  count = 18  // 6个三角形18个顶点  所以需要绘制18次数
+    const  count = 16 * 6  // 6个三角形18个顶点  所以需要绘制18次数
     gl.drawArrays(
       primitiveType, offset, count
     )
@@ -384,7 +410,7 @@ function setGeometry(gl) {
   gl.bufferData(
     gl.ARRAY_BUFFER,
     new Float32Array([
-      // 左边列的三角形
+      // left column front
       0,   0,  0,
       30,   0,  0,
       0, 150,  0,
@@ -392,22 +418,262 @@ function setGeometry(gl) {
       30,   0,  0,
       30, 150,  0,
 
-      // 顶部行
-      40,   0,  0,
+      // top rung front
+      30,   0,  0,
       100,   0,  0,
-      40,  40,  0,
-      40,  40,  0,
+      30,  30,  0,
+      30,  30,  0,
       100,   0,  0,
-      100,  40,  0,
+      100,  30,  0,
 
-      // 中间行
-      40,  50,  0,
-      80,  50,  0,
-      40,  100,  0,
-      80,  50,  0,
-      40,  100,  0,
-      80,  100,  0]),
+      // middle rung front
+      30,  60,  0,
+      67,  60,  0,
+      30,  90,  0,
+      30,  90,  0,
+      67,  60,  0,
+      67,  90,  0,
+
+      // left column back
+      0,   0,  30,
+      30,   0,  30,
+      0, 150,  30,
+      0, 150,  30,
+      30,   0,  30,
+      30, 150,  30,
+
+      // top rung back
+      30,   0,  30,
+      100,   0,  30,
+      30,  30,  30,
+      30,  30,  30,
+      100,   0,  30,
+      100,  30,  30,
+
+      // middle rung back
+      30,  60,  30,
+      67,  60,  30,
+      30,  90,  30,
+      30,  90,  30,
+      67,  60,  30,
+      67,  90,  30,
+
+      // top
+      0,   0,   0,
+      100,   0,   0,
+      100,   0,  30,
+      0,   0,   0,
+      100,   0,  30,
+      0,   0,  30,
+
+      // top rung right
+      100,   0,   0,
+      100,  30,   0,
+      100,  30,  30,
+      100,   0,   0,
+      100,  30,  30,
+      100,   0,  30,
+
+      // under top rung
+      30,   30,   0,
+      30,   30,  30,
+      100,  30,  30,
+      30,   30,   0,
+      100,  30,  30,
+      100,  30,   0,
+
+      // between top rung and middle
+      30,   30,   0,
+      30,   30,  30,
+      30,   60,  30,
+      30,   30,   0,
+      30,   60,  30,
+      30,   60,   0,
+
+      // top of middle rung
+      30,   60,   0,
+      30,   60,  30,
+      67,   60,  30,
+      30,   60,   0,
+      67,   60,  30,
+      67,   60,   0,
+
+      // right of middle rung
+      67,   60,   0,
+      67,   60,  30,
+      67,   90,  30,
+      67,   60,   0,
+      67,   90,  30,
+      67,   90,   0,
+
+      // bottom of middle rung.
+      30,   90,   0,
+      30,   90,  30,
+      67,   90,  30,
+      30,   90,   0,
+      67,   90,  30,
+      67,   90,   0,
+
+      // right of bottom
+      30,   90,   0,
+      30,   90,  30,
+      30,  150,  30,
+      30,   90,   0,
+      30,  150,  30,
+      30,  150,   0,
+
+      // bottom
+      0,   150,   0,
+      0,   150,  30,
+      30,  150,  30,
+      0,   150,   0,
+      30,  150,  30,
+      30,  150,   0,
+
+      // left side
+      0,   0,   0,
+      0,   0,  30,
+      0, 150,  30,
+      0,   0,   0,
+      0, 150,  30,
+      0, 150,   0]),
     gl.STATIC_DRAW
   )
 }
 
+
+// Fill the buffer with colors for the 'F'.
+function setColors(gl) {
+  gl.bufferData(
+    gl.ARRAY_BUFFER,
+    new Uint8Array([
+      // left column front
+      200,  70, 120,
+      200,  70, 120,
+      200,  70, 120,
+      200,  70, 120,
+      200,  70, 120,
+      200,  70, 120,
+
+      // top rung front
+      200,  70, 120,
+      200,  70, 120,
+      200,  70, 120,
+      200,  70, 120,
+      200,  70, 120,
+      200,  70, 120,
+
+      // middle rung front
+      200,  70, 120,
+      200,  70, 120,
+      200,  70, 120,
+      200,  70, 120,
+      200,  70, 120,
+      200,  70, 120,
+
+      // left column back
+      80, 70, 200,
+      80, 70, 200,
+      80, 70, 200,
+      80, 70, 200,
+      80, 70, 200,
+      80, 70, 200,
+
+      // top rung back
+      80, 70, 200,
+      80, 70, 200,
+      80, 70, 200,
+      80, 70, 200,
+      80, 70, 200,
+      80, 70, 200,
+
+      // middle rung back
+      80, 70, 200,
+      80, 70, 200,
+      80, 70, 200,
+      80, 70, 200,
+      80, 70, 200,
+      80, 70, 200,
+
+      // top
+      70, 200, 210,
+      70, 200, 210,
+      70, 200, 210,
+      70, 200, 210,
+      70, 200, 210,
+      70, 200, 210,
+
+      // top rung right
+      200, 200, 70,
+      200, 200, 70,
+      200, 200, 70,
+      200, 200, 70,
+      200, 200, 70,
+      200, 200, 70,
+
+      // under top rung
+      210, 100, 70,
+      210, 100, 70,
+      210, 100, 70,
+      210, 100, 70,
+      210, 100, 70,
+      210, 100, 70,
+
+      // between top rung and middle
+      210, 160, 70,
+      210, 160, 70,
+      210, 160, 70,
+      210, 160, 70,
+      210, 160, 70,
+      210, 160, 70,
+
+      // top of middle rung
+      70, 180, 210,
+      70, 180, 210,
+      70, 180, 210,
+      70, 180, 210,
+      70, 180, 210,
+      70, 180, 210,
+
+      // right of middle rung
+      100, 70, 210,
+      100, 70, 210,
+      100, 70, 210,
+      100, 70, 210,
+      100, 70, 210,
+      100, 70, 210,
+
+      // bottom of middle rung.
+      76, 210, 100,
+      76, 210, 100,
+      76, 210, 100,
+      76, 210, 100,
+      76, 210, 100,
+      76, 210, 100,
+
+      // right of bottom
+      140, 210, 80,
+      140, 210, 80,
+      140, 210, 80,
+      140, 210, 80,
+      140, 210, 80,
+      140, 210, 80,
+
+      // bottom
+      90, 130, 110,
+      90, 130, 110,
+      90, 130, 110,
+      90, 130, 110,
+      90, 130, 110,
+      90, 130, 110,
+
+      // left side
+      160, 160, 220,
+      160, 160, 220,
+      160, 160, 220,
+      160, 160, 220,
+      160, 160, 220,
+      160, 160, 220]),
+    gl.STATIC_DRAW
+  )
+}
