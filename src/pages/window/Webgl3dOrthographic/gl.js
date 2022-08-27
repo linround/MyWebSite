@@ -1,8 +1,6 @@
 import { createProgramFromStrings } from '../webglCommon'
 
 export function render(canvas) {
-  // Get A WebGL context
-  /** @type {HTMLCanvasElement} */
   const  gl = canvas.getContext('webgl')
   if (!gl) {
     return
@@ -13,7 +11,7 @@ export function render(canvas) {
   uniform mat4 u_matrix;
   
   void main() {
-    // Multiply the position by the matrix.
+    // 矩阵*位置得到新的位置
     gl_Position = u_matrix * a_position;
   }
   `
@@ -26,35 +24,28 @@ export function render(canvas) {
      gl_FragColor = u_color;
   }
   `
-  // setup GLSL program
+  // 创建着色器程序
   const program = createProgramFromStrings(
     gl, vertexShaderSource, fragmentShaderSource
   )
 
-  // look up where the vertex data needs to go.
   const positionLocation = gl.getAttribLocation(program, 'a_position')
 
-  // lookup uniforms
   const colorLocation = gl.getUniformLocation(program, 'u_color')
   const matrixLocation = gl.getUniformLocation(program, 'u_matrix')
 
-  // Create a buffer to put positions in
   const positionBuffer = gl.createBuffer()
-  // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
-  // Put geometry data into buffer
+  // 为绑定点的顶点缓冲区填入顶点数据
   setGeometry(gl)
 
-  // function radToDeg(r) {
-  //   return r * 180 / Math.PI
-  // }
 
   function degToRad(d) {
     return d * Math.PI / 180
   }
 
-  const translation = [45, 150, 0]
-  const rotation = [degToRad(40), degToRad(25), degToRad(325)]
+  const translation = [0, 0, 0]
+  const rotation = [degToRad(0), degToRad(0), degToRad(0)]
   const scale = [1, 1, 1]
   const color = [Math.random(), Math.random(), Math.random(), 1]
 
@@ -80,32 +71,32 @@ export function render(canvas) {
     updatePosition,
     updateRotation,
   }
-  // Draw the scene.
   function drawScene() {
 
-    // Tell WebGL how to convert from clip space to pixels
+    // 将裁剪空间转换到像素空间
     gl.viewport(
       0, 0, gl.canvas.width, gl.canvas.height
     )
 
-    // Clear the canvas.
     gl.clear(gl.COLOR_BUFFER_BIT)
-
-    // Tell it to use our program (pair of shaders)
     gl.useProgram(program)
 
-    // Turn on the attribute
+    // 启用位置属性（只有启用了之后才能够为这个属性进行赋值）
     gl.enableVertexAttribArray(positionLocation)
 
-    // Bind the position buffer.
+    // 将绑定点与positionBuffer绑定
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
-
-    // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
-    const size = 3           // 3 components per iteration
-    const  type = gl.FLOAT   // the data is 32bit floats
-    const normalize = false // don't normalize the data
-    const stride = 0        // 0 = move forward size * sizeof(type) each iteration to get the next position
-    let offset = 0        // start at the beginning of the buffer
+    /**
+     * todo
+     * 以下将当前绑定点的缓冲数据，读取到指定的位置
+     * @type {number}
+     */
+    // 告诉属性怎么从 positionBuffer (ARRAY_BUFFER) 中读取位置
+    const size = 3          // 每次迭代使用 3 个单位的数据
+    const type = gl.FLOAT   // 单位数据类型是32位的浮点型
+    const normalize = false // 不需要归一化数据
+    const stride = 0        // 0 = 移动距离 * 单位距离长度sizeof(type)  每次迭代跳多少距离到下一个数据
+    let offset = 0        // 从绑定缓冲的起始处开始
     gl.vertexAttribPointer(
       positionLocation, size, type, normalize, stride, offset
     )
@@ -113,10 +104,17 @@ export function render(canvas) {
     // set the color
     gl.uniform4fv(colorLocation, color)
 
-    // Compute the matrices
+    // 计算出这个空间矩阵
     let matrix = m4.projection(
-      gl.canvas.clientWidth, gl.canvas.clientHeight, 400
+      gl.canvas.clientWidth, gl.canvas.clientHeight, 300
     )
+    /**
+     * todo
+     * =====================================================start===============================
+     * 先乘以平移矩阵
+     * 再乘以算转矩阵
+     * 最后乘以缩放矩阵
+     */
     matrix = m4.translate(
       matrix, translation[0], translation[1], translation[2]
     )
@@ -126,28 +124,34 @@ export function render(canvas) {
     matrix = m4.scale(
       matrix, scale[0], scale[1], scale[2]
     )
+    /**
+     * =====================================================end===============================
+     */
 
-    // Set the matrix.
+    /**
+     * todo
+     * 设置这个新的矩阵，，后续只要这个新的矩阵和原有的坐标点矩阵进行相乘即可得到新的坐标
+     */
     gl.uniformMatrix4fv(
       matrixLocation, false, matrix
     )
 
-    // Draw the geometry.
+    // 开始绘制
     const primitiveType = gl.TRIANGLES
     offset = 0
-    const  count = 18  // 6 triangles in the 'F', 3 points per triangle
+    const  count = 18  // 6个三角形18个顶点  所以需要绘制18次数
     gl.drawArrays(
       primitiveType, offset, count
     )
   }
 }
 
-var m4 = {
+const m4 = {
 
   projection: function(
     width, height, depth
   ) {
-    // Note: This matrix flips the Y axis so 0 is at the top.
+    // 注意：这个矩阵翻转了 Y 轴，所以 0 在上方
     return [
       2 / width, 0, 0, 0,
       0, -2 / height, 0, 0,
@@ -283,7 +287,7 @@ var m4 = {
       b30 * a03 + b31 * a13 + b32 * a23 + b33 * a33
     ]
   },
-
+  // 生成平移矩阵
   translation: function(
     tx, ty, tz
   ) {
@@ -298,7 +302,7 @@ var m4 = {
   xRotation: function(angleInRadians) {
     const c = Math.cos(angleInRadians)
     const s = Math.sin(angleInRadians)
-
+    // x 方向的旋转矩阵
     return [
       1, 0, 0, 0,
       0, c, s, 0,
@@ -310,6 +314,7 @@ var m4 = {
   yRotation: function(angleInRadians) {
     const c = Math.cos(angleInRadians)
     const s = Math.sin(angleInRadians)
+    // y 方向的旋转矩阵
 
     return [
       c, 0, -s, 0,
@@ -322,6 +327,7 @@ var m4 = {
   zRotation: function(angleInRadians) {
     const c = Math.cos(angleInRadians)
     const s = Math.sin(angleInRadians)
+    // z 方向的旋转矩阵
 
     return [
       c, s, 0, 0,
@@ -334,6 +340,8 @@ var m4 = {
   scaling: function(
     sx, sy, sz
   ) {
+
+    // 缩放矩阵
     return [
       sx, 0,  0,  0,
       0, sy,  0,  0,
@@ -371,12 +379,12 @@ var m4 = {
   },
 
 }
-// Fill the buffer with the values that define a letter 'F'.
+//  'F' 文字.
 function setGeometry(gl) {
   gl.bufferData(
     gl.ARRAY_BUFFER,
     new Float32Array([
-      // left column
+      // 左边列的三角形
       0,   0,  0,
       30,   0,  0,
       0, 150,  0,
@@ -384,21 +392,21 @@ function setGeometry(gl) {
       30,   0,  0,
       30, 150,  0,
 
-      // top rung
-      30,   0,  0,
+      // 顶部行
+      40,   0,  0,
       100,   0,  0,
-      30,  30,  0,
-      30,  30,  0,
+      40,  40,  0,
+      40,  40,  0,
       100,   0,  0,
-      100,  30,  0,
+      100,  40,  0,
 
-      // middle rung
-      30,  60,  0,
-      67,  60,  0,
-      30,  90,  0,
-      30,  90,  0,
-      67,  60,  0,
-      67,  90,  0]),
+      // 中间行
+      40,  50,  0,
+      80,  50,  0,
+      40,  100,  0,
+      80,  50,  0,
+      40,  100,  0,
+      80,  100,  0]),
     gl.STATIC_DRAW
   )
 }
