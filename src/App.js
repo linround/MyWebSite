@@ -49,6 +49,7 @@ const Webgl2dTranslation = React.lazy(() => import('./pages/window/webgl2dTransl
 const Webgl2dRotation = React.lazy(() => import('./pages/window/Webgl2dRotation'))
 const Webgl2dMatrices = React.lazy(() => import('./pages/window/Webgl2dMatrices'))
 const Webgl3dOrthographic = React.lazy(() => import('./pages/window/Webgl3dOrthographic'))
+const Webgl3dPerspective = React.lazy(() => import('./pages/window/Webgl3dPerspective'))
 
 export default function App() {
   return (
@@ -181,6 +182,11 @@ export default function App() {
             <Webgl />
           </React.Suspense>
         } />
+        <Route path='/Webgl3dPerspective' element={
+          <React.Suspense fallback={<>...</>}>
+            <Webgl3dPerspective />
+          </React.Suspense>
+        }></Route>
         <Route path='/Webgl3dOrthographic' element={
           <React.Suspense fallback={<>...</>}>
             <Webgl3dOrthographic />
