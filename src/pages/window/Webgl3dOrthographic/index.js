@@ -8,11 +8,11 @@ export default function Webgl3dOrthographic() {
   const [ty, setValueTY] = useState(79)
   const [tz, setValueTZ] = useState(0)
   const [rx, setValueRX] = useState(0)
-  const [ry, setValueRY] = useState(33)
+  const [ry, setValueRY] = useState(156)
   const [rz, setValueRZ] = useState(33)
-  const [sx, setValueSX] = useState(71)
-  const [sy, setValueSY] = useState(66)
-  const [sz, setValueSZ] = useState(100)
+  const [sx, setValueSX] = useState(46)
+  const [sy, setValueSY] = useState(52)
+  const [sz, setValueSZ] = useState(58)
 
   const handler = {
     update: () => ({}),
