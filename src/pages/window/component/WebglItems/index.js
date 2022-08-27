@@ -8,11 +8,12 @@ export function WebglItems() {
         <Item to='Webgl' name='Webgl基础' />
         <Item to='WebglHowItWorks' name='Webgl原理' />
         <Item to='ShadersAndGLSL' name='ShadersAndGLSL' />
-        <Item to='WebglImageProcessing' name='WebglImageProcessing' />
-        <Item to='WebglImageProcess2' name='WebglImageProcess2' />
-        <Item to='Webgl2dTranslation' name='Webgl2dTranslation' />
-        <Item to='Webgl2dRotation' name='Webgl2dRotation' />
-        <Item to='Webgl2dMatrices' name='Webgl2dMatrices' />
+        <Item to='WebglImageProcessing' name='图像处理2' />
+        <Item to='WebglImageProcess2' name='图像处理1' />
+        <Item to='Webgl2dTranslation' name='2D平移' />
+        <Item to='Webgl2dRotation' name='2D旋转' />
+        <Item to='Webgl2dMatrices' name='2D矩阵' />
+        <Item to='Webgl3dOrthographic' name='3D正交投影' />
       </div>
     </>
   )
