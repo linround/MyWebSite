@@ -4,17 +4,17 @@ import { render } from './gl'
 
 export default function webgl3dPerspective() {
   const canvasRef = useRef(null)
-  const [tx, setValueTX] = useState(200)
-  const [ty, setValueTY] = useState(79)
-  const [tz, setValueTZ] = useState(0)
-  const [rx, setValueRX] = useState(0)
-  const [ry, setValueRY] = useState(156)
-  const [rz, setValueRZ] = useState(33)
-  const [sx, setValueSX] = useState(1)
-  const [sy, setValueSY] = useState(1)
-  const [sz, setValueSZ] = useState(1)
-  const [fudgeFactor, setFudgeFactor] = useState(1)
-  const [fieldOfViewRadians, setFieldOfViewRadians] = useState(60)
+  const [tx, setValueTX] = useState(18)
+  const [ty, setValueTY] = useState(186)
+  const [tz, setValueTZ] = useState(-153)
+  const [rx, setValueRX] = useState(226)
+  const [ry, setValueRY] = useState(228)
+  const [rz, setValueRZ] = useState(153)
+  const [sx, setValueSX] = useState(39)
+  const [sy, setValueSY] = useState(14)
+  const [sz, setValueSZ] = useState(-64)
+  const [fudgeFactor, setFudgeFactor] = useState(250)
+  const [fieldOfViewRadians, setFieldOfViewRadians] = useState(146)
 
   const handler = {
     update: () => ({}),
@@ -24,6 +24,8 @@ export default function webgl3dPerspective() {
   const drawTriangles = () => {
     const func = render(canvasRef.current, {
       rx, ry, rz, tx, ty, tz, sx: sx / 25, sy: +sy / 25, sz: +sz / 25,
+      fieldOfViewRadiansVal: fieldOfViewRadians,
+      fudgeFactorVal: fudgeFactor,
     })
     setFn(func)
   }

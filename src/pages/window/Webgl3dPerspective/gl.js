@@ -51,7 +51,6 @@ export function render(canvas, initialValue) {
   const program = createProgramFromStrings(
     gl, vertexShaderSource, fragmentShaderSource
   )
-  let fudgeFactor = 1
   const fudgeLocation = gl.getUniformLocation(program, 'u_fudgeFactor')
 
 
@@ -73,11 +72,13 @@ export function render(canvas, initialValue) {
   function degToRad(d) {
     return d * Math.PI / 180
   }
-  const { rx, ry, rz, tx, ty, tz, sx, sy, sz, } = initialValue
+  const { rx, ry, rz, tx, ty, tz, sx, sy, sz, fieldOfViewRadiansVal, fudgeFactorVal, } = initialValue
   const translation = [tx, ty, tz]
+
+  let fudgeFactor = fudgeFactorVal
   const rotation = [degToRad(rx), degToRad(ry), degToRad(rz)]
   const scale = [sx, sy, sz]
-  let fieldOfViewRadians = degToRad(60)
+  let fieldOfViewRadians = degToRad(fieldOfViewRadiansVal)
 
   gl.enable(gl.DEPTH_TEST)
   drawScene()
@@ -593,14 +594,14 @@ function setGeometry(gl) {
   )
 }
 
-function makeZToWMatrix(fudgeFactor) {
-  return [
-    1, 0, 0, 0,
-    0, 1, 0, 0,
-    0, 0, 1, fudgeFactor,
-    0, 0, 0, 1
-  ]
-}
+// function makeZToWMatrix(fudgeFactor) {
+//   return [
+//     1, 0, 0, 0,
+//     0, 1, 0, 0,
+//     0, 0, 1, fudgeFactor,
+//     0, 0, 0, 1
+//   ]
+// }
 // Fill the buffer with colors for the 'F'.
 function setColors(gl) {
   gl.bufferData(
