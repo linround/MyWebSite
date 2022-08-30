@@ -47,33 +47,28 @@ export function render(canvas) {
       gl_FragColor.rgb *= light;
     }
   `
-  // setup GLSL program
   const program = createProgramFromStrings(
     gl, vertexShaderSource, fragmentShaderSource
   )
 
-  // look up where the vertex data needs to go.
   const positionLocation = gl.getAttribLocation(program, 'a_position')
   const normalLocation = gl.getAttribLocation(program, 'a_normal')
 
-  // lookup uniforms
   const matrixLocation = gl.getUniformLocation(program, 'u_matrix')
   const colorLocation = gl.getUniformLocation(program, 'u_color')
+
   const reverseLightDirectionLocation =
     gl.getUniformLocation(program, 'u_reverseLightDirection')
 
-  // Create a buffer to put positions in
   const positionBuffer = gl.createBuffer()
-  // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
-  // Put geometry data into buffer
+  // 在positionBuffer存储顶点信息
   setGeometry(gl)
 
-  // Create a buffer to put normals in
+
   const normalBuffer = gl.createBuffer()
-  // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = normalBuffer)
   gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer)
-  // Put normals data into buffer
+  // 存储对应顶点的法向量信息
   setNormals(gl)
 
 
@@ -81,81 +76,92 @@ export function render(canvas) {
     return d * Math.PI / 180
   }
 
-  const fieldOfViewRadians = degToRad(60)
+  let fieldOfViewRadians = degToRad(60)
   let fRotationRadians = 0
 
   drawScene()
 
   function updateRotation(ui) {
-    console.log(ui)
     fRotationRadians = degToRad(ui.value)
     drawScene()
   }
-  return { updateRotation, }
-  // Draw the scene.
+  function updateFieldOfViewRadians(value) {
+
+    fieldOfViewRadians = degToRad(value)
+    drawScene()
+  }
+  return { updateRotation, updateFieldOfViewRadians, }
   function drawScene() {
 
-    // Tell WebGL how to convert from clip space to pixels
+    // 设置像素空间的相关参数
     gl.viewport(
       0, 0, gl.canvas.width, gl.canvas.height
     )
 
-    // Clear the canvas AND the depth buffer.
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
-    // Turn on culling. By default backfacing triangles
-    // will be culled.
+    // 启用裁剪，默认剔除背面的三角形
     gl.enable(gl.CULL_FACE)
 
-    // Enable the depth buffer
+    // 启用深度缓冲
     gl.enable(gl.DEPTH_TEST)
 
-    // Tell it to use our program (pair of shaders)
     gl.useProgram(program)
 
-    // Turn on the position attribute
     gl.enableVertexAttribArray(positionLocation)
-
-    // Bind the position buffer.
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
-
-    // Tell the position attribute how to get data out of positionBuffer (ARRAY_BUFFER)
-    let size = 3          // 3 components per iteration
-    let  type = gl.FLOAT   // the data is 32bit floats
-    let  normalize = false // don't normalize the data
-    let  stride = 0        // 0 = move forward size * sizeof(type) each iteration to get the next position
-    let  offset = 0        // start at the beginning of the buffer
+    let size = 3          // 三维空间 位置坐标有三个 x,y,z
+    let  type = gl.FLOAT   // 数据类型是float
+    let  normalize = false // 不做归一化处理
+    let  stride = 0
+    let  offset = 0        // 从缓冲区的开始位置读取
     gl.vertexAttribPointer(
       positionLocation, size, type, normalize, stride, offset
     )
 
-    // Turn on the normal attribute
+    /**
+     * todo
+     * 设置每个顶点的法向量数据
+     * 法向量也是三维空间的向量，所以也是三个值 x,y,z
+     */
     gl.enableVertexAttribArray(normalLocation)
-
-    // Bind the normal buffer.
     gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer)
-
-    // Tell the attribute how to get data out of normalBuffer (ARRAY_BUFFER)
-    size = 3          // 3 components per iteration
-    type = gl.FLOAT  // the data is 32bit floating point values
-    normalize = false // normalize the data (convert from 0-255 to 0-1)
-    stride = 0        // 0 = move forward size * sizeof(type) each iteration to get the next position
-    offset = 0        // start at the beginning of the buffer
+    size = 3
+    type = gl.FLOAT
+    normalize = false
+    stride = 0
+    offset = 0
     gl.vertexAttribPointer(
       normalLocation, size, type, normalize, stride, offset
     )
 
-    // Compute the projection matrix
+    /**
+     * todo
+     * fieldOfViewRadians 这个值如果是可以设置的化，那么这个矩阵就是一个透视投影矩阵
+     * @type {number}
+     */
+    // 开始计算这个 透视投影的矩阵
     const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight
     const zNear = 1
     const zFar = 2000
+    // 根据透视投影的计算规则进行处理
     const projectionMatrix = m4.perspective(
       fieldOfViewRadians, aspect, zNear, zFar
     )
 
+    /**
+     * todo
+     * 本身是没有摄像机的概念
+     * 通过把场景中的所有物体进行移动，产生一种我们在移动的感觉，而不是移动场景
+     * lookAt矩阵的定义：
+     * camera： 摄像机的位置
+     * target： 摄像机看向的方向
+     * up： 向上的up方向
+     * @type {number[]}
+     */
     // Compute the camera's matrix
-    const camera = [100, 150, 200]
-    const target = [0, 35, 0]
+    const camera = [50, 100, 160]
+    const target = [0, 7, 0]
     const up = [0, 1, 0]
     const cameraMatrix = m4.lookAt(
       camera, target, up

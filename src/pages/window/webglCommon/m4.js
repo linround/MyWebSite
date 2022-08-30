@@ -317,7 +317,7 @@ function lookAt(
   cameraPosition, target, up, dst
 ) {
   dst = dst || new MatType(16)
-  var zAxis = normalize(subtractVectors(cameraPosition, target)),
+  const zAxis = normalize(subtractVectors(cameraPosition, target)),
     xAxis = normalize(cross(up, zAxis)),
     yAxis = normalize(cross(zAxis, xAxis))
 
@@ -364,24 +364,24 @@ function perspective(
   fieldOfViewInRadians, aspect, near, far, dst
 ) {
   dst = dst || new MatType(16)
-  var f = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians),
-    rangeInv = 1.0 / (near - far)
+  const f = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians)
+  const  rangeInv = 1.0 / (near - far)
 
-  dst[0] = f / aspect
+  dst[0] = (1/f) / aspect
   dst[1] = 0
   dst[2] = 0
   dst[3] = 0
   dst[4] = 0
-  dst[5] = f
+  dst[5] = 1/f
   dst[6] = 0
   dst[7] = 0
   dst[8] = 0
   dst[9] = 0
-  dst[10] = (near + far) * rangeInv
+  dst[10] = -(near + far) * rangeInv
   dst[11] = -1
   dst[12] = 0
   dst[13] = 0
-  dst[14] = near * far * rangeInv * 2
+  dst[14] = -near * far * rangeInv * 2
   dst[15] = 0
 
   return dst
@@ -1207,7 +1207,7 @@ function determinate(m) {
  */
 function inverse(m, dst) {
   dst = dst || new MatType(16)
-  var m00 = m[0 * 4 + 0],
+  const m00 = m[0 * 4 + 0],
     m01 = m[0 * 4 + 1],
     m02 = m[0 * 4 + 2],
     m03 = m[0 * 4 + 3],
