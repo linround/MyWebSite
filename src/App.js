@@ -50,6 +50,9 @@ const Webgl2dRotation = React.lazy(() => import('./pages/window/Webgl2dRotation'
 const Webgl2dMatrices = React.lazy(() => import('./pages/window/Webgl2dMatrices'))
 const Webgl3dOrthographic = React.lazy(() => import('./pages/window/Webgl3dOrthographic'))
 const Webgl3dPerspective = React.lazy(() => import('./pages/window/Webgl3dPerspective'))
+const Webgl3dCamera = React.lazy(() => import('./pages/window/Webgl3dCamera'))
+const Webgl3dLightingDirectional = React.lazy(() => import('./pages/window/Webgl3dLightingDirectional'))
+
 
 export default function App() {
   return (
@@ -182,6 +185,16 @@ export default function App() {
             <Webgl />
           </React.Suspense>
         } />
+        <Route path='/Webgl3dLightingDirectional' element={
+          <React.Suspense fallback={<>...</>}>
+            <Webgl3dLightingDirectional />
+          </React.Suspense>
+        }></Route>
+        <Route path='/Webgl3dCamera' element={
+          <React.Suspense fallback={<>...</>}>
+            <Webgl3dCamera />
+          </React.Suspense>
+        }></Route>
         <Route path='/Webgl3dPerspective' element={
           <React.Suspense fallback={<>...</>}>
             <Webgl3dPerspective />

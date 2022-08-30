@@ -15,6 +15,8 @@ export function WebglItems() {
         <Item to='Webgl2dMatrices' name='2D矩阵' />
         <Item to='Webgl3dOrthographic' name='3D正交投影' />
         <Item to='Webgl3dPerspective' name='3D透视投影' />
+        <Item to='Webgl3dCamera' name='3D相机' />
+        <Item to='Webgl3dLightingDirectional' name='光照相关' />
       </div>
     </>
   )
