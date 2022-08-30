@@ -317,9 +317,9 @@ function lookAt(
   cameraPosition, target, up, dst
 ) {
   dst = dst || new MatType(16)
-  const zAxis = normalize(subtractVectors(cameraPosition, target)),
-    xAxis = normalize(cross(up, zAxis)),
-    yAxis = normalize(cross(zAxis, xAxis))
+  const zAxis = normalize(subtractVectors(cameraPosition, target))
+  const xAxis = normalize(cross(up, zAxis))
+  const  yAxis = normalize(cross(zAxis, xAxis))
 
   dst[0] = xAxis[0]
   dst[1] = xAxis[1]
