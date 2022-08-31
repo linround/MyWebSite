@@ -7,35 +7,39 @@ export function render(canvas) {
     return
   }
   const vertexShaderSource = `
+  // 顶点坐标
     attribute vec4 a_position;
+    // 每个顶点的法向量
     attribute vec3 a_normal;
-    
+    // 世界空间顶点到裁剪空间的MVP矩阵（观察矩阵*裁剪矩阵）
     uniform mat4 u_matrix;
     
+    // 将法向量传入片元
     varying vec3 v_normal;
+    // 定义一个世界矩阵 这是一个旋转矩阵
+    uniform mat4 u_world;
     
     void main() {
-      // Multiply the position by the matrix.
+      // 新的位置 就是mvp矩阵乘以之前的顶点位置
       gl_Position = u_matrix * a_position;
     
-      // Pass the normal to the fragment shader
-      v_normal = a_normal;
+      // 世界方向发生变化的时候 重新改变当前这个顶点的法向量 旋转矩阵与之前的法向量进行相乘即可
+      v_normal = mat3(u_world) * a_normal;
     }
   `
   const fragmentShaderSource = `
   
     precision mediump float;
     
-    // Passed in from the vertex shader.
+    // 得到顶点的法向量
     varying vec3 v_normal;
-    
+    // 这个是光照的方向
     uniform vec3 u_reverseLightDirection;
+    
     uniform vec4 u_color;
     
     void main() {
-      // because v_normal is a varying it's interpolated
-      // so it will not be a unit vector. Normalizing it
-      // will make it a unit vector again
+      // 归一化
       vec3 normal = normalize(v_normal);
     
       float light = dot(normal, u_reverseLightDirection);
@@ -53,7 +57,7 @@ export function render(canvas) {
 
   const positionLocation = gl.getAttribLocation(program, 'a_position')
   const normalLocation = gl.getAttribLocation(program, 'a_normal')
-
+  const worldLocation = gl.getUniformLocation(program, 'u_world')
   const matrixLocation = gl.getUniformLocation(program, 'u_matrix')
   const colorLocation = gl.getUniformLocation(program, 'u_color')
 
@@ -135,20 +139,9 @@ export function render(canvas) {
       normalLocation, size, type, normalize, stride, offset
     )
 
-    /**
-     * todo
-     * fieldOfViewRadians 这个值如果是可以设置的化，那么这个矩阵就是一个透视投影矩阵
-     * @type {number}
-     */
-    // 开始计算这个 透视投影的矩阵
-    const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight
-    const zNear = 1
-    const zFar = 2000
-    // 根据透视投影的计算规则进行处理
-    const projectionMatrix = m4.perspective(
-      fieldOfViewRadians, aspect, zNear, zFar
-    )
 
+
+    //=================== 根据以上构造观察空间到世界空间的矩阵==================START============
     /**
      * todo
      * 本身是没有摄像机的概念
@@ -168,43 +161,86 @@ export function render(canvas) {
      *
      * 通过把场景中的所有物体进行移动，产生一种我们在移动的感觉，而不是移动场景
      * lookAt矩阵的定义：
-     * camera： 摄像机的位置
-     * target： 摄像机看向的方向
-     * up： 向上的up方向
+     * camera： 摄像机的 位置
+     * target： 摄像机看向的目标的 位置
+     * up： 向上的up的单位坐标点的 位置
+     * 以上
+     * 定义z 方向是 camera-target
+     * 定义up 一个向上的方向(0,1,0)
+     * 此时 up和 z是不一定垂直的，但是定义得到了一个面
+     * up 叉乘 z 得到 x 方向的向量 此时x垂直up,x垂直z
+     * 再用-z叉乘x得到y向量 此时就得到 一个基础坐标系 (x,y,z)
+     *
+     * 得到相机的三个分量之后，又知道相机的中心坐标
+     * 这样就可以得到 由相机空间 到  世界空间 的变换矩阵  |R||T|
+     * R就是（x,y,z分量组成的矩阵） T 就是相机中心点的位置矩阵
+     *
+     * 那么只需要对上面的矩阵求逆变换，就可以得到  世界空空间 到 相机空间 的变换矩阵
+     *
+     *
      * @type {number[]}
      */
-    // Compute the camera's matrix
-    const camera = [50, 100, 160]
-    const target = [0, 7, 0]
-    const up = [0, 1, 0]
+
+    const camera = [50, 100, 160] // 定义相机的 坐标
+    const target = [0, 100, 0] // 定义中心点坐标
+    const up = [0, 1, 0] // 定义一个向上的 方向向量
     const cameraMatrix = m4.lookAt(
       camera, target, up
     )
+    //=================== 根据以上构造观察空间到世界空间的矩阵==================START============
 
-    // Make a view matrix from the camera matrix.
+
+    //=================== 构造一个裁剪空间矩阵（透视投影）==================START============
+    /**
+     * todo
+     * fieldOfViewRadians 这个值如果是可以设置的化，那么这个矩阵就是一个透视投影矩阵
+     * projectionMatrix 相当于一个裁剪矩阵
+     * @type {number}
+     */
+    // 开始计算这个 透视投影的矩阵
+    const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight
+    const zNear = 1
+    const zFar = 2000
+    // 根据透视投影的计算规则进行处理
+    const projectionMatrix = m4.perspective(
+      fieldOfViewRadians, aspect, zNear, zFar
+    )
+    //=================== 构造一个裁剪空间矩阵（透视投影）==================END============
+
+    /**
+     * todo 由于cameraMatrix是一个由观察空间到世界空间的矩阵;所以这里求逆变换即可得到 由   世界空间到观察空间的一个矩阵
+     *
+     * @type {Matrix4}
+     */
     const viewMatrix = m4.inverse(cameraMatrix)
 
-    // Compute a view projection matrix
+    /**
+     * todo
+     * 裁剪空间坐标 = 裁剪矩阵也叫投影矩阵 * 世界空间到观察空间的矩阵 * 点P
+     * P1 = projectionMatrix* viewMatrix * P
+     * todo viewProjectionMatrix是结合了投影矩阵和观察矩阵
+     */
     const viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix)
 
-    // Draw a F at the origin
+    // 定义一个旋转矩阵
     const worldMatrix = m4.yRotation(fRotationRadians)
-
-    // Multiply the matrices.
+    // 世界变化，也会影响到某个顶点的法向量的变化
+    gl.uniformMatrix4fv(
+      worldLocation, false, worldMatrix
+    )
+    // 转换矩阵乘以旋转矩阵得到最终的交互矩阵
     const worldViewProjectionMatrix = m4.multiply(viewProjectionMatrix, worldMatrix)
 
-    // Set the matrix.
+    // 这个MVP矩阵
     gl.uniformMatrix4fv(
       matrixLocation, false, worldViewProjectionMatrix
     )
 
-    // Set the color to use
     gl.uniform4fv(colorLocation, [0.2, 1, 0.2, 1]) // green
 
-    // set the light direction.
+    // 设立光照的方向（归一化向量，面光源）
     gl.uniform3fv(reverseLightDirectionLocation, m4.normalize([0.5, 0.7, 1]))
 
-    // Draw the geometry.
     const primitiveType = gl.TRIANGLES
     offset = 0
     const count = 16 * 6
@@ -214,7 +250,6 @@ export function render(canvas) {
   }
 }
 
-// Fill the buffer with the values that define a letter 'F'.
 function setGeometry(gl) {
   const positions = new Float32Array([
     // left column front
@@ -344,17 +379,10 @@ function setGeometry(gl) {
     0,   0,   0,
     0, 150,  30,
     0, 150,   0])
-
-  // Center the F around the origin and Flip it around. We do this because
-  // we're in 3D now with and +Y is up where as before when we started with 2D
-  // we had +Y as down.
-
-  // We could do by changing all the values above but I'm lazy.
-  // We could also do it with a matrix at draw time but you should
-  // never do stuff at draw time if you can do it at init time.
+  // 变变动旋转的中心点
   let matrix = m4.xRotation(Math.PI)
   matrix = m4.translate(
-    matrix, -50, -75, -15
+    matrix, -50, -50, 0
   )
 
   for (let ii = 0; ii < positions.length; ii += 3) {
@@ -363,7 +391,6 @@ function setGeometry(gl) {
     positions[ii + 1] = vector[1]
     positions[ii + 2] = vector[2]
   }
-
   gl.bufferData(
     gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW
   )
