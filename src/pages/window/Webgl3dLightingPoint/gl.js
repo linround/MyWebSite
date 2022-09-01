@@ -17,6 +17,7 @@ export function render(canvas) {
     // 相机位置
     uniform vec3 u_viewWorldPosition;
     
+    
     // 世界的矩阵（可能发生旋转）
     uniform mat4 u_world;
     
@@ -43,11 +44,16 @@ export function render(canvas) {
     
       // 世界空间中观察（相机与点的向量值） 旋转的时候 相机位置在世界空间是不变的
       v_surfaceToView = u_viewWorldPosition - surfaceWorldPosition;
+      
     }
   `
   const fragmentShaderSource = `
     precision mediump float;
-  
+    //处理光线变化太过急促
+    uniform float u_shininess;
+    // 设置光照颜色
+    uniform vec3 u_lightColor;
+    
     // 顶点的法向量
     varying vec3 v_normal;
     // 顶点到光源的向量
@@ -67,13 +73,17 @@ export function render(canvas) {
     
       // 求得每一个顶点的光照值
       float light = dot(normal, surfaceToLightDirection);
+      
       // 光照会有反射
-      float specular = dot(normal, halfVector);
+      float specular = 0.0;
+      if (light > 0.0) {
+        specular = pow(dot(normal, halfVector), u_shininess);
+      }
     
       gl_FragColor = u_color;
     
       // 通过光照值调整颜色
-      gl_FragColor.rgb *= light;
+      gl_FragColor.rgb *= light * u_lightColor;
     
       // 调整之后的颜色信息加上反射的光照值，即可得到新的光照值
       gl_FragColor.rgb += specular;
@@ -85,7 +95,9 @@ export function render(canvas) {
 
   const positionLocation = gl.getAttribLocation(program, 'a_position')
   const normalLocation = gl.getAttribLocation(program, 'a_normal')
-
+  const shininessLocation = gl.getUniformLocation(program, 'u_shininess')
+  const lightColorLocation =
+    gl.getUniformLocation(program, 'u_lightColor')
   const worldViewProjectionLocation = gl.getUniformLocation(program, 'u_worldViewProjection')
   const worldInverseTransposeLocation = gl.getUniformLocation(program, 'u_worldInverseTranspose')
   const colorLocation = gl.getUniformLocation(program, 'u_color')
@@ -114,7 +126,19 @@ export function render(canvas) {
   const fieldOfViewRadians = degToRad(60)
   let fRotationRadians = 0
 
+
+  gl.useProgram(program)
+  gl.uniform4fv(colorLocation, [0.8, 0.5, 0.4, 1]) // 顶点颜色
+  // 设置光照颜色
+  gl.uniform3fv(lightColorLocation, m4.normalize([0.5, 0.5, 0.3]))  // 红光
+  let shininess = 2  // 缓和光强
+  gl.uniform1f(shininessLocation, shininess)
   drawScene()
+  function updateShininess(ui) {
+    shininess = ui.value
+    gl.uniform1f(shininessLocation, shininess)
+    drawScene()
+  }
 
   function updateRotation(ui) {
     fRotationRadians = degToRad(ui.value)
@@ -122,6 +146,7 @@ export function render(canvas) {
   }
   return {
     updateRotation,
+    updateShininess,
   }
   function drawScene() {
 
@@ -131,7 +156,6 @@ export function render(canvas) {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
     gl.enable(gl.CULL_FACE)
     gl.enable(gl.DEPTH_TEST)
-    gl.useProgram(program)
 
     gl.enableVertexAttribArray(positionLocation)
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
@@ -201,8 +225,6 @@ export function render(canvas) {
     gl.uniformMatrix4fv(
       worldLocation, false, worldMatrix
     )
-    gl.uniform4fv(colorLocation, [1, 1, 1, 1]) // 顶点颜色
-
     // 光线位置
     gl.uniform3fv(lightWorldPositionLocation, [-90, 30, 60])
 
