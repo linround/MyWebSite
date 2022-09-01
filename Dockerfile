@@ -5,6 +5,8 @@ RUN npm install && npm run build
 
 FROM nginx
 RUN mkdir /app
+# 将build文件内容复制到html文件下
 COPY --from=0 /app/build /usr/share/nginx/html
+# 这里可以用来在项目去配置nginx文件
 COPY nginx.conf /etc/nginx/nginx.conf
 LABEL maintainer = "usha.mandya@docker.com"
