@@ -2,20 +2,24 @@ import { createProgramFromStrings } from '../webglCommon'
 import m4 from '../webglCommon/m4'
 
 export function render(canvas) {
-  // Get A WebGL context
-  /** @type {HTMLCanvasElement} */
   const gl = canvas.getContext('webgl')
   if (!gl) {
     return
   }
   const vertexShaderSource = `
+    // 顶点坐标
     attribute vec4 a_position;
+    // 顶点法向量
     attribute vec3 a_normal;
     
+    // 光源位置
     uniform vec3 u_lightWorldPosition;
+    // 相机位置
     uniform vec3 u_viewWorldPosition;
     
+    // 世界的矩阵（可能发生旋转）
     uniform mat4 u_world;
+    //
     uniform mat4 u_worldViewProjection;
     uniform mat4 u_worldInverseTranspose;
     
@@ -180,37 +184,42 @@ export function render(canvas) {
       normalLocation, size, type, normalize, stride, offset
     )
 
-    // Compute the projection matrix
     const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight
     const zNear = 1
     const zFar = 2000
+
+    // 透视投影空间矩阵 对观察空间中的点进行裁剪
     const projectionMatrix = m4.perspective(
       fieldOfViewRadians, aspect, zNear, zFar
     )
 
-    // Compute the camera's matrix
     const camera = [100, 150, 200]
     const target = [0, 35, 0]
     const up = [0, 1, 0]
+    // 观察空间矩阵 这个矩阵描述了相机空间在世界空间中的位置，通过这个矩阵可以将相机空间转换为世界空间矩阵
     const cameraMatrix = m4.lookAt(
       camera, target, up
     )
 
-    // Make a view matrix from the camera matrix.
+    // cameraMatrix 该矩阵是为了将相机空间中的点转换到世界空间中
+    // 因此求cameraMatrix的逆矩阵，就可以得到将世界空间转换到观察空间的 观察矩阵
     const viewMatrix = m4.inverse(cameraMatrix)
 
-    // Compute a view projection matrix
+    // 将世界空间中的点传递到观察空间后，还需要进行裁剪，以便该点是在视锥体中
     const viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix)
 
-    // Draw a F at the origin
+    // 这里添加了一个世界空间旋转矩阵
     const worldMatrix = m4.yRotation(fRotationRadians)
 
-    // Multiply the matrices.
+    // 得到最终的MVP矩阵
     const worldViewProjectionMatrix = m4.multiply(viewProjectionMatrix, worldMatrix)
+
+    // 旋转矩阵的逆
     const worldInverseMatrix = m4.inverse(worldMatrix)
+    // 旋转矩阵逆的转置就是矩阵本身
     const worldInverseTransposeMatrix = m4.transpose(worldInverseMatrix)
 
-    // Set the matrices
+    // 这只MVP矩阵（）
     gl.uniformMatrix4fv(
       worldViewProjectionLocation, false, worldViewProjectionMatrix
     )
