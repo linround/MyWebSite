@@ -19,7 +19,7 @@ export function render(canvas) {
     
     // 世界的矩阵（可能发生旋转）
     uniform mat4 u_world;
-    //
+    
     uniform mat4 u_worldViewProjection;
     uniform mat4 u_worldInverseTranspose;
     
@@ -29,28 +29,26 @@ export function render(canvas) {
     varying vec3 v_surfaceToView;
     
     void main() {
-      // Multiply the position by the matrix.
+      // MVP矩阵乘以顶点坐标 得到新的坐标位置
       gl_Position = u_worldViewProjection * a_position;
     
-      // orient the normals and pass to the fragment shader
+      // 旋转矩阵本身乘以法向量 得到旋转后的法向量
       v_normal = mat3(u_worldInverseTranspose) * a_normal;
     
-      // compute the world position of the surfoace
+      // 世界发生了旋转 所以顶点坐标需要乘以旋转矩阵 得到世界空间中新的顶点坐标
       vec3 surfaceWorldPosition = (u_world * a_position).xyz;
     
-      // compute the vector of the surface to the light
-      // and pass it to the fragment shader
+      // 世界空间中 (点光源与点的向量值)  旋转的时候 点光源位置在世界空间是不变的
       v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
     
-      // compute the vector of the surface to the view/camera
-      // and pass it to the fragment shader
+      // 世界空间中观察（相机与点的向量值） 旋转的时候 相机位置在世界空间是不变的
       v_surfaceToView = u_viewWorldPosition - surfaceWorldPosition;
     }
   `
   const fragmentShaderSource = `
     precision mediump float;
   
-    // Passed in from the vertex shader.
+    // 顶点着色器传入的
     varying vec3 v_normal;
     varying vec3 v_surfaceToLight;
     varying vec3 v_surfaceToView;
@@ -229,17 +227,13 @@ export function render(canvas) {
     gl.uniformMatrix4fv(
       worldLocation, false, worldMatrix
     )
+    gl.uniform4fv(colorLocation, [0.6, 0.1, 0.9, 1]) // 顶点颜色
 
-    // Set the color to use
-    gl.uniform4fv(colorLocation, [0.2, 1, 0.2, 1]) // green
+    // 光线位置
+    gl.uniform3fv(lightWorldPositionLocation, [-90, 30, 60])
 
-    // set the light position
-    gl.uniform3fv(lightWorldPositionLocation, [20, 30, 60])
-
-    // set the camera/view position
     gl.uniform3fv(viewWorldPositionLocation, camera)
 
-    // Draw the geometry.
     const  primitiveType = gl.TRIANGLES
     offset = 0
     const  count = 16 * 6
