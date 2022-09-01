@@ -48,46 +48,44 @@ export function render(canvas) {
   const fragmentShaderSource = `
     precision mediump float;
   
-    // 顶点着色器传入的
+    // 顶点的法向量
     varying vec3 v_normal;
+    // 顶点到光源的向量
     varying vec3 v_surfaceToLight;
+    // 顶点到相机的向量
     varying vec3 v_surfaceToView;
-    
+    // 全局设置顶点的颜色
     uniform vec4 u_color;
     
     void main() {
-      // because v_normal is a varying it's interpolated
-      // so it will not be a unit vector. Normalizing it
-      // will make it a unit vector again
+      // 对法向量进行归一化处理
       vec3 normal = normalize(v_normal);
     
       vec3 surfaceToLightDirection = normalize(v_surfaceToLight);
       vec3 surfaceToViewDirection = normalize(v_surfaceToView);
       vec3 halfVector = normalize(surfaceToLightDirection + surfaceToViewDirection);
     
+      // 求得每一个顶点的光照值
       float light = dot(normal, surfaceToLightDirection);
+      // 光照会有反射
       float specular = dot(normal, halfVector);
     
       gl_FragColor = u_color;
     
-      // Lets multiply just the color portion (not the alpha)
-      // by the light
+      // 通过光照值调整颜色
       gl_FragColor.rgb *= light;
     
-      // Just add in the specular
+      // 调整之后的颜色信息加上反射的光照值，即可得到新的光照值
       gl_FragColor.rgb += specular;
     }
   `
-  // setup GLSL program
   const program = createProgramFromStrings(
     gl, vertexShaderSource, fragmentShaderSource
   )
 
-  // look up where the vertex data needs to go.
   const positionLocation = gl.getAttribLocation(program, 'a_position')
   const normalLocation = gl.getAttribLocation(program, 'a_normal')
 
-  // lookup uniforms
   const worldViewProjectionLocation = gl.getUniformLocation(program, 'u_worldViewProjection')
   const worldInverseTransposeLocation = gl.getUniformLocation(program, 'u_worldInverseTranspose')
   const colorLocation = gl.getUniformLocation(program, 'u_color')
@@ -98,18 +96,14 @@ export function render(canvas) {
   const worldLocation =
     gl.getUniformLocation(program, 'u_world')
 
-  // Create a buffer to put positions in
+  // 顶点坐标
   const positionBuffer = gl.createBuffer()
-  // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
-  // Put geometry data into buffer
   setGeometry(gl)
 
-  // Create a buffer to put normals in
+  // 法向量
   const normalBuffer = gl.createBuffer()
-  // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = normalBuffer)
   gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer)
-  // Put normals data into buffer
   setNormals(gl)
 
 
@@ -129,55 +123,35 @@ export function render(canvas) {
   return {
     updateRotation,
   }
-  // Draw the scene.
   function drawScene() {
 
-    // Tell WebGL how to convert from clip space to pixels
     gl.viewport(
       0, 0, gl.canvas.width, gl.canvas.height
     )
-
-    // Clear the canvas AND the depth buffer.
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-
-    // Turn on culling. By default backfacing triangles
-    // will be culled.
     gl.enable(gl.CULL_FACE)
-
-    // Enable the depth buffer
     gl.enable(gl.DEPTH_TEST)
-
-    // Tell it to use our program (pair of shaders)
     gl.useProgram(program)
 
-    // Turn on the position attribute
     gl.enableVertexAttribArray(positionLocation)
-
-    // Bind the position buffer.
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
-
-    // Tell the position attribute how to get data out of positionBuffer (ARRAY_BUFFER)
-    let size = 3          // 3 components per iteration
-    let type = gl.FLOAT   // the data is 32bit floats
-    let normalize = false // don't normalize the data
-    let stride = 0        // 0 = move forward size * sizeof(type) each iteration to get the next position
-    let offset = 0        // start at the beginning of the buffer
+    let size = 3
+    let type = gl.FLOAT
+    let normalize = false
+    let stride = 0
+    let offset = 0
     gl.vertexAttribPointer(
       positionLocation, size, type, normalize, stride, offset
     )
 
-    // Turn on the normal attribute
+
     gl.enableVertexAttribArray(normalLocation)
-
-    // Bind the normal buffer.
     gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer)
-
-    // Tell the attribute how to get data out of normalBuffer (ARRAY_BUFFER)
-    size = 3          // 3 components per iteration
-    type = gl.FLOAT   // the data is 32bit floating point values
-    normalize = false // normalize the data (convert from 0-255 to 0-1)
-    stride = 0        // 0 = move forward size * sizeof(type) each iteration to get the next position
-    offset = 0        // start at the beginning of the buffer
+    size = 3
+    type = gl.FLOAT
+    normalize = false
+    stride = 0
+    offset = 0
     gl.vertexAttribPointer(
       normalLocation, size, type, normalize, stride, offset
     )
@@ -227,7 +201,7 @@ export function render(canvas) {
     gl.uniformMatrix4fv(
       worldLocation, false, worldMatrix
     )
-    gl.uniform4fv(colorLocation, [0.6, 0.1, 0.9, 1]) // 顶点颜色
+    gl.uniform4fv(colorLocation, [1, 1, 1, 1]) // 顶点颜色
 
     // 光线位置
     gl.uniform3fv(lightWorldPositionLocation, [-90, 30, 60])
@@ -243,7 +217,7 @@ export function render(canvas) {
   }
 }
 
-// Fill the buffer with the values that define a letter 'F'.
+// F 顶点坐标
 function setGeometry(gl) {
   const positions = new Float32Array([
     // left column front
