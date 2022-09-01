@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkmy_app_react=self.webpackChunkmy_app_react||[]).push([[420],{1420:function(e,n,r){r.r(n),r.d(n,{default:function(){return t}});r(2791);var a=r(184);function t(){return(0,a.jsx)("div",{children:"NavBarDemo"})}}}]);
-//# sourceMappingURL=420.66fe0259.chunk.js.map

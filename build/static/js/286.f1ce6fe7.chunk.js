@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkmy_app_react=self.webpackChunkmy_app_react||[]).push([[286],{6286:function(n,e,t){t.r(e),t.d(e,{default:function(){return u}});t(2791);var r=t(184);function u(){return(0,r.jsx)("div",{children:"AnimationDemo"})}}}]);
-//# sourceMappingURL=286.f1ce6fe7.chunk.js.map
