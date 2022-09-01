@@ -5,7 +5,6 @@ RUN npm install && npm run build
 
 FROM nginx
 RUN mkdir /app
-COPY --from=0 /app/build /app
+COPY --from=0 /app/build /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY /app/build /usr/share/nginx/html
 LABEL maintainer = "usha.mandya@docker.com"
