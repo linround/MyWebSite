@@ -80,21 +80,11 @@ export function render(canvas) {
       
       // 光照会有反射
       float specular = 0.0;
-      float light = 0.0;
       // 光到表面点的向量 乘以指定的聚光灯方向（可以得到两者之间的夹角）
       float dotFromDirection = dot(surfaceToLightDirection, -u_lightDirection);
-      // 对于夹角在聚光灯范围的，才可以照亮
-      if ( dotFromDirection >= u_limit) {
-        // 计算在聚光灯范围的光照度
-        light = dot(normal, surfaceToLightDirection);
-        if (light > 0.0) {
-          specular = pow(dot(normal, halfVector), u_shininess);
-        }
-      }
-      if (light > 0.0) {
-        specular = pow(dot(normal, halfVector), u_shininess);
-      }
-    
+      float inLight = step(u_limit, dotFromDirection);
+      float light = inLight * dot(normal, surfaceToLightDirection);
+      specular = inLight * pow(dot(normal, halfVector), u_shininess);
       gl_FragColor = u_color;
     
       // 通过光照值调整颜色

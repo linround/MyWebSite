@@ -142,7 +142,6 @@ export function triangles(canvas, image) {
    * todo
    * 所有支持WebGL的环境，在片断着色器中至少有8个纹理单元，顶点着色器中可以是0个。
    */
-  gl.activeTexture(gl.TEXTURE0) // 可写可不写
   gl.bindTexture(gl.TEXTURE_2D, texture)
   // 设置纹理参数
   // target: gl.TEXTURE_2D
@@ -171,14 +170,16 @@ export function triangles(canvas, image) {
    *
    * 指定根据图像二维纹理图像
    * 参数 ：target, level, internalformat, format, type, ImageData? pixels
-   *
+   * target 指定纹理的绑定对象
+   * level 指定详细级别. 0 级是基本图像等级，n 级是第 n 个金字塔简化级
+   * internalformat 指定纹理中的颜色组件。
+   * format 指定 texel 数据格式。在 WebGL 1 中，它必须与 internalformat 相同
+   * type 指定 texel 数据的数据类型   gl.UNSIGNED_BYTE: gl.RGBA每个通道 8 位
+   * ImageData 用作纹理的像素源
    */
   gl.texImage2D(
     gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image
   )
-
-  // =========================================创建图像纹理=============END========================================
-
 
   // 找到全局变量的位置
   const resolutionLocation = gl.getUniformLocation(program, 'u_resolution')
@@ -188,22 +189,8 @@ export function triangles(canvas, image) {
 
   const initialSelection = 'edgeDetect2'
 
-  // ===============定义一套UI交互=====================================================START===============
-  const ui = document.querySelector('#ui')
-  const select = document.createElement('select')
-  for (const name in kernels) {
-    const option = document.createElement('option')
-    option.value = name
-    if (name === initialSelection) {
-      option.selected = true
-    }
-    option.appendChild(document.createTextNode(name))
-    select.appendChild(option)
-  }
-  select.onchange = function() {
-    drawWithKernel(this.options[this.selectedIndex].value)
-  }
-  ui.appendChild(select)
+  // 使用着色器程序
+  gl.useProgram(program)
   drawWithKernel(initialSelection)
 
   function computeKernelWeight(kernel) {
@@ -228,8 +215,6 @@ export function triangles(canvas, image) {
     )
     gl.clear(gl.COLOR_BUFFER_BIT)
 
-    // 使用着色器程序
-    gl.useProgram(program)
 
     // 开启位置属性
     gl.enableVertexAttribArray(positionLocation)
@@ -320,9 +305,9 @@ function setRectangle(
   const y2 = y + height
   gl.bufferData(
     gl.ARRAY_BUFFER, new Float32Array([
-      x1, y2,
       x1, y1,
       x2, y1,
+      x1, y2,
       x1, y2,
       x2, y1,
       x2, y2
