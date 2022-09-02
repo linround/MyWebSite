@@ -54,6 +54,10 @@ export function render(canvas) {
     // 设置光照颜色
     uniform vec3 u_lightColor;
     
+    // 实现聚光灯
+    uniform vec3 u_lightDirection;  // 聚光灯方向
+    uniform float u_limit;          // 在点乘空间中
+    
     // 顶点的法向量
     varying vec3 v_normal;
     // 顶点到光源的向量
@@ -72,10 +76,21 @@ export function render(canvas) {
       vec3 halfVector = normalize(surfaceToLightDirection + surfaceToViewDirection);
     
       // 求得每一个顶点的光照值
-      float light = dot(normal, surfaceToLightDirection);
+      // float light = dot(normal, surfaceToLightDirection);
       
       // 光照会有反射
       float specular = 0.0;
+      float light = 0.0;
+      // 光到表面点的向量 乘以指定的聚光灯方向（可以得到两者之间的夹角）
+      float dotFromDirection = dot(surfaceToLightDirection, -u_lightDirection);
+      // 对于夹角在聚光灯范围的，才可以照亮
+      if ( dotFromDirection >= u_limit) {
+        // 计算在聚光灯范围的光照度
+        light = dot(normal, surfaceToLightDirection);
+        if (light > 0.0) {
+          specular = pow(dot(normal, halfVector), u_shininess);
+        }
+      }
       if (light > 0.0) {
         specular = pow(dot(normal, halfVector), u_shininess);
       }
@@ -133,7 +148,20 @@ export function render(canvas) {
   gl.uniform3fv(lightColorLocation, m4.normalize([0.5, 0.5, 0.3]))  // 红光
   let shininess = 2  // 缓和光强
   gl.uniform1f(shininessLocation, shininess)
+
+  const lightDirection = [0, 0, -1]
+  let limit = 160
+  const lightDirectionLocation = gl.getUniformLocation(program, 'u_lightDirection')
+  const limitLocation = gl.getUniformLocation(program, 'u_limit')
+  gl.uniform3fv(lightDirectionLocation, lightDirection)
+  gl.uniform1f(limitLocation, Math.cos(degToRad(limit)))
+
   drawScene()
+  function updateLimit(ui) {
+    limit = ui.value
+    gl.uniform1f(limitLocation, Math.cos(degToRad(limit)))
+    drawScene()
+  }
   function updateShininess(ui) {
     shininess = ui.value
     gl.uniform1f(shininessLocation, shininess)
@@ -147,6 +175,7 @@ export function render(canvas) {
   return {
     updateRotation,
     updateShininess,
+    updateLimit,
   }
   function drawScene() {
 

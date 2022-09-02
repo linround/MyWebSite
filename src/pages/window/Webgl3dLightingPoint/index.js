@@ -8,6 +8,7 @@ export default function Webgl3dLightingPoint() {
   const canvasRef = useRef(null)
   const [r, setValueR] = useState(0)
   const [s, setValueS] = useState(0)
+  const [l, setValueL] = useState(0)
   const handler = {
     update: () => ({}),
   }
@@ -21,6 +22,13 @@ export default function Webgl3dLightingPoint() {
     drawTriangles()
   }, [canvasRef])
 
+  const onLimit = (value) => {
+    const { updateLimit, } = fn
+    setValueL(+value)
+    updateLimit({
+      value: +value,
+    })
+  }
   const onRotation = (value) => {
     const { updateRotation, } = fn
     setValueR(+value)
@@ -52,6 +60,13 @@ export default function Webgl3dLightingPoint() {
             max={360} min={0}
             onChange={(e) => onShininess(e.target.value)}
             value={s}/>{s}
+        </div>
+        <div className={styles.canvasOper}>
+          聚光灯：<input
+            type='range'
+            max={180} min={0}
+            onChange={(e) => onLimit(e.target.value)}
+            value={l}/>{l}
         </div>
         <div className={styles.canvasButton} onClick={drawTriangles}>绘制图形</div>
       </div>
