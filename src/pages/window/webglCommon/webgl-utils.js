@@ -402,7 +402,9 @@
       if (name.substr(-3) === '[0]') {
         name = name.substr(0, name.length - 3);
       }
+      console.log(uniformInfo)
       const setter = createUniformSetter(program, uniformInfo);
+      console.log(setter)
       uniformSetters[name] = setter;
     }
     return uniformSetters;

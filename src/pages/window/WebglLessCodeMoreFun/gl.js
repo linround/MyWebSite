@@ -3,8 +3,6 @@ import primitives from '../webglCommon/primitives'
 import m4 from '../webglCommon/m4'
 
 export function render(canvas) {
-  // Get A WebGL context
-  /** @type {HTMLCanvasElement} */
   const vertexShaderSource = `
     attribute vec4 a_position;
     attribute vec4 a_color;
@@ -14,17 +12,17 @@ export function render(canvas) {
     varying vec4 v_color;
     
     void main() {
-      // Multiply the position by the matrix.
+      // 模型坐标转换通过矩阵转换到视锥体空间
       gl_Position = u_matrix * a_position;
     
-      // Pass the color to the fragment shader.
+      // 将顶点颜色传给片段着色器
       v_color = a_color;
     }
   `
   const fragmentShaderSource = `
     precision mediump float;
   
-    // Passed in from the vertex shader.
+    // 传入的顶点着色器颜色
     varying vec4 v_color;
     
     uniform vec4 u_colorMult;
@@ -38,9 +36,8 @@ export function render(canvas) {
     return
   }
 
-  // creates buffers with position, normal, texcoord, and vertex color
-  // data for primitives by calling gl.createBuffer, gl.bindBuffer,
-  // and gl.bufferData
+
+  // 生成顶点、法向量、纹理坐标、顶点颜色
   const sphereBufferInfo = primitives.createSphereWithVertexColorsBufferInfo(
     gl, 10, 12, 6
   )
@@ -48,8 +45,7 @@ export function render(canvas) {
   const coneBufferInfo   = primitives.createTruncatedConeWithVertexColorsBufferInfo(
     gl, 10, 0, 20, 12, 1, true, false
   )
-
-  // setup GLSL program
+  // 创建一个着色器程序
   const programInfo = webglUtils.createProgramInfo(gl, [vertexShaderSource, fragmentShaderSource])
   function degToRad(d) {
     return d * Math.PI / 180
@@ -57,7 +53,7 @@ export function render(canvas) {
 
   const fieldOfViewRadians = degToRad(60)
 
-  // Uniforms for each object.
+  // 设置全局变量.
   const sphereUniforms = {
     u_colorMult: [0.5, 1, 0.5, 1],
     u_matrix: m4.identity(),
@@ -71,8 +67,8 @@ export function render(canvas) {
     u_matrix: m4.identity(),
   }
   const sphereTranslation = [0, 0, 0]
-  const cubeTranslation   = [-40, 0, 0]
-  const coneTranslation   = [40, 0, 0]
+  const cubeTranslation   = [-80, 0, 0]
+  const coneTranslation   = [80, 0, 0]
 
   const objectsToDraw = [
     {
@@ -102,18 +98,19 @@ export function render(canvas) {
       translation[2]
     )
     matrix = m4.xRotate(matrix, xRotation)
+    matrix = m4.scale(
+      matrix, 2, 2, 2
+    )
     return m4.yRotate(matrix, yRotation)
   }
 
   requestAnimationFrame(drawScene)
 
-  // Draw the scene.
   function drawScene(t) {
-    const time  = t * 0.0005
+    const time  = t * 0.001
 
     webglUtils.resizeCanvasToDisplaySize(gl.canvas)
 
-    // Tell WebGL how to convert from clip space to pixels
     gl.viewport(
       0, 0, gl.canvas.width, gl.canvas.height
     )
@@ -121,27 +118,27 @@ export function render(canvas) {
     gl.enable(gl.CULL_FACE)
     gl.enable(gl.DEPTH_TEST)
 
-    // Clear the canvas AND the depth buffer.
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
-    // Compute the projection matrix
+    // 透视投影空间矩阵 对观察空间中的点进行裁剪
     const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight
     const projectionMatrix =
       m4.perspective(
         fieldOfViewRadians, aspect, 1, 2000
       )
 
-    // Compute the camera's matrix using look at.
+
     const cameraPosition = [0, 0, 100]
     const target = [0, 0, 0]
     const up = [0, 1, 0]
+    // 观察空间矩阵，这个矩阵描述了相机空间在世界空间的位置，通过这个矩阵可以将相机空间里的点转换到世界空间
     const cameraMatrix = m4.lookAt(
       cameraPosition, target, up
     )
 
-    // Make a view matrix from the camera matrix.
+    // 在这里对相机矩阵求逆，即可得到由世界空间到相机空间的转换矩阵
     const viewMatrix = m4.inverse(cameraMatrix)
-
+    // 裁剪矩阵乘以 观察矩阵得到一个转换到裁剪空间的矩阵
     const viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix)
 
     const sphereXRotation =  time
@@ -150,15 +147,19 @@ export function render(canvas) {
     const cubeYRotation   =  time
     const coneXRotation   =  time
     const coneYRotation   = -time
-
-    // Compute the matrices for each object.
+    /**
+     * todo
+     * 坐标点转换到到相机空间后，需要进行平移或者缩放以及旋转
+     * @type {Matrix4}
+     */
+    // 球体
     sphereUniforms.u_matrix = computeMatrix(
       viewProjectionMatrix,
       sphereTranslation,
       sphereXRotation,
       sphereYRotation
     )
-
+    // 立方体
     cubeUniforms.u_matrix = computeMatrix(
       viewProjectionMatrix,
       cubeTranslation,
@@ -173,7 +174,6 @@ export function render(canvas) {
       coneYRotation
     )
 
-    // ------ Draw the objects --------
 
     objectsToDraw.forEach(function(object) {
       const programInfo = object.programInfo
@@ -181,15 +181,12 @@ export function render(canvas) {
 
       gl.useProgram(programInfo.program)
 
-      // Setup all the needed attributes.
       webglUtils.setBuffersAndAttributes(
         gl, programInfo, bufferInfo
       )
 
-      // Set the uniforms.
       webglUtils.setUniforms(programInfo, object.uniforms)
 
-      // Draw
       gl.drawArrays(
         gl.TRIANGLES, 0, bufferInfo.numElements
       )
