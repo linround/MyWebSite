@@ -55,15 +55,21 @@ export function render(canvas) {
 
   // 设置全局变量.
   const sphereUniforms = {
+    // eslint-disable-next-line camelcase
     u_colorMult: [0.5, 1, 0.5, 1],
+    // eslint-disable-next-line camelcase
     u_matrix: m4.identity(),
   }
   const cubeUniforms = {
+    // eslint-disable-next-line camelcase
     u_colorMult: [1, 0.5, 0.5, 1],
+    // eslint-disable-next-line camelcase
     u_matrix: m4.identity(),
   }
   const coneUniforms = {
+    // eslint-disable-next-line camelcase
     u_colorMult: [0.5, 0.5, 1, 1],
+    // eslint-disable-next-line camelcase
     u_matrix: m4.identity(),
   }
   const sphereTranslation = [0, 0, 0]
@@ -153,6 +159,7 @@ export function render(canvas) {
      * @type {Matrix4}
      */
     // 球体
+    // eslint-disable-next-line camelcase
     sphereUniforms.u_matrix = computeMatrix(
       viewProjectionMatrix,
       sphereTranslation,
@@ -160,6 +167,7 @@ export function render(canvas) {
       sphereYRotation
     )
     // 立方体
+    // eslint-disable-next-line camelcase
     cubeUniforms.u_matrix = computeMatrix(
       viewProjectionMatrix,
       cubeTranslation,
@@ -167,6 +175,7 @@ export function render(canvas) {
       cubeYRotation
     )
     // 锥形
+    // eslint-disable-next-line camelcase
     coneUniforms.u_matrix = computeMatrix(
       viewProjectionMatrix,
       coneTranslation,

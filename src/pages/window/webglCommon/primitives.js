@@ -516,7 +516,6 @@ function createCubeVertices(size) {
   const normals   = webglUtils.createAugmentedTypedArray(3, numVertices);
   const texCoords = webglUtils.createAugmentedTypedArray(2 , numVertices);
   const indices   = webglUtils.createAugmentedTypedArray(3, 6 * 2, Uint16Array);
-  
   for (let f = 0; f < 6; ++f) {
     const faceIndices = CUBE_FACE_INDICES[f];
     for (let v = 0; v < 4; ++v) {
