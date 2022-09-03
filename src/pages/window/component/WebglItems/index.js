@@ -18,6 +18,7 @@ export function WebglItems() {
         <Item to='Webgl3dCamera' name='3D相机' />
         <Item to='Webgl3dLightingDirectional' name='方向光源' />
         <Item to='Webgl3dLightingPoint' name='点光源' />
+        <Item to='WebglLessCodeMoreFun' name='渲染多个' />
       </div>
     </>
   )

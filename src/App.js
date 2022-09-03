@@ -53,6 +53,7 @@ const Webgl3dPerspective = React.lazy(() => import('./pages/window/Webgl3dPerspe
 const Webgl3dCamera = React.lazy(() => import('./pages/window/Webgl3dCamera'))
 const Webgl3dLightingDirectional = React.lazy(() => import('./pages/window/Webgl3dLightingDirectional'))
 const Webgl3dLightingPoint = React.lazy(() => import('./pages/window/Webgl3dLightingPoint'))
+const WebglLessCodeMoreFun = React.lazy(() => import('./pages/window/WebglLessCodeMoreFun'))
 
 export default function App() {
   return (
@@ -185,6 +186,11 @@ export default function App() {
             <Webgl />
           </React.Suspense>
         } />
+        <Route path='/WebglLessCodeMoreFun' element={
+          <React.Suspense fallback={<>...</>}>
+            <WebglLessCodeMoreFun />
+          </React.Suspense>
+        }></Route>
         <Route path='/Webgl3dLightingPoint' element={
           <React.Suspense fallback={<>...</>}>
             <Webgl3dLightingPoint />
