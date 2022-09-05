@@ -55,6 +55,8 @@ const Webgl3dLightingDirectional = React.lazy(() => import('./pages/window/Webgl
 const Webgl3dLightingPoint = React.lazy(() => import('./pages/window/Webgl3dLightingPoint'))
 const WebglLessCodeMoreFun = React.lazy(() => import('./pages/window/WebglLessCodeMoreFun'))
 
+const Webgl3dTextures = React.lazy(() => import('./pages/window/Webgl3dTextures'))
+
 export default function App() {
   return (
     <AuthProvider>
@@ -186,6 +188,12 @@ export default function App() {
             <Webgl />
           </React.Suspense>
         } />
+
+        <Route path='/Webgl3dTextures' element={
+          <React.Suspense fallback={<>...</>}>
+            <Webgl3dTextures />
+          </React.Suspense>
+        }></Route>
         <Route path='/WebglLessCodeMoreFun' element={
           <React.Suspense fallback={<>...</>}>
             <WebglLessCodeMoreFun />

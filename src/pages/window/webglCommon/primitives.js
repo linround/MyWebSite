@@ -416,8 +416,8 @@ function createSphereVertices(
   for (let y = 0; y <= subdivisionsHeight; y++) {
     for (let x = 0; x <= subdivisionsAxis; x++) {
       // Generate a vertex based on its spherical coordinates
-      const u = x / subdivisionsAxis;
-      const v = y / subdivisionsHeight;
+      const u = x / subdivisionsAxis; // 细分轴
+      const v = y / subdivisionsHeight; // 细分高
       const theta = longRange * u + opt_startLongitudeInRadians;
       const phi = latRange * v + opt_startLatitudeInRadians;
       const sinTheta = Math.sin(theta);
