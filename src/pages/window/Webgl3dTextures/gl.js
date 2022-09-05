@@ -26,23 +26,25 @@ export function render(canvas) {
       varying vec2 v_texcoord;
       
       void main() {
-        // Multiply the position by the matrix.
+        // MVP矩阵 乘以坐标点，得到模型在视图里面的位置坐标
         gl_Position = u_matrix * a_position;
       
-        // Pass the texcoord to the fragment shader.
+        // 将纹理坐标传入片元着色器
         v_texcoord = a_texcoord;
       }
   `
   const f = `
       precision mediump float;
       
-      // Passed in from the vertex shader.
       varying vec2 v_texcoord;
       
-      // The texture.
+      // 纹理采样器
       uniform sampler2D u_texture;
       
       void main() {
+         // 从默认读取第一层纹理
+         gl_FragColor = texture2D(u_texture, v_texcoord);
+         // 再次读取纹理 这个时候读取第二层
          gl_FragColor = texture2D(u_texture, v_texcoord);
       }
   `
@@ -51,28 +53,21 @@ export function render(canvas) {
     gl, v, f
   )
 
-  // look up where the vertex data needs to go.
   const positionLocation = gl.getAttribLocation(program, 'a_position')
   const texcoordLocation = gl.getAttribLocation(program, 'a_texcoord')
-
-  // lookup uniforms
   const matrixLocation = gl.getUniformLocation(program, 'u_matrix')
   const textureLocation = gl.getUniformLocation(program, 'u_texture')
 
-  // Create a buffer for positions
+  // 设置模型顶点坐标
   const positionBuffer = gl.createBuffer()
-  // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
-  // Put the positions in the buffer
   setGeometry(gl)
-
-  // provide texture coordinates for the rectangle.
+  // 设置每个面的顶点与对应的纹理坐标点的映射关系
   const texcoordBuffer = gl.createBuffer()
   gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer)
-  // Set Texcoords.
   setTexcoords(gl)
 
-  // Create a texture.
+
   const texture = gl.createTexture()
   gl.bindTexture(gl.TEXTURE_2D, texture)
   // Fill the texture with a 1x1 blue pixel.
@@ -80,11 +75,10 @@ export function render(canvas) {
     gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
     new Uint8Array([0, 0, 255, 255])
   )
-  // Asynchronously load an image
+
   const image = new Image()
   image.src = imgTexture
   image.addEventListener('load', function() {
-    // Now that the image has loaded make copy it to the texture.
     gl.bindTexture(gl.TEXTURE_2D, texture)
     gl.texImage2D(
       gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image
@@ -105,18 +99,12 @@ export function render(canvas) {
 
   requestAnimationFrame(drawScene)
 
-  // Draw the scene.
   function drawScene(now) {
-    // eslint-disable-next-line no-param-reassign
-    now *= 0.001
-    // Subtract the previous time from the current time
-    const deltaTime = now - then
-    // Remember the current time for the next frame.
+    const deltaTime = (now - then) * 0.001
     then = now
 
     webglUtils.resizeCanvasToDisplaySize(gl.canvas)
 
-    // Tell WebGL how to convert from clip space to pixels
     gl.viewport(
       0, 0, gl.canvas.width, gl.canvas.height
     )
@@ -124,81 +112,73 @@ export function render(canvas) {
     gl.enable(gl.CULL_FACE)
     gl.enable(gl.DEPTH_TEST)
 
-    // Animate the rotation
+    // 沿XY分别旋转的角度
     modelXRotationRadians += 1.2 * deltaTime
     modelYRotationRadians += 0.7 * deltaTime
 
-    // Clear the canvas AND the depth buffer.
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-
-    // Tell it to use our program (pair of shaders)
     gl.useProgram(program)
 
-    // Turn on the position attribute
     gl.enableVertexAttribArray(positionLocation)
-
-    // Bind the position buffer.
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
-
-    // Tell the position attribute how to get data out of positionBuffer (ARRAY_BUFFER)
-    let size = 3          // 3 components per iteration
-    let  type = gl.FLOAT   // the data is 32bit floats
-    let normalize = false // don't normalize the data
-    let stride = 0        // 0 = move forward size * sizeof(type) each iteration to get the next position
-    let offset = 0        // start at the beginning of the buffer
+    let size = 3
+    let  type = gl.FLOAT
+    let normalize = false
+    let stride = 0
+    let offset = 0
     gl.vertexAttribPointer(
       positionLocation, size, type, normalize, stride, offset
     )
 
-    // Turn on the texcoord attribute
+
     gl.enableVertexAttribArray(texcoordLocation)
-
-    // bind the texcoord buffer.
+    // 纹理坐标是二维的
     gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer)
-
-    // Tell the texcoord attribute how to get data out of texcoordBuffer (ARRAY_BUFFER)
-    size = 2          // 2 components per iteration
-    type = gl.FLOAT   // the data is 32bit floats
-    normalize = false // don't normalize the data
-    stride = 0        // 0 = move forward size * sizeof(type) each iteration to get the next position
-    offset = 0        // start at the beginning of the buffer
+    size = 2
+    type = gl.FLOAT
+    normalize = false
+    stride = 0
+    offset = 0
     gl.vertexAttribPointer(
       texcoordLocation, size, type, normalize, stride, offset
     )
 
-    // Compute the projection matrix
+    // 计算这个裁剪矩阵
     const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight
     const projectionMatrix =
       m4.perspective(
         fieldOfViewRadians, aspect, 1, 2000
       )
 
-    const cameraPosition = [0, 0, 200]
+    const cameraPosition = [0, 0, 150]
     const up = [0, 1, 0]
     const target = [0, 0, 0]
 
-    // Compute the camera's matrix using look at.
+    // 计算这个观察矩阵（即观察空间到世界空间的转换矩阵）
     const cameraMatrix = m4.lookAt(
       cameraPosition, target, up
     )
 
-    // Make a view matrix from the camera matrix.
+    // 对官差矩阵进行转置即可求得 世界空间到观察空间的转换矩阵
     const viewMatrix = m4.inverse(cameraMatrix)
-
+    // 对观察矩阵进行裁剪 得到对应的视锥体所形成的矩阵（裁剪矩阵）
     const viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix)
-
+    // 对最终的转换结果进行平移和旋转
     let matrix = m4.xRotate(viewProjectionMatrix, modelXRotationRadians)
     matrix = m4.yRotate(matrix, modelYRotationRadians)
 
-    // Set the matrix.
+
     gl.uniformMatrix4fv(
       matrixLocation, false, matrix
     )
 
-    // Tell the shader to use texture unit 0 for u_texture
+    /**
+     * todo
+     * 这里可以使用 gl.activeTexture(gl.TEXTURE1) 激活突出纹理 1
+     * 使用 gl.bindTexture(gl.TEXTURE_2D, textures[0]); 对图层纹理进行绑定
+     * 当使用 sampler2D 对gl纹理进行采样的时候，默认是从0 到尾进行一层层的读取采样
+     */
     gl.uniform1i(textureLocation, 0)
-
-    // Draw the geometry.
     gl.drawArrays(
       gl.TRIANGLES, 0, 16 * 6
     )
@@ -207,7 +187,7 @@ export function render(canvas) {
   }
 }
 
-// Fill the buffer with the values that define a letter 'F'.
+//  'F'.
 function setGeometry(gl) {
   const positions = new Float32Array([
     // left column front
@@ -362,7 +342,7 @@ function setGeometry(gl) {
   )
 }
 
-// Fill the buffer with texture coordinates the F.
+//  F.
 function setTexcoords(gl) {
   gl.bufferData(
     gl.ARRAY_BUFFER,
