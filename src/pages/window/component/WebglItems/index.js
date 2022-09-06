@@ -21,6 +21,8 @@ export function WebglItems() {
         <Item to='WebglLessCodeMoreFun' name='渲染多个' />
         <Item to='Webgl3dTextures' name=' 纹理' />
         <Item to='Webgl3dTexturesRepeat' name=' 纹理重复' />
+        <Item to='Webgl3dTexturesMipmap' name=' 纹理插值' />
+        <Item to='Webgl3dTexturesMipmap2' name=' 纹理插值2' />
       </div>
     </>
   )
