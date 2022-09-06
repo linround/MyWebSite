@@ -20,6 +20,7 @@ export function WebglItems() {
         <Item to='Webgl3dLightingPoint' name='点光源' />
         <Item to='WebglLessCodeMoreFun' name='渲染多个' />
         <Item to='Webgl3dTextures' name=' 纹理' />
+        <Item to='Webgl3dTexturesRepeat' name=' 纹理重复' />
       </div>
     </>
   )

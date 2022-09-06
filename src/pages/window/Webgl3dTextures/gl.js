@@ -48,7 +48,6 @@ export function render(canvas) {
          gl_FragColor = texture2D(u_texture, v_texcoord);
       }
   `
-  // setup GLSL program
   const program = createProgramFromStrings(
     gl, v, f
   )
@@ -100,7 +99,7 @@ export function render(canvas) {
   requestAnimationFrame(drawScene)
 
   function drawScene(now) {
-    const deltaTime = (now - then) * 0.001
+    const deltaTime = (now - then) * 0.00
     then = now
 
     webglUtils.resizeCanvasToDisplaySize(gl.canvas)
@@ -348,52 +347,52 @@ function setTexcoords(gl) {
     gl.ARRAY_BUFFER,
     new Float32Array([
       // left column front
-      0, 0,
-      0, 1,
-      1, 0,
-      0, 1,
-      1, 1,
-      1, 0,
+      -38 / 255,  44 / 255,
+      38 / 255, 223 / 255,
+      113 / 255,  44 / 255,
+      38 / 255, 223 / 255,
+      113 / 255, 223 / 255,
+      113 / 255,  44 / 255,
 
       // top rung front
-      0, 0,
-      0, 1,
-      1, 0,
-      0, 1,
-      1, 1,
-      1, 0,
+      -113 / 255, 44 / 255,
+      113 / 255, 85 / 255,
+      218 / 255, 44 / 255,
+      113 / 255, 85 / 255,
+      218 / 255, 85 / 255,
+      218 / 255, 44 / 255,
 
       // middle rung front
-      0, 0,
-      0, 1,
-      1, 0,
-      0, 1,
-      1, 1,
-      1, 0,
+      -113 / 255, 112 / 255,
+      113 / 255, 151 / 255,
+      203 / 255, 112 / 255,
+      113 / 255, 151 / 255,
+      203 / 255, 151 / 255,
+      203 / 255, 112 / 255,
 
       // left column back
-      0, 0,
-      1, 0,
-      0, 1,
-      0, 1,
-      1, 0,
-      1, 1,
+      38 / 255,  44 / 255,
+      113 / 255,  44 / 255,
+      38 / 255, 223 / 255,
+      38 / 255, 223 / 255,
+      113 / 255,  44 / 255,
+      113 / 255, 223 / 255,
 
       // top rung back
-      0, 0,
-      1, 0,
-      0, 1,
-      0, 1,
-      1, 0,
-      1, 1,
+      113 / 255, 44 / 255,
+      218 / 255, 44 / 255,
+      113 / 255, 85 / 255,
+      113 / 255, 85 / 255,
+      218 / 255, 44 / 255,
+      218 / 255, 85 / 255,
 
       // middle rung back
-      0, 0,
-      1, 0,
-      0, 1,
-      0, 1,
-      1, 0,
-      1, 1,
+      113 / 255, 112 / 255,
+      203 / 255, 112 / 255,
+      113 / 255, 151 / 255,
+      113 / 255, 151 / 255,
+      203 / 255, 112 / 255,
+      203 / 255, 151 / 255,
 
       // top
       0, 0,
@@ -473,7 +472,8 @@ function setTexcoords(gl) {
       1, 1,
       0, 0,
       1, 1,
-      1, 0]),
+      1, 0
+    ]),
     gl.STATIC_DRAW
   )
 }
