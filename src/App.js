@@ -61,6 +61,7 @@ const Webgl3dTexturesMipmap = React.lazy(() => import('./pages/window/Webgl3dTex
 const Webgl3dTexturesMipmap2 = React.lazy(() => import('./pages/window/Webgl3dTexturesMipmap2'))
 const Webgl3dTexturesMipmap3 = React.lazy(() => import('./pages/window/Webgl3dTexturesMipmap3'))
 const WebglDataTextures = React.lazy(() => import('./pages/window/WebglDataTextures'))
+const Webgl3dGeometryLathe = React.lazy(() => import('./pages/window/Webgl3dGeometryLathe'))
 
 export default function App() {
   return (
@@ -194,7 +195,11 @@ export default function App() {
           </React.Suspense>
         } />
 
-        <Route path='/WebglDataTextures' element={
+        <Route path='/Webgl3dGeometryLathe' element={
+          <React.Suspense fallback={<>...</>}>
+            <Webgl3dGeometryLathe />
+          </React.Suspense>
+        } /><Route path='/WebglDataTextures' element={
           <React.Suspense fallback={<>...</>}>
             <WebglDataTextures />
           </React.Suspense>
