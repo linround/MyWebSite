@@ -149,8 +149,8 @@ export function render(canvas) {
   }
 
   const fieldOfViewRadians = degToRad(90)
-  const modelXRotationRadians = degToRad(45)
-  const modelYRotationRadians = degToRad(20)
+  const modelXRotationRadians = degToRad(0)
+  const modelYRotationRadians = degToRad(0)
 
   requestAnimationFrame(drawScene)
 

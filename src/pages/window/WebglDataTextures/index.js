@@ -4,7 +4,7 @@ import React, {
 import styles from '../webglCommon/style.less'
 import { render } from './gl'
 
-export default function Webgl3dTexturesMipmap() {
+export default function WebglDataTextures() {
   const canvasRef = useRef(null)
   const handler = {
     update: () => ({}),
@@ -26,7 +26,7 @@ export default function Webgl3dTexturesMipmap() {
 
   return (
     <div>
-      <canvas className={ styles.canvasContainer} ref={canvasRef} width={800} height={800} ></canvas>
+      <canvas className={ styles.canvasContainer} ref={canvasRef} width={600} height={600} ></canvas>
       <button onClick={onUpdateFudgeFactor}>onUpdate</button>
     </div>
   )

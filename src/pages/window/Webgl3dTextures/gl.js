@@ -69,7 +69,6 @@ export function render(canvas) {
 
   const texture = gl.createTexture()
   gl.bindTexture(gl.TEXTURE_2D, texture)
-  // Fill the texture with a 1x1 blue pixel.
   gl.texImage2D(
     gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
     new Uint8Array([0, 0, 255, 255])
@@ -317,14 +316,7 @@ function setGeometry(gl) {
     0, 150,  30,
     0, 150,   0])
 
-  // Center the F around the origin and Flip it around. We do this because
-  // we're in 3D now with and +Y is up where as before when we started with 2D
-  // we had +Y as down.
-
-  // We could do by changing all the values above but I'm lazy.
-  // We could also do it with a matrix at draw time but you should
-  // never do stuff at draw time if you can do it at init time.
-  let matrix = m4.identity()// m4.xRotation(Math.PI);
+  let matrix = m4.identity()
   matrix = m4.translate(
     matrix, -50, -75, -15
   )

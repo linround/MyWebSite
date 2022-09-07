@@ -59,6 +59,9 @@ const Webgl3dTextures = React.lazy(() => import('./pages/window/Webgl3dTextures'
 const Webgl3dTexturesRepeat = React.lazy(() => import('./pages/window/Webgl3dTexturesRepeat'))
 const Webgl3dTexturesMipmap = React.lazy(() => import('./pages/window/Webgl3dTexturesMipmap'))
 const Webgl3dTexturesMipmap2 = React.lazy(() => import('./pages/window/Webgl3dTexturesMipmap2'))
+const Webgl3dTexturesMipmap3 = React.lazy(() => import('./pages/window/Webgl3dTexturesMipmap3'))
+const WebglDataTextures = React.lazy(() => import('./pages/window/WebglDataTextures'))
+
 export default function App() {
   return (
     <AuthProvider>
@@ -191,6 +194,16 @@ export default function App() {
           </React.Suspense>
         } />
 
+        <Route path='/WebglDataTextures' element={
+          <React.Suspense fallback={<>...</>}>
+            <WebglDataTextures />
+          </React.Suspense>
+        } />
+        <Route path='/Webgl3dTexturesMipmap3' element={
+          <React.Suspense fallback={<>...</>}>
+            <Webgl3dTexturesMipmap3 />
+          </React.Suspense>
+        } />
         <Route path='/Webgl3dTexturesMipmap2' element={
           <React.Suspense fallback={<>...</>}>
             <Webgl3dTexturesMipmap2 />
