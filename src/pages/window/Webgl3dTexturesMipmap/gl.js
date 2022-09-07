@@ -240,6 +240,7 @@ export function render(canvas) {
     const ySpacing = 0.7
     /**
      * 以下 在一帧内渲染了六个图像
+     * 通过偏移旋转 缩放的方式得到六个不同的图像
      */
     settings.forEach(function(s) {
       const z = -5 + s.z // Math.cos(time * 0.3) * zDistance - zDistance;
@@ -310,9 +311,9 @@ export function render(canvas) {
   }
 }
 
-// Fill the buffer with the values that define a plane.
+
 function setGeometry(gl) {
-  var positions = new Float32Array([
+  const positions = new Float32Array([
     -0.5, -0.5,   0.5,
     0.5, -0.5,   0.5,
     -0.5,  0.5,   0.5,
@@ -326,7 +327,7 @@ function setGeometry(gl) {
   )
 }
 
-// Fill the buffer with texture coordinates for a plane.
+
 function setTexcoords(gl) {
   gl.bufferData(
     gl.ARRAY_BUFFER,
