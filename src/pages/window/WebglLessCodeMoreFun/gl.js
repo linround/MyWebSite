@@ -115,7 +115,6 @@ export function render(canvas) {
   function drawScene(t) {
     const time  = t * 0.001
 
-    webglUtils.resizeCanvasToDisplaySize(gl.canvas)
 
     gl.viewport(
       0, 0, gl.canvas.width, gl.canvas.height
