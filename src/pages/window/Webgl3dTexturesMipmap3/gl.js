@@ -148,7 +148,6 @@ export function render(canvas) {
   }
 }
 
-// Fill the buffer with the values that define a cube.
 function setGeometry(gl) {
   const positions = new Float32Array([
     -0.5, -0.5,  -0.5,
