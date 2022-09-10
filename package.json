@@ -38,7 +38,6 @@
     "file-loader": "^6.2.0",
     "font-awesome": "^4.7.0",
     "fs-extra": "^10.0.0",
-    "gsap": "npm:@gsap/member@^3.10.4",
     "html-webpack-plugin": "^5.5.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.4.3",

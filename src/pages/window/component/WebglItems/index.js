@@ -25,7 +25,6 @@ export function WebglItems() {
         <Item to='Webgl3dTexturesMipmap2' name=' 纹理插值2' />
         <Item to='Webgl3dTexturesMipmap3' name=' 纹理插值3' />
         <Item to='WebglDataTextures' name=' 数据纹理' />
-        <Item to='Webgl3dGeometryLathe' name=' 三维几何物体' />
       </div>
     </>
   )
